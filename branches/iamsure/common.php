@@ -1668,7 +1668,7 @@ if ($templatemessage!=""){
 
 $races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",0=>"Unknown",50=>"Hoversheep");
 
-$logd_version = "0.9.7+jt";
+$logd_version = "TDS-0.01";
 $session['user']['laston']=date("Y-m-d H:i:s");
 
 $playermount = getmount($session['user']['hashorse']);
