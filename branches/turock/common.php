@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "dbwrapper.php";
 
 $pagestarttime = getmicrotime();
@@ -6,12 +6,126 @@ $pagestarttime = getmicrotime();
 $nestedtags=array();
 $output="";
 
+function get_special_var ($var, $event=FALSE, $player=FALSE) {
+	global $session;
+	global $specialinc;
+
+	if ($player === FALSE) $player = $session['user']['acctid'];
+	if ($event === FALSE) $event = $specialinc;
+
+	// Query once for all-player vars, and once for the current players vars
+	// There must be a more efficient way to do this.  Maybe querying both and ordering by player?
+	$query = "SELECT * FROM specialvars WHERE event='$event' AND var='$var' AND player=NULL";
+	$res = db_query($query) or die (db_error($link));
+	if ($row = db_fetch_assoc($res))
+		$retval = $row['value'];
+	else $retval = NULL;
+
+	$query = "SELECT * FROM specialvars WHERE event='$event' AND var='$var' AND player=$player";
+	$res = db_query($query) or die (db_error($link));
+	if ($row = db_fetch_assoc($res))
+		$retval = $row['value'];
+	else $retval = NULL;
+
+	return $retval;
+}
+function set_special_var ($var, $value=NULL, $event = FALSE, $player = FALSE) {
+    global $session;
+    global $specialinc;
+
+    if ($player === FALSE) $player = $session['user']['acctid'];
+    if ($event === FALSE) $event = $specialinc;
+
+    $query = "SELECT * FROM specialvars
+                WHERE event='$event'
+                AND player=$player
+                AND var='$var'";
+    $res = db_query($query) or die (db_error($link));
+    if (db_num_rows($res))
+        $query = "UPDATE specialvars SET value='$value'
+                    WHERE event='$event'
+                    AND player='$player'
+                    AND var='$var'";
+    else
+        $query = "INSERT INTO specialvars (event, player, var, value)
+                    VALUES ('$event', $player, '$var', '$value') ";
+    if ($value === NULL)
+        $query = "DELETE FROM specialvars
+                    WHERE event='$event'
+                    AND player='$player'
+                    AND var='$var'";
+    $res = db_query($query) or die(db_error($link));
+    $retval = get_special_var($var);
+    return $retval;
+}
+
+function get_global_var ($var) {
+   global $session;
+   global $specialinc;
+   $query = "SELECT * FROM globalvars WHERE variable='$var'";
+   $res = db_query($query) or die (db_error($link));
+   if ($row = db_fetch_assoc($res))
+      $retval = $row['data'];
+//   else $retval = NULL;
+   return $retval;
+}
+function set_global_var ($var,$data) {
+    global $session;
+    global $specialinc;
+    $query = "SELECT * FROM globalvars WHERE variable='$var'";
+    $res = db_query($query) or die (db_error($link));
+    if (db_num_rows($res))
+        $query = "UPDATE globalvars SET data='$data' WHERE variable='$var'";
+    else
+        $query = "INSERT INTO globalvars (variable, data)
+                    VALUES ('$var', '$data') ";
+    if ($data === NULL)
+        $query = "DELETE FROM globalvars WHERE variable='$var'";
+    $res = db_query($query) or die(db_error($link));
+    $retval = get_global_var($var);
+    return $retval;
+}
+
+// IGM CODE
+function igm_listnavs($section,$header="Venture Forth"){
+    $sql = "SELECT * FROM igms WHERE section=\"$section\" ORDER BY menuname";
+    $result = db_query($sql)or die(db_error(LINK));
+    addnav($header);
+    while($row = mysql_fetch_array($result)){
+        $menunames[]=$row["menuname"];
+        $filenames[]=$row["filename"];
+    }
+    $ec = count($menunames);
+    for($i=0;$i<$ec;$i++){
+        if (@file_exists($filenames[$i])) addnav($menunames[$i],$filenames[$i]);
+    }
+    db_free_result($result);
+}
+
+function igm_process($section){
+    $sql = "SELECT * FROM igms WHERE section=\"$section\" ORDER BY menuname";
+    $result = db_query($sql)or die(db_error(LINK));
+    while($row = mysql_fetch_array($result)){
+        $menunames[]=$row["menuname"];
+        $filenames[]=$row["filename"];
+    }
+    $ec = count($menunames);
+    for($i=0;$i<$ec;$i++){
+        if (@file_exists($filenames[$i])) include($filenames[$i]);
+    }
+    db_free_result($result);
+}
+// END IGM CODE
+
+function commas($str) {
+    return number_format($str,0,".",",");
+}
+
 function pvpwarning($dokill=false) {
 	global $session;
 	$days = getsetting("pvpimmunity", 5);
 	$exp = getsetting("pvpminexp", 1500);
 	if ($session['user']['age'] <= $days &&
-		$session['user']['dragonkills'] == 0 &&
 		$session['user']['user']['pk'] == 0 &&
 		$session['user']['experience'] <= $exp) {
 		if ($dokill) {
@@ -30,7 +144,7 @@ function rawoutput($indata) {
 
 function output($indata,$priv=false){
 	global $nestedtags,$output;
-	$data = translate($indata);
+	$data = $indata;
 	if (date("m-d")=="04-01"){
 		$out = appoencode($data,$priv);
 		if ($priv==false) $out = borkalize($out);
@@ -68,9 +182,9 @@ function systemmail($to,$subject,$body,$from=0,$noemail=false){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	$prefs = unserialize($row[prefs]);
-	
-	if ($prefs[dirtyemail]){
+	$prefs = unserialize($row['prefs']);
+
+	if ($prefs['dirtyemail']){
 		//output("Not cleaning: $prefs[dirtyemail]");
 	}else{
 		//output("Cleaning: $prefs[dirtyemail]");
@@ -81,24 +195,24 @@ function systemmail($to,$subject,$body,$from=0,$noemail=false){
 	$sql = "INSERT INTO mail (msgfrom,msgto,subject,body,sent) VALUES ('".(int)$from."','".(int)$to."','$subject','$body',now())";
 	db_query($sql);
 	$email=false;
-	if ($prefs[emailonmail] && $from>0){
+	if ($prefs['emailonmail'] && $from>0){
 		$email=true;
-	}elseif($prefs[emailonmail] && $from==0 && $prefs[systemmail]){
+	}elseif($prefs['emailonmail'] && $from==0 && $prefs['systemmail']){
 		$email=true;
 	}
-	if (!is_email($row[emailaddress])) $email=false;
+	if (!is_email($row['emailaddress'])) $email=false;
 	if ($email && !$noemail){
 		$sql = "SELECT name FROM accounts WHERE acctid='$from'";
 		$result = db_query($sql);
 		$row1=db_fetch_assoc($result);
 		db_free_result($result);
-		if ($row1[name]!="") $fromline="From: ".preg_replace("'[`].'","",$row1[name])."\n";
+		if ($row1['name']!="") $fromline="From: ".preg_replace("'[`].'","",$row1['name'])."\n";
 		// We've inserted it into the database, so.. strip out any formatting
 		// codes from the actual email we send out... they make things
 		// unreadable
 		$body = preg_replace("'[`]n'", "\n", $body);
 		$body = preg_replace("'[`].'", "", $body);
-		mail($row[emailaddress],"New LoGD Mail","You have received new mail on LoGD at http://".$_SERVER[HTTP_HOST].dirname($_SERVER[SCRIPT_NAME])."\n\n$fromline"
+		mail($row['emailaddress'],"New LoGD Mail","You have received new mail on LoGD at http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])."\n\n$fromline"
 			."Subject: ".preg_replace("'[`].'","",stripslashes($subject))."\n"
 			."Body: ".stripslashes($body)."\n"
 			."\nYou may turn off these alerts in your preferences page.",
@@ -140,7 +254,7 @@ function isnewday($level){
 		$result = db_query($sql);
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			systemmail($row['acctid'],"`#{$session['user']['name']}`# tried to hack the superuser pages!","Bad, bad, bad {$session['user']['name']}, they are a hacker!");
+			systemmail($row['acctid'],"`#".$session['user']['name']."`# tried to hack the superuser pages!","Bad, bad, bad {$session['user']['name']}, they are a hacker!");
 		}
 		exit();
 	}
@@ -148,23 +262,19 @@ function isnewday($level){
 
 function forest($noshowmessage=false) {
 	global $session,$playermount;
-  $conf = unserialize($session['user']['donationconfig']);
-  if ($conf['healer']) {
-  	addnav("H?Golinda's Hut","healer.php");
-  } else {
-  	addnav("H?Healer's Hut","healer.php");
-  }
-  addnav("L?Look for Something to kill","forest.php?op=search");
-  if ($session['user']['level']>1)
-  	addnav("S?Go Slumming","forest.php?op=search&type=slum");
-  addnav("T?Go Thrillseeking","forest.php?op=search&type=thrill");
-  //if ($session['user'][hashorse]>=2) addnav("D?Dark Horse Tavern","forest.php?op=darkhorse");
-  if ($playermount['tavern']>0) addnav("D?Take {$playermount['mountname']} to Dark Horse Tavern","forest.php?op=darkhorse");
-  addnav("V?Return to the Village","village.php");
-  addnav("","forest.php");
-	if ($session['user'][level]>=15  && $session['user'][seendragon]==0){
-		addnav("G?`@Seek out the Green Dragon","forest.php?op=dragon");
-	}
+    $conf = unserialize($session['user']['donationconfig']);
+    if ($conf['healer']) {
+  	    addnav("H?Golinda's Hut","healer.php");
+    } else {
+  	    addnav("H?Healer's Hut","healer.php");
+    }
+    addnav("L?Look for Something to kill","forest.php?op=search");
+    if ($session['user']['level']>1) addnav("S?Go Slumming","forest.php?op=search&type=slum");
+    addnav("T?Go Thrillseeking","forest.php?op=search&type=thrill");
+    if ($playermount['tavern']>0) addnav("D?Take ".$playermount['mountname']." to Dark Horse Tavern","forest.php?op=darkhorse");
+    addnav("V?Return to the Village","village.php");
+    addnav("","forest.php");
+	if ($session['user']['level']>=15  && $session['user']['seendragon']==0) addnav("G?`@Seek out the Green Dragon","forest.php?op=dragon");
 	addnav("Other");
 	addnav("O?The Outhouse","outhouse.php");
 	if ($noshowmessage!=true){
@@ -176,33 +286,20 @@ function forest($noshowmessage=false) {
 		output("a twig or any of numerous bleached pieces of bone that perforate the forest floor, lest ");
 		output("you belie your presence to one of the vile beasts that wander the forest.");
 	}
-	if ($session['user'][superuser]>1){
-		output("`n`nSUPERUSER special inc's:`n");
-		$d = dir("special");
+	if ($session['user']['superuser']>1){
+	  output("`n`nSUPERUSER special inc's:`n");
+	  $d = dir("special");
 		while (false !== ($entry = $d->read())){
-			// Skip non php files (including directories)
-			if(strpos($entry, ".php") === false) continue;
-			// Skip any hidden files
-			if (substr($entry,0,1)==".") continue;
-	  		output("<a href='forest.php?specialinc=$entry'>$entry</a>`n", true);
-			addnav("","forest.php?specialinc=$entry");
+		  if (substr($entry,0,1)!="."){
+	  	output("<a href='forest.php?specialinc=$entry'>$entry</a>`n", true);
+		addnav("","forest.php?specialinc=$entry");
+			}
 		}
 	}
 }
 
 function borkalize($in){
-	$out = $in;
-	$out = str_replace(". ",". Bork bork. ",$out);
-	$out = str_replace(", ",", bork, ",$out);
-	$out = str_replace(" h"," hoor",$out);
-	$out = str_replace(" v"," veer",$out);
-	$out = str_replace("g ","gen ",$out);
-	$out = str_replace(" p"," pere",$out);
-	$out = str_replace(" qu"," quee",$out);
-	$out = str_replace("n ","nen ",$out);
-	$out = str_replace("e ","eer ",$out);
-	$out = str_replace("s ","ses ",$out);
-	return $out;
+// removed april fools joke
 }
 
 function getmicrotime(){ 
@@ -215,18 +312,21 @@ function make_seed() {
 }
 mt_srand(make_seed());
 
+// updated e_rand function
 function e_rand($min=false,$max=false){
-	if ($min===false) return mt_rand();
-	$min*=1000;
-	if ($max===false) return round(mt_rand($min)/1000,0);
-	$max*=1000;
-	if ($min==$max) return round($min/1000,0);
-	if ($min==0 && $max==0) return 0; //do NOT as me why this line can be executed, it makes no sense, but it *does* get executed.
-	if ($min<$max){
-		return round(@mt_rand($min,$max)/1000,0);
-	}else if($min>$max){
-		return round(@mt_rand($max,$min)/1000,0);
-	}
+  if ($min===false) return mt_rand();
+  if ($min==$max) return $min; //line moved up from below and modified
+  $min*=1000;
+  if ($max===false) return round(mt_rand($min)/1000,0); //this line probably needs to be changed
+  $max+=1; //line added
+  $max*=1000;
+  $max--;  //line added (instead of having x001 values, only have x000)
+  if ($min==0 && $max==0) return 0; //do NOT as me why this line can be executed, it makes no sense, but it *does* get executed.
+  if ($min<$max){
+      return (int)(@mt_rand($min,$max)/1000);
+  }else if($min>$max){
+      return (int)(@mt_rand($max,$min)/1000);
+  }
 }
 
 function is_email($email){
@@ -237,8 +337,8 @@ function checkban($login=false){
 	global $session;
 	if ($session['banoverride']) return false;
 	if ($login===false){
-		$ip=$_SERVER[REMOTE_ADDR];
-		$id=$_COOKIE[lgi];
+		$ip=$_SERVER['REMOTE_ADDR'];
+		$id=$_COOKIE['lgi'];
 		//echo "<br>Orig output: $ip, $id<br>";
 	}else{
 		$sql = "SELECT lastip,uniqueid,banoverride FROM accounts WHERE login='$login'";
@@ -252,8 +352,8 @@ function checkban($login=false){
 			//echo "`nNo absolution here, son.";
 		}
 		db_free_result($result);
-		$ip=$row[lastip];
-		$id=$row[uniqueid];
+		$ip=$row['lastip'];
+		$id=$row['uniqueid'];
 		//echo "<br>Secondary output: $ip, $id<br>";
 	}
 	$sql = "select * from bans where ((substring('$ip',1,length(ipfilter))=ipfilter AND ipfilter<>'') OR (uniqueid='$id' AND uniqueid<>'')) AND (banexpire='0000-00-00' OR banexpire>'".date("Y-m-d")."')";
@@ -264,15 +364,15 @@ function checkban($login=false){
 		$session=array();
 		//$session['message'] = $msg;
 		//echo "Session Abandonment";
-		$session[message].="`n`4You fall under a ban currently in place on this website:`n";
+		$session['message'].="`n`4You fall under a ban currently in place on this website:`n";
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			$session[message].=$row[banreason];
-			if ($row[banexpire]=="0000-00-00") $session[message].="  `\$This ban is permanent!`0";
-			if ($row[banexpire]!="0000-00-00") $session[message].="  `^This ban will be removed on ".date("M d, Y",strtotime($row[banexpire]))."`0";
-			$session[message].="`n";
+			$session['message'].=$row['banreason'];
+			if ($row['banexpire']=="0000-00-00") $session['message'].="  `\$This ban is permanent!`0";
+			if ($row['banexpire']!="0000-00-00") $session['message'].="  `^This ban will be removed on ".date("M d, Y",strtotime($row['banexpire']))."`0";
+			$session['message'].="`n";
 		}
-		$session[message].="`4If you wish, you may appeal your ban with the petition link.";
+		$session['message'].="`4If you wish, you may appeal your ban with the petition link.";
 		header("Location: index.php");
 		exit();
 	}
@@ -281,16 +381,16 @@ function checkban($login=false){
 
 function increment_specialty(){
   global $session;
-		if ($session['user'][specialty]>0){
+		if ($session['user']['specialty']>0){
 			$skillnames = array(1=>"Dark Arts","Mystical Powers","Thievery");
 			$skills = array(1=>"darkarts","magic","thievery");
 			$skillpoints = array(1=>"darkartuses","magicuses","thieveryuses");
-			$session['user'][$skills[$session['user'][specialty]]]++;
-			output("`nYou gain a level in `&".$skillnames[$session['user'][specialty]]."`# to ".$session['user'][$skills[$session['user'][specialty]]].", ");
-			$x = ($session['user'][$skills[$session['user'][specialty]]]) % 3;
+			$session[user][$skills[$session['user']['specialty']]]++;
+			output("`nYou gain a level in `&".$skillnames[$session['user']['specialty']]."`# to ".$session['user'][$skills[$session['user']['specialty']]].", ");
+			$x = ($session['user'][$skills[$session['user']['specialty']]]) % 3;
 			if ($x == 0){
 				output("you gain an extra use point!`n");
-				$session['user'][$skillpoints[$session['user'][specialty]]]++;
+				$session['user'][$skillpoints[$session['user']['specialty']]]++;
 			}else{
 				output("only ".(3-$x)." more skill levels until you gain an extra use point!`n");
 			}
@@ -309,41 +409,41 @@ function fightnav($allowspecial=true, $allowflee=true){
 	}
 	if ($allowspecial) {
 		addnav("`bSpecial Abilities`b");
-		if ($session['user'][darkartuses]>0) {
+		if ($session['user']['darkartuses']>0) {
 			addnav("`\$Dark Arts`0", "");
-			addnav("`\$&#149; Skeleton Crew`7 (1/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=1",true);
+			addnav("`\$&#149; Skeleton Crew`7 (1/".$session['user']['darkartuses'].")`0","$script?op=fight&skill=DA&l=1",true);
 		}
-		if ($session['user'][darkartuses]>1)
-			addnav("`\$&#149; Voodoo`7 (2/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=2",true);
-		if ($session['user'][darkartuses]>2)
-			addnav("`\$&#149; Curse Spirit`7 (3/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=3",true);
-		if ($session['user'][darkartuses]>4)
-			addnav("`\$&#149; Wither Soul`7 (5/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=5",true);
-	
-		if ($session['user'][thieveryuses]>0) {
+		if ($session['user']['darkartuses']>1)
+			addnav("`\$&#149; Voodoo`7 (2/".$session['user']['darkartuses'].")`0","$script?op=fight&skill=DA&l=2",true);
+		if ($session['user']['darkartuses']>2)
+			addnav("`\$&#149; Curse Spirit`7 (3/".$session['user']['darkartuses'].")`0","$script?op=fight&skill=DA&l=3",true);
+		if ($session['user']['darkartuses']>4)
+			addnav("`\$&#149; Wither Soul`7 (5/".$session['user']['darkartuses'].")`0","$script?op=fight&skill=DA&l=5",true);
+
+		if ($session['user']['thieveryuses']>0) {
 			addnav("`^Thieving Skills`0","");
-			addnav("`^&#149; Insult`7 (1/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=1",true);
+			addnav("`^&#149; Insult`7 (1/".$session['user']['thieveryuses'].")`0","$script?op=fight&skill=TS&l=1",true);
 		}
-		if ($session['user'][thieveryuses]>1)
-			addnav("`^&#149; Poison Blade`7 (2/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=2",true);
-		if ($session['user'][thieveryuses]>2)
-			addnav("`^&#149; Hidden Attack`7 (3/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=3",true);
-		if ($session['user'][thieveryuses]>4)
-			addnav("`^&#149; Backstab`7 (5/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=5",true);
-	
-		if ($session['user'][magicuses]>0) {
+		if ($session['user']['thieveryuses']>1)
+			addnav("`^&#149; Poison Blade`7 (2/".$session['user']['thieveryuses'].")`0","$script?op=fight&skill=TS&l=2",true);
+		if ($session['user']['thieveryuses']>2)
+			addnav("`^&#149; Hidden Attack`7 (3/".$session['user']['thieveryuses'].")`0","$script?op=fight&skill=TS&l=3",true);
+		if ($session['user']['thieveryuses']>4)
+			addnav("`^&#149; Backstab`7 (5/".$session['user']['thieveryuses'].")`0","$script?op=fight&skill=TS&l=5",true);
+
+		if ($session['user']['magicuses']>0) {
 			addnav("`%Mystical Powers`0","");
 			//disagree with making this 'n', players shouldn't have their behavior dictated by convenience of god mode, hehe
-			addnav("g?`%&#149; Regeneration`7 (1/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=1",true);
+			addnav("g?`%&#149; Regeneration`7 (1/".$session['user']['magicuses'].")`0","$script?op=fight&skill=MP&l=1",true);
 		}
-		if ($session['user'][magicuses]>1)
-			addnav("`%&#149; Earth Fist`7 (2/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=2",true);
-		if ($session['user'][magicuses]>2)
-			addnav("L?`%&#149; Siphon Life`7 (3/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=3",true);
-		if ($session['user'][magicuses]>4)
-			addnav("A?`%&#149; Lightning Aura`7 (5/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=5",true);
+		if ($session['user']['magicuses']>1)
+			addnav("`%&#149; Earth Fist`7 (2/".$session['user']['magicuses'].")`0","$script?op=fight&skill=MP&l=2",true);
+		if ($session['user']['magicuses']>2)
+			addnav("L?`%&#149; Siphon Life`7 (3/".$session['user']['magicuses'].")`0","$script?op=fight&skill=MP&l=3",true);
+		if ($session['user']['magicuses']>4)
+			addnav("A?`%&#149; Lightning Aura`7 (5/".$session['user']['magicuses'].")`0","$script?op=fight&skill=MP&l=5",true);
 
-		if ($session['user'][superuser]>=3) {
+		if ($session['user']['superuser']>=3) {
 			addnav("`&Super user`0","");
 			addnav("!?`&&#149; __GOD MODE","$script?op=fight&skill=godmode",true);
 		}
@@ -493,27 +593,131 @@ function templatereplace($itemname,$vals=false){
 	return $out;
 }
 
+// expbar, hungerbar & thirstbar mods
+function expbar() {
+    global $session;
+    $exparray=array(1=>100,204,349,616,1141,2100,3724,6288,10117,15581,23100,33145,46228,62916,83820,109600,140965,178668,223517,276360,338100,409685,492109,586416,693700,815100,951804,1105049,1276116,1466340,1677100,1909825,2165989,2447116,2754780,3090600,3456245,3853429,4283916,4749520,5252100,5793564,6375869,7001016,7671061,8388100,9154284,9971808,10842916,11769901,12755100,13800904,14909748,16084116,17326541,18639600,20025924,21488188,23029116,24651481,26358100,28151844,30035629,32012416,34085221,36257100,38531164,40910568,43398516,45998261,48713100,51546384,54501509,57581916,60791101,64132600,67610004,71226948,74987116,78894241,82952100,87164524,91535388,96068617,100768181,105638100,110682444,115905328,121310917,126903420,132687100,138666264,144845268,151228517,157820460,164625600,171648484,178893708,186365917,194069801);
+//	while (list($key,$val)=each($exparray)){
+///		$exparray[$key]= round($val + ($session['user']['dragonkills']/4) * $session['user']['level'] * 100,0);
+//	}
+    $min = $exparray[$session['user']['level']-1];
+    $exp = $session['user']['experience'];
+	$req=$exparray[$session['user']['level']];
+    if ($req-$min > 0) $nonpct = round(($req-$exp)/($req-$min) * 100, 0);
+        else $nonpct = 0;
+        $pct = 100-$nonpct;
+    $u = "<font face=\"verdana\" size=1>" . commas($exp) . "/" . commas($req) . "<br><table style=\"border: solid 1px #000000\" cellspacing=\"0\" width=\"70\" height=\"6\">";
+    if ($pct > 0){
+        $u = $u . "<tr><td width=\"" . $pct . "%\" bgcolor=\"red\"></td>";
+        }
+    if ($nonpct >= 0){
+        $u = $u . "<td width=\"".$nonpct."%\" bgcolor=\"white\"></td></tr></table>";
+    }else {
+        $u = $u . "</tr></table>";
+    }
+return($u);
+}
+
+function hungerbar() {
+    global $session;
+    $hmax = 100;
+    $curhunger = $session['user']['hungry'];
+    $pct = ($curhunger/$hmax)*100;
+    $nonpct = $hmax - $pct;
+    $u = "<table style=\"border: solid 1px #000000\" cellspacing=\"0\" width=\"70\" height=\"6\">";
+    if ($pct > 0){
+        $u = $u . "<tr><td width=\"".$pct."%\" bgcolor=\"blue\"></td>";
+        }
+    if ($nonpct > 0){
+        $u = $u . "<td width=\"".$nonpct."%\" bgcolor=\"white\"></td></tr></table>";
+    }else {
+        $u = $u."</tr></table>";
+    }
+return($u);
+}
+
 function charstats(){
 	global $session;
 	$u =& $session['user'];
 	if ($session['loggedin']){
+        // clickable potion mod
+        $currentpage=$_SERVER['REQUEST_URI'];
+
+        if(strstr($currentpage, "?") !=""){
+            $position=strrpos($currentpage,"?");
+            $currentpage=substr($currentpage,0,$position);
+        }
+        $currentpage=str_replace("/logd97/","",$currentpage);
+        if($currentpage != "usepotion.php" || $currentpage != "usechow.php"){
+            $session['user']['pqrestorepage']=$currentpage;
+        }
+    global $badguy;
+	for ($i=0;$i<6;$i+=1){
+		if ($session['user']['potion']>$i){
+			if ($badguy['creaturename']<>"" or $session['user']['alive']==0 or strstr($currentpage, "inventory") !="" or strstr($currentpage, "usepotion") !="" or strstr($currentpage, "usechow") !="" or strstr($currentpage, "newday") !="" or strstr($currentpage, "inventory") !=""){
+				$potion.="<img src=\"./images/potion.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 20px;\">";
+			}else{
+				$potion.="<a href=\"usepotion.php\"><img src=\"./images/potion.gif\" title=\"\" alt=\"\" style=\"border: 0px solid ; width: 14px; height: 20px;\"></a>";
+				addnav("","usepotion.php");
+			}
+		}else{
+			$potion.="<img src=\"./images/potionclear.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 20px;\">";
+		}
+	}
+    // end clickable potion mod
+
+	//begin medallion meter
+	for ($i=0;$i<6;$i+=1){
+		if ($session['user']['medallion']>$i){
+			$medallion.="<img src=\"./images/medallion.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 16px;\">";
+		}else{
+			$medallion.="<img src=\"./images/medallionclear.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 16px;\">";
+		}
+	}
+	//end medallion meter
+
+    // inventory mod
+    $currentpage=$_SERVER['REQUEST_URI'];
+    if (strstr($currentpage, "?") !=""){
+        $position=strrpos($currentpage,"?");
+        $currentpage=substr($currentpage,0,$position);
+    }
+    $currentpage=str_replace("/logd97/","",$currentpage);
+    if($currentpage != "inventory.php"){
+        $session['user']['invrestorepage']=$currentpage;
+    }
+        if($badguy['creaturename']<>"" or $session['user']['alive']==0 or strstr($currentpage, "inventory") !="" or strstr($currentpage, "usepotion") !="" or strstr($currentpage, "newday") !=""){
+            $inventory.="<img src=\"./images/chest.gif\" border=\"0\">";
+        } else {
+            $inventory.="<a href=\"inventory.php\"><img src=\"./images/chest.gif\" border=\"0\"></a>";
+            addnav("","inventory.php");
+        }
+        // end mod
 		$u['hitpoints']=round($u['hitpoints'],0);
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
 		$spirits=array("-6"=>"Resurrected","-2"=>"Very Low","-1"=>"Low","0"=>"Normal","1"=>"High","2"=>"Very High");
-		if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
-		reset($session['bufflist']);
-		$atk=$u['attack'];
-		$def=$u['defence'];
-		while (list($key,$val)=each($session['bufflist'])){
+        $job=array("0"=>"None","1"=>"Trashman","2"=>"Farmhand","3"=>"Seamstress","4"=>"Guardsman","5"=>"Carpenter","6"=>"Blacksmith","7"=>"Chef","8"=>"Hostess","9"=>"Lumberjack","10"=>"Rancher","11"=>"Goldminer","12"=>"Doctor","13"=>"Lawyer","14"=>"Judge","15"=>"Banker","16"=>"CEO");
+
+        // added so you can see the race in vitals
+        $races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf");
+        // added so you can see skills in vitals
+   		$skills = array(1=>"Dark Arts","Mystical Powers","Thievery");
+        $mounts = array(0=>"None",1=>"Pony",2=>"Gelding",3=>"Stallion",4=>"War Horse",5=>"Mastadon",6=>"Griffon",8=>"Goat",9=>"Raven",10=>"Eagle",11=>"Wyvern",12=>"Phoenix");
+        if ($u[alive]){ }else{ $spirits[$u[spirits]] = "DEAD"; }
+		reset($session[bufflist]);
+		$atk=$u[attack];
+		$def=$u[defense];
+  
+		while (list($key,$val)=each($session[bufflist])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
 			if (isset($val['atkmod'])) $atk *= $val['atkmod'];
 			if (isset($val['defmod'])) $def *= $val['defmod'];
 		}
 		$atk = round($atk, 2);
 		$def = round($def, 2);
-		$atk = ($atk == $u['attack'] ? "`^" : ($atk > $u[attack] ? "`@" : "`$")) . "`b$atk`b`0";
-		$def = ($def == $u['defence'] ? "`^" : ($def > $u[defence] ? "`@" : "`$")) . "`b$def`b`0";
+		$atk = ($atk == $u['attack'] ? "`^" : ($atk > $u['attack'] ? "`@" : "`$")) . "`b$atk`b`0";
+		$def = ($def == $u['defense'] ? "`^" : ($def > $u['defense'] ? "`@" : "`$")) . "`b$def`b`0";
 
 		if (count($session['bufflist'])==0){
 			$buffs.=appoencode("`^None`0",true);
@@ -521,13 +725,14 @@ function charstats(){
 		$charstat=appoencode(templatereplace("statstart")
 		.templatereplace("stathead",array("title"=>"Vital Info"))
 		.templatereplace("statrow",array("title"=>"Name","value"=>appoencode($u['name'],false)))
-		,true);
+        .templatereplace("statrow",array("title"=>"Race","value"=>"".$races[$u['race']].""))
+        .templatereplace("statrow",array("title"=>"Skill","value"=>"".$skills[$u['specialty']]."")),true);
+
 		if ($session['user']['alive']){
 
-			$charstat.=appoencode(
-			templatereplace("statrow",array("title"=>"Hitpoints","value"=>"$u[hitpoints]`0/$u[maxhitpoints]"))
-			.templatereplace("statrow",array("title"=>"Turns","value"=>$u['turns']))
-			,true);
+			$charstat.=appoencode(templatereplace("statrow",array("title"=>"Hitpoints","value"=>"$u[hitpoints]`0/$u[maxhitpoints]"))
+//            .templatereplace("statrow",array("title"=>"Mana","value"=>"$u[mana]`0/$u[maxmana]"))
+			.templatereplace("statrow",array("title"=>"Turns","value"=>$u['turns'])),true);
 		}else{
 			$charstat.=appoencode(
 			 templatereplace("statrow",array("title"=>"Soul Points","value"=>$u['soulpoints']))
@@ -540,19 +745,38 @@ function charstats(){
 		.($session['user']['alive']?
 			 templatereplace("statrow",array("title"=>"Attack","value"=>$atk))
 			.templatereplace("statrow",array("title"=>"Defense","value"=>$def))
+            .templatereplace("statrow",array("title"=>"Charm","value"=>$u['charm']))
+            .templatereplace("statrow",array("title"=>"Mount/Pet","value"=>"".$mounts[$u['hashorse'].""]))
+
+            .templatereplace("stathead",array("title"=>"Location info"))
+    	    .templatereplace("statrow",array("title"=>"Latitude","value"=>$u['latitude']." N"))
+		    .templatereplace("statrow",array("title"=>"Longitude","value"=>$u['longitude']." E"))
 			:
 			 templatereplace("statrow",array("title"=>"Psyche","value"=>10 + round(($u['level']-1)*1.5)))
 			.templatereplace("statrow",array("title"=>"Spirit","value"=>10 + round(($u['level']-1)*1.5)))
+            .templatereplace("statrow",array("title"=>"Favor","value"=>$u['deathpower']))
 			)
+        .templatereplace("stathead",array("title"=>"Miscellaneous info"))
+		.templatereplace("statrow",array("title"=>"Clan","value"=>$u['clan']))
+        .templatereplace("statrow",array("title"=>"Inventory","value"=>$inventory))
 		.templatereplace("statrow",array("title"=>"Gems","value"=>$u['gems']))
-		.templatereplace("stathead",array("title"=>"Miscellaneous info"))
-		.templatereplace("statrow",array("title"=>"Gold","value"=>$u['gold']))
-		.templatereplace("statrow",array("title"=>"Experience","value"=>$u['experience']))
-		.templatereplace("statrow",array("title"=>"Weapon","value"=>$u['weapon']))
-		.templatereplace("statrow",array("title"=>"Armor","value"=>$u['armor']))
-		,true);
-		if (!is_array($session['bufflist'])) $session['bufflist']=array();
-		$charstat.=appoencode(templatereplace("statbuff",array("title"=>"Buffs:","value"=>$buffs)),true);
+        .templatereplace("statrow",array("title"=>"Gold","value"=>commas($u['gold']))),true);
+		if ($session[user][medhunt]==1){
+			$charstat.=appoencode(templatereplace("statrow",array("title"=>"Medallions","value"=>$medallion)),true);
+		}
+		$charstat.=appoencode(
+        // added for the clickable potion mod
+        templatereplace("statrow",array("title"=>"Potions","value"=>$potion))
+        // end mod
+        .templatereplace("statrow",array("title"=>"Exp","value"=>expbar($u)))
+		.templatereplace("statrow",array("title"=>"Head","value"=>stripslashes($u['headgear'])))
+		.templatereplace("statrow",array("title"=>"Body","value"=>stripslashes($u['armor'])))
+		.templatereplace("statrow",array("title"=>"Right","value"=>stripslashes($u['weapon'])))
+  		.templatereplace("statrow",array("title"=>"Left","value"=>stripslashes($u['lefthand'])))
+  		.templatereplace("statrow",array("title"=>"Feet","value"=>stripslashes($u['feet']))), true);
+
+		if (!is_array($session[bufflist])) $session[bufflist]=array();
+		$charstat.=appoencode(templatereplace("statbuff",array("title"=>"Special","value"=>$buffs)),true);
 		$charstat.=appoencode(templatereplace("statend"),true);
 		return $charstat;
 	}else{
@@ -563,7 +787,7 @@ function charstats(){
 		$result = db_query($sql) or die(sql_error($sql));
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			//$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
+			//$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
 			//if ($loggedin) {
 				$ret.=appoencode("`^$row[name]`n");
 				$onlinecount++;
@@ -575,11 +799,35 @@ function charstats(){
 	}
 }
 
+/* this causes major load on the server with larger player bases
+//mod for displaying users online *****************
+function onlinechars(){
+  global $session;
+  if ($session[loggedin]){
+      $sql="SELECT name,alive,location,sex,level,laston,loggedin,lastip,uniqueid,superuser FROM accounts WHERE locked=0 AND loggedin=1 AND laston>'".date("Y-m-d H:i:s",strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds"))."' ORDER BY level DESC";
+      $ret=appoencode(templatereplace(statstart).templatereplace("stathead",array("title"=>"Users Online")),true);
+      $result = db_query($sql) or die(sql_error($sql));
+      for ($i=0;$i<db_num_rows($result);$i++){
+        $row = db_fetch_assoc($result);
+        if($row[superuser]>0) $name = "@ ".$row[name];
+        $ret.=appoencode(templatereplace("statrow",array("title"=>"".$name."","value"=>" ")),true);
+        $onlinecount++;
+      }
+      $ret.=appoencode(templatereplace("statend"),true);
+      db_free_result($result);
+      if ($onlinecount==0) $ret.=appoencode("`iNone`i");
+      return $ret;
+  }
+}
+// end mod ****************************************
+*/
+
 $accesskeys=array();
 $quickkeys=array();
+
 function addnav($text,$link=false,$priv=false,$pop=false){
 	global $nav,$session,$accesskeys,$REQUEST_URI,$quickkeys;
-	$text = translate($text);
+	$text = $text;
 	if (date("m-d")=="04-01"){
 		$text = borkalize($text);
 	}
@@ -638,7 +886,6 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 						// output("Not found`n");
 					}
 				}
-				//
 			}
 			if ($key==""){
 				for ($i=0;$i<strlen($text); $i++){
@@ -811,7 +1058,7 @@ function redirect($location,$reason=false){
 		$session['allowednavs']=array();
 		addnav("",$location);
 	}
-	if (strpos($location,"badnav.php")===false) $session[output]="<a href=\"".HTMLEntities($location)."\">Click here.</a>";
+	if (strpos($location,"badnav.php")===false) $session['output']="<a href=\"".HTMLEntities($location)."\">Click here.</a>";
 	$session['debug'].="Redirected to $location from $REQUEST_URI.  $reason\n";
 	saveuser();
 	header("Location: $location");
@@ -835,7 +1082,7 @@ function loadtemplate($templatename){
 
 function maillink(){
 	global $session;
-	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session['user']['acctid']."\"";
+	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session[user][acctid]."\"";
 	$result = db_query($sql) or die(mysql_error(LINK));
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
@@ -858,7 +1105,7 @@ function motdlink(){
 	}
 }
 
-function page_header($title="The Dragon Saga"){
+function page_header($title="Age of Lords"){
 	global $header,$SCRIPT_NAME,$session,$template;
 	$nopopups["login.php"]=1;
 	$nopopups["motd.php"]=1;
@@ -872,7 +1119,7 @@ function page_header($title="The Dragon Saga"){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups['$SCRIPT_NAME']!=1 && $session['user']['loggedin']){
+	if (($row[motddate]>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
 		$header=str_replace("{headscript}","<script language='JavaScript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
 	}else{
@@ -925,8 +1172,6 @@ function page_footer(){
 	}
 	//-->
 	</script>";
-	
-
 	$footer = $template['footer'];
 	$header=str_replace("{nav}",$nav,$header);
 	$footer=str_replace("{nav}",$nav,$footer);
@@ -934,7 +1179,7 @@ function page_footer(){
 	$header = str_replace("{motd}", motdlink(), $header);
 	$footer = str_replace("{motd}", motdlink(), $footer);
 
-	if ($session['user']['acctid']>0) {
+	if ($session[user][acctid]>0) {
 		$header=str_replace("{mail}",maillink(),$header);
 		$footer=str_replace("{mail}",maillink(),$footer);
 	}else{
@@ -956,6 +1201,8 @@ function page_footer(){
 	}
 	$footer=str_replace("{stats}",charstats(),$footer);
 	$header=str_replace("{stats}",charstats(),$header);
+    //$footer=str_replace("{onlinechars}", onlinechars(), $footer);
+    //$header=str_replace("{onlinechars}", onlinechars(), $header);
 	$header=str_replace("{script}",$script,$header);
 	$footer=str_replace("{source}","<a href='source.php?url=".preg_replace("/[?].*/","",($_SERVER['REQUEST_URI']))."' target='_blank'>View PHP Source</a>",$footer);
 	$header=str_replace("{source}","<a href='source.php?url=".preg_replace("/[?].*/","",($_SERVER['REQUEST_URI']))."' target='_blank'>View PHP Source</a>",$header);
@@ -965,13 +1212,6 @@ function page_footer(){
 	$session['user']['gentime']+=$gentime;
 	$session['user']['gentimecount']++;
 	$footer=str_replace("{pagegen}","Page gen: ".round($gentime,2)."s, Ave: ".round($session['user']['gentime']/$session['user']['gentimecount'],2)."s - ".round($session['user']['gentime'],2)."/".round($session['user']['gentimecount'],2)."",$footer);
-	if (strpos($_SERVER['HTTP_HOST'],"lotgd.net")!==false){
-		$footer=str_replace(
-			"</html>",
-			'<script language="JavaScript" type="text/JavaScript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?5193"></script></html>',
-			$footer
-			);
-	}
 
 	$output=$header.$output.$footer;
 	$session['user']['gensize']+=strlen($output);
@@ -984,10 +1224,10 @@ function page_footer(){
 	exit();
 }
 
-function popup_header($title="The Dragon Saga"){
+function popup_header($title="Legend of the Green Dragon"){
   global $header;
 	$header.="<html><head><title>$title</title>";
-	$header.="<link href=\"templates/newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
+	$header.="<link href=\"newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
 	$header.="</head><body bgcolor='#000000' text='#CCCCCC'><table cellpadding=5 cellspacing=0 width='100%'>";
 	$header.="<tr><td class='popupheader'><b>$title</b></td></tr>";
 	$header.="<tr><td valign='top' width='100%'>";
@@ -999,7 +1239,7 @@ function popup_footer(){
 		$output.="</$key>";
 		unset($nestedtags[$key]);
 	}
-	$output.="</td></tr><tr><td bgcolor='#330000' align='center'>Copyright 2002, Eric Stevens</td></tr></table></body></html>";
+	$output.="</td></tr><tr><td bgcolor='#330000' align='center'>&nbsp;</td></tr></table></body></html>";
 	$output=$header.$output;
 	//$session[output]=$output;
 	
@@ -1009,10 +1249,10 @@ function popup_footer(){
 }
 
 function clearoutput(){
-  global $output,$nestedtags,$header,$nav,$session;
+    global $output,$nestedtags,$header,$nav,$session;
 	$session['allowednavs']="";
 	$output="";
-  unset($nestedtags);
+    unset($nestedtags);
 	$header="";
 	$nav="";
 }
@@ -1023,8 +1263,8 @@ function soap($input){
 		$search = "*damn* *dyke *fuck* *phuck* *shit* asshole amcik andskota arschloch arse* atouche ayir bastard bitch* boiolas bollock* buceta butt-pirate cabron cawk cazzo chink chraa chuj cipa clit cock* "
 						. "cum cunt* dago daygo dego dick* dildo dike dirsa dupa dziwka ejackulate ekrem* ekto enculer faen fag* fanculo fanny fatass fcuk feces feg felcher ficken fitta fitte flikker foreskin phuck fuk* fut futkretzn fuxor gay gook guiena hor "
 						. "hell helvete hoer* honkey hore huevon hui injun jism jizz kanker* kawk kike klootzak knulle kraut kuk kuksuger kurac kurwa kusi* kyrpä* leitch lesbian lesbo mamhoon masturbat* merd merde mibun monkleigh mouliewop muie "
-						. "mulkku muschi nazis nepesaurio nigga* *nigger* nutsack orospu paska* pendejo penis perse phuck picka pierdol* pillu* pimmel pimpis piss* pizda poontsee poop porn pron preteen preud prick pula pule pusse pussy puta puto qahbeh queef* queer* "
-						. "qweef rautenberg schaffer scheiss* scheisse schlampe schmuck screw scrotum sharmuta sharmute shemale shipal shiz skribz skurwysyn slut smut sphencter spic spierdalaj splooge suka teets teez testicle tits titties titty twat twaty vittu "
+						. "mulkku muschi nazis nepesaurio nigga* *nigger* nutsack orospu paska* pendejo penis perse phuck picka pierdol* pillu* pimmel pimpis piss* pizda poontsee porn pron preteen preud prick pula pule pusse pussy puta puto qahbeh queef* queer* "
+						. "qweef rautenberg schaffer scheiss* scheisse schlampe schmuck scrotum sharmuta sharmute shemale shipal shiz skribz skurwysyn slut smut sphencter spic spierdalaj splooge suka teets teez testicle tits titties titty twat twaty vittu "
 						. "votze woose wank* wetback* whoar whore wichser wop yed zabourah ass";
 	*/
 		$sql = "SELECT * FROM nastywords";
@@ -1060,15 +1300,14 @@ function saveuser(){
 //	$cmd = date("Y-m-d H:i:s")." $dbqueriesthishit ".$_SERVER['REQUEST_URI'];
 //	@exec("echo $cmd >> /home/groups/l/lo/lotgd/sessiondata/data/queryusage-".$session['user']['login'].".txt");
 	if ($session['loggedin'] && $session['user']['acctid']!=""){
-  	$session['user']['output']=$session['output'];
+  	$session['user']['output']=$session[output];
   	$session['user']['allowednavs']=serialize($session['allowednavs']);
 		$session['user']['bufflist']=serialize($session['bufflist']);
 		if (is_array($session['user']['prefs'])) $session['user']['prefs']=serialize($session['user']['prefs']);
-		if (is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=serialize($session['user']['dragonpoints']);
-		//$session['user'][laston] = date("Y-m-d H:i:s");
+		//$session[user][laston] = date("Y-m-d H:i:s");
   	$sql="UPDATE accounts SET ";
-  	reset($session['user']);
-  	while(list($key,$val)=each($session['user'])){
+  	reset($session[user]);
+  	while(list($key,$val)=each($session[user])){
   		if (is_array($val)){
 				$sql.="$key='".addslashes(serialize($val))."', ";
 			}else{
@@ -1076,7 +1315,7 @@ function saveuser(){
 			}
   	}
   	$sql = substr($sql,0,strlen($sql)-2);
-  	$sql.=" WHERE acctid = ".$session['user']['acctid'];
+  	$sql.=" WHERE acctid = ".$session[user][acctid];
   	db_query($sql);
   }
 }
@@ -1132,18 +1371,18 @@ function dump_item($item){
 
 function addnews($news){
 	global $session;
-	$sql = "INSERT INTO news(newstext,newsdate,accountid) VALUES ('".addslashes($news)."',NOW(),".$session['user']['acctid'].")";
+	$sql = "INSERT INTO news(newstext,newsdate,accountid) VALUES ('".addslashes($news)."',NOW(),".$session[user][acctid].")";
 	return db_query($sql) or die(db_error($link));
 }
 
 function checkday() {
 	global $session,$revertsession,$REQUEST_URI;
-  //output("`#`iChecking to see if you're due for a new day: ".$session['user'][laston].", ".date("Y-m-d H:i:s")."`i`n`0");
+  //output("`#`iChecking to see if you're due for a new day: ".$session[user][laston].", ".date("Y-m-d H:i:s")."`i`n`0");
 	if ($session['user']['loggedin']){
 		output("<!--CheckNewDay()-->",true);
 		if(is_new_day()){
 			$session=$revertsession;
-			$session['user'][restorepage]=$REQUEST_URI;
+			$session['user']['restorepage']=$REQUEST_URI;
 			$session['allowednavs']=array();
 			addnav("","newday.php");
 			redirect("newday.php");
@@ -1154,7 +1393,7 @@ function checkday() {
 function is_new_day(){
 	global $session;
 	$t1 = gametime(); 
-	$t2 = convertgametime(strtotime($session['user']['lasthit']));
+	$t2 = convertgametime(strtotime($session[user][lasthit]));
 	$d1 = date("Y-m-d",$t1);
 	$d2 = date("Y-m-d",$t2);
 	if ($d1!=$d2){
@@ -1198,6 +1437,23 @@ function ordinal($val){
 	}
 }
 
+function emoticons($text){
+	$imgloc=$_SERVER['REQUEST_URI'];
+	$text = str_replace(":(","<IMG SRC=\"./images/cry.gif\">",$text);
+	$text = str_replace(":d","<IMG SRC=\"./images/devil.gif\">",$text);
+	$text = str_replace(":o","<IMG SRC=\"./images/eek.gif\">",$text);
+	$text = str_replace(":v","<IMG SRC=\"./images/evil.gif\">",$text);
+	$text = str_replace(":h2","<IMG SRC=\"./images/hammer2.gif\">",$text);
+	$text = str_replace(":lol","<IMG SRC=\"./images/laugh.gif\">",$text);
+	$text = str_replace(":-","<IMG SRC=\"./images/pipe.gif\">",$text);
+	$text = str_replace(":|","<IMG SRC=\"./images/sleep.gif\">",$text);
+	$text = str_replace(":)","<IMG SRC=\"./images/smile.gif\">",$text);
+	$text = str_replace(":tst","<IMG SRC=\"./images/toast.gif\">",$text);
+	$text = str_replace(":p","<IMG SRC=\"./images/tongue.gif\">",$text);
+	$text = str_replace(";)","<IMG SRC=\"./images/wink.gif\">",$text);
+	return $text;
+}
+
 function addcommentary() {
 	global $HTTP_POST_VARS,$session,$REQUEST_URI,$HTTP_GET_VARS,$doublepost;
 	$doublepost=0;
@@ -1209,7 +1465,7 @@ function addcommentary() {
 	$talkline=$HTTP_POST_VARS['talkline'];
 	if ($HTTP_POST_VARS['insertcommentary'][$section]!==NULL &&
 		trim($HTTP_POST_VARS['insertcommentary'][$section])!="") {
-		$commentary = str_replace("`n","",soap($HTTP_POST_VARS['insertcommentary'][$section]));
+        $commentary = str_replace("`n","",soap($HTTP_POST_VARS['insertcommentary'][$section]));
 		$y = strlen($commentary);
 		for ($x=0;$x<$y;$x++){
 			if (substr($commentary,$x,1)=="`"){
@@ -1263,18 +1519,21 @@ function addcommentary() {
 		}//end if
 		$commentary = preg_replace("'([^[:space:]]{45,45})([^[:space:]])'","\\1 \\2",$commentary);
 		if ($session['user']['drunkenness']>50) $talkline = "drunkenly $talkline";
-		$talkline = translate($talkline);
+//		$talkline = $talkline;
 
 		if ($talkline!="says" // do an emote if the area has a custom talkline and the user isn't trying to emote already.
 		&& substr($commentary,0,1)!=":" 
 		&& substr($commentary,0,2)!="::" 
 		&& substr($commentary,0,3)!="/me") 
-			$commentary = ":`3$talkline, \\\"`#$commentary`3\\\"";
+		$commentary = ":`3$talkline, \\\"`#$commentary`3\\\"";
+        // added for emoticons
+        $commentary=htmlentities($commentary);
+        // end mod
 		$sql = "SELECT commentary.comment,commentary.author FROM commentary WHERE section='$section' ORDER BY commentid DESC LIMIT 1";
 		$result = db_query($sql) or die(db_error(LINK));
 		$row = db_fetch_assoc($result);
 		db_free_result($result);
-		if ($row[comment]!=$commentary || $row[author]!=$session['user']['acctid']){
+		if ($row['comment']!=$commentary || $row['author']!=$session['user']['acctid']){
 		  $sql = "INSERT INTO commentary (postdate,section,author,comment) VALUES (now(),'$section',".$session['user']['acctid'].",\"$commentary\")";
 			db_query($sql) or die(db_error(LINK));
 		} else {
@@ -1283,44 +1542,45 @@ function addcommentary() {
 		}
 }
 
-function viewcommentary($section,$message="Interject your own commentary?",$limit=10,$talkline="says") {
+function viewcommentary($section,$message="Interject your own commentary?",$limit=20,$talkline="says",$climit="0") {
 	global $HTTP_POST_VARS,$session,$REQUEST_URI,$HTTP_GET_VARS, $doublepost;
 	$nobios = array("motd.php"=>true);
 	if ($nobios[basename($_SERVER['SCRIPT_NAME'])]) $linkbios=false; else $linkbios=true;
 	//output("`b".basename($_SERVER['SCRIPT_NAME'])."`b`n");
 	if ($doublepost) output("`\$`bDouble post?`b`0`n");
-	$message = translate($message);
+//	$message = translate($message);
 	if ((int)getsetting("expirecontent",180)>0){
 		$sql = "DELETE FROM commentary WHERE postdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 		db_query($sql);
 	}
-	$com=(int)$HTTP_GET_VARS['comscroll'];
-  $sql = "SELECT commentary.*, 
+	$com=(int)$HTTP_GET_VARS[comscroll];
+  $sql = "SELECT commentary.*,
 	               accounts.name,
 	               accounts.login
 	          FROM commentary
 	         INNER JOIN accounts
 	            ON accounts.acctid = commentary.author
 	         WHERE section = '$section'
-	           AND accounts.locked=0 
+	           AND accounts.locked=0
 	         ORDER BY commentid DESC
 	         LIMIT ".($com*$limit).",$limit";
 	$result = db_query($sql) or die(db_error(LINK));
 	$counttoday=0;
 	for ($i=0;$i < db_num_rows($result);$i++){
 	  $row = db_fetch_assoc($result);
-		$row[comment]=preg_replace("'[`][^1234567!@#$%^&]'","",$row[comment]);
-		$commentids[$i] = $row[commentid];
-		if (date("Y-m-d",strtotime($row[postdate]))==date("Y-m-d")){
-			if ($row[name]==$session['user'][name]) $counttoday++;
+		$row['comment']=preg_replace("'[`][^1234567!@#$%^&]'","",$row['comment']);
+        $row['comment']=emoticons($row['comment']);
+		$commentids[$i] = $row['commentid'];
+		if (date("Y-m-d",strtotime($row['postdate']))==date("Y-m-d")){
+            if ($row['name']==$session['user']['name'] && $climit=="0") $counttoday++;
 		}
 		$x=0;
 		$ft="";
-		for ($x=0;strlen($ft)<3 && $x<strlen($row[comment]);$x++){
-			if (substr($row[comment],$x,1)=="`" && strlen($ft)==0) {
+		for ($x=0;strlen($ft)<3 && $x<strlen($row['comment']);$x++){
+			if (substr($row['comment'],$x,1)=="`" && strlen($ft)==0) {
 				$x++;
 			}else{
-				$ft.=substr($row[comment],$x,1);
+				$ft.=substr($row['comment'],$x,1);
 			}
 		}
 		$link = "bio.php?char=".rawurlencode($row[login]) . "&ret=".URLEncode($_SERVER['REQUEST_URI']);
@@ -1328,29 +1588,29 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		else
 			if (substr($ft,0,1)==":") $ft = substr($ft,0,1);
 		if ($ft=="::" || $ft=="/me" || $ft==":"){
-			$x = strpos($row[comment],$ft);
+			$x = strpos($row['comment'],$ft);
 			if ($x!==false){
 				if ($linkbios)
-					$op[$i] = str_replace("&amp;","&",HTMLEntities(substr($row[comment],0,$x)))
+					$op[$i] = str_replace("&amp;","&",substr($row['comment'],0,$x))
 					."`0<a href='$link' style='text-decoration: none'>\n`&$row[name]`0</a>\n`& "
-					.str_replace("&amp;","&",HTMLEntities(substr($row[comment],$x+strlen($ft))))
+					.str_replace("&amp;","&",substr($row['comment'],$x+strlen($ft)))
 						."`0`n";
 				else
-					$op[$i] = str_replace("&amp;","&",HTMLEntities(substr($row[comment],0,$x)))
+					$op[$i] = str_replace("&amp;","&",substr($row['comment'],0,$x))
 					."`0\n`&$row[name]`0\n`& "
-					.str_replace("&amp;","&",HTMLEntities(substr($row[comment],$x+strlen($ft))))
+					.str_replace("&amp;","&",substr($row['comment'],$x+strlen($ft)))
 						."`0`n";
 			}
 		}
-		if ($op[$i]=="") 
+		if ($op[$i]=="")
 			if ($linkbios)
 				$op[$i] = "`0<a href='$link' style='text-decoration: none'>`&$row[name]`0</a>`3 says, \"`#"
-					.str_replace("&amp;","&",HTMLEntities($row[comment]))."`3\"`0`n";
+					.str_replace("&amp;","&",$row['comment'])."`3\"`0`n";
 			else
 				$op[$i] = "`0`&$row[name]`0`3 says, \"`#"
-				    .str_replace("&amp;","&",HTMLEntities($row[comment]))."`3\"`0`n";
+				    .str_replace("&amp;","&",$row['comment'])."`3\"`0`n";
 		if ($message=="X") $op[$i]="`0($row[section]) ".$op[$i];
-		if ($row['postdate']>=$session['user']['recentcomments']) $op[$i]="<img src='images/new.png' alt='&gt;' width='3' height='5' align='absmiddle'> ".$op[$i];
+		if ($row['postdate']>=$session['user']['recentcomments']) $op[$i]="<img src='images/new.gif' alt='&gt;' width='3' height='5' align='absmiddle'> ".$op[$i];
 		addnav("",$link);
 	}
 	$i--;
@@ -1358,7 +1618,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	$sect="x";
 	for (;$i>=0;$i--){
 		$out="";
-		if ($session['user'][superuser]>=3 && $message=="X"){
+		if ($session['user']['superuser']>=3 && $message=="X"){
 			$out.="`0[ <a href='superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI'])."'>Del</a> ]&nbsp;";
 			addnav("","superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI']));
 			$matches=array();
@@ -1384,7 +1644,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		if ($counttoday<($limit/2) || $session['user']['superuser']>=2){
 			if ($message!="X"){
 				if ($talkline!="says") $tll = strlen($talkline)+11; else $tll=0;
-				output("<form action=\"$REQUEST_URI\" method='POST'>`@$message`n<input name='insertcommentary[$section]' size='40' maxlength='".(200-$tll)."'><input type='hidden' name='talkline' value='$talkline'><input type='hidden' name='section' value='$section'><input type='submit' class='button' value='Add'>`n".(round($limit/2,0)-$counttoday<3?"`)(You have ".(round($limit/2,0)-$counttoday)." posts left today)":"")."`0`n</form>",true);
+				output("<form action=\"$REQUEST_URI\" method='POST'>`@$message`n.<input name='insertcommentary[$section]' size='40' maxlength='".(200-$tll)."'><input type='hidden' name='talkline' value='$talkline'><input type='hidden' name='section' value='$section'><input type='submit' class='button' value='Add'>`n".(round($limit/2,0)-$counttoday<3?"`)(You have ".(round($limit/2,0)-$counttoday)." posts left today)":"")."`0`n</form>",true);
 				addnav("",$REQUEST_URI);
 			}
 		}else{
@@ -1413,7 +1673,18 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 			output(" <a href=\"$req\">Next &gt;&gt;</a>",true);
 			addnav("",$req);
 		}
-	db_free_result($result);
+   $key="<br><br><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" height=\"62\"><tr><td width=\"57%\" colspan=\"7\" height=\"19\">Emoticon Key:</td>";
+   $key.="<td width=\"45%\" colspan=\"7\" height=\"19\"></td></tr><tr><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/cry.gif\"></td><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/devil.gif\"></td>";
+   $key.="<td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/eek.gif\"></td><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/evil.gif\"></td>";
+   $key.="<td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/hammer2.gif\"></td><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/laugh.gif\"></td><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/pipe.gif\"></td>";
+   $key.="<td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/sleep.gif\"></td><td width=\"8%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/smile.gif\"></td>";
+   $key.="<td width=\"9%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/toast.gif\"></td><td width=\"9%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/tongue.gif\"></td><td width=\"9%\" align=\"center\" height=\"20\"><IMG SRC=\"./images/wink.gif\">";
+   $key.="</td></tr><tr><td width=\"8%\" align=\"center\" height=\"21\">:(</td><td width=\"8%\" align=\"center\" height=\"21\">:d</td><td width=\"8%\" align=\"center\" height=\"21\">:o</td><td width=\"8%\" align=\"center\" height=\"21\">:v</td>";
+   $key.="<td width=\"8%\" align=\"center\" height=\"21\">:h2</td><td width=\"8%\" align=\"center\" height=\"21\">:lol</td><td width=\"8%\" align=\"center\" height=\"21\">:-</td><td width=\"8%\" align=\"center\" height=\"21\">:|</td>";
+   $key.="<td width=\"8%\" align=\"center\" height=\"21\">:)</td><td width=\"9%\" align=\"center\" height=\"21\">:tst</td><td width=\"9%\" align=\"center\" height=\"21\">:p</td><td width=\"9%\" align=\"center\" height=\"21\">;)</td></tr></table>";
+   rawoutput($key,true);
+
+db_free_result($result);
 }
 
 function dhms($secs,$dec=false){
@@ -1446,12 +1717,13 @@ if (file_exists("dbconnect.php")){
 	exit();
 }
 
-$link = db_pconnect($DB_HOST, $DB_USER, $DB_PASS) or die (db_error($link));
+$link = db_connect($server, $user, $password, $database);
+if(!$link) $db->ErrorMsg();
+
 db_select_db ($DB_NAME) or die (db_error($link));
 define("LINK",$link);
 
-require_once "translator.php";
-
+//require_once "translator.php";
 
 session_register("session");
 function register_global(&$var){
@@ -1467,7 +1739,7 @@ $session =& $_SESSION['session'];
 //register_global($_SESSION);
 register_global($_SERVER);
 
-if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session['loggedin']){
+if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session[loggedin]){
 	//force the abandoning of the session when the user should have been sent to the fields.
 	//echo "Session abandon:".(strtotime("now")-$session[lasthit]);
 	
@@ -1477,11 +1749,6 @@ if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit
 $session['lasthit']=strtotime("now");
 
 $revertsession=$session;
-
-if ($PATH_INFO != "") {
-	$SCRIPT_NAME=$PATH_INFO;
-	$REQUEST_URI="";
-}
 if ($REQUEST_URI==""){
 	//necessary for some IIS installations (CGI in particular)
 	if (is_array($_GET) && count($_GET)>0){
@@ -1504,7 +1771,6 @@ if (strpos($REQUEST_URI,"?")){
 }else{
 	$REQUEST_URI=$SCRIPT_NAME;
 }
-
 $allowanonymous=array("index.php"=>true,"login.php"=>true,"create.php"=>true,"about.php"=>true,"list.php"=>true,"petition.php"=>true,"connector.php"=>true,"logdnet.php"=>true,"referral.php"=>true,"news.php"=>true,"motd.php"=>true,"topwebvote.php"=>true);
 $allownonnav = array("badnav.php"=>true,"motd.php"=>true,"petition.php"=>true,"mail.php"=>true,"topwebvote.php"=>true);
 if ($session['loggedin']){
@@ -1513,9 +1779,7 @@ if ($session['loggedin']){
 	if (db_num_rows($result)==1){
 		$session['user']=db_fetch_assoc($result);
 		$session['output']=$session['user']['output'];
-		$session['user']['dragonpoints']=unserialize($session['user']['dragonpoints']);
 		$session['user']['prefs']=unserialize($session['user']['prefs']);
-		if (!is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=array();
 		if (is_array(unserialize($session['user']['allowednavs']))){
 			$session['allowednavs']=unserialize($session['user']['allowednavs']);
 		}else{
@@ -1528,7 +1792,7 @@ if ($session['loggedin']){
 		}
 	}else{
 		$session=array();
-		$session[message]="`4Error, your login was incorrect`0";
+		$session['message']="`4Error, your login was incorrect`0";
 		redirect("index.php","Account Disappeared!");
 	}
 	db_free_result($result);
@@ -1546,7 +1810,7 @@ if ($session['loggedin']){
 		redirect("index.php?op=timeout","Not logged in: $REQUEST_URI");
 	}
 }
-//if ($session['user']['loggedin']!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
+//if ($session[user][loggedin]!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
 if ($session['user']['loggedin']!=true && !$allowanonymous[$SCRIPT_NAME]){
 	redirect("login.php?op=logout");
 }
@@ -1614,7 +1878,7 @@ while (list($key,$val)=each($templatetags)){
 	if (strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in your footer\n";
 }
 //tags that may appear anywhere but must appear
-$templatetags=array("nav","stats","petition","motd","mail","copyright","source");
+$templatetags=array("nav","stats","petition","motd","mail","paypal","copyright","source");
 while (list($key,$val)=each($templatetags)){
 	if (strpos($template['header'],"{".$val."}")===false && strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in either your header or footer\n";
 }
@@ -1624,9 +1888,11 @@ if ($templatemessage!=""){
 	$template=loadtemplate("yarbrough.htm");
 }
 
-$races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",0=>"Unknown",50=>"Hoversheep");
+$pietre=array(1=>"`\$Poker's Stone",2=>"`^Love's Stone",3=>"`^Friendship's Stone",4=>"`#King's Stone",5=>"`#Mighthy's Stone",6=>"`#Pegasus' Stone",7=>"`@Aris' Stone",8=>"`@Excalibur's Stone",9=>"`@Luke's Stone",10=>"`&Innocence's Stone",11=>"`#Queen's Stone",12=>"`#Imperator's Stone",13=>"`!Gold's Stone",14=>"`%Power's Stone",15=>"`\$Ramius' Stone",16=>"`#Cedrik's Stone",17=>"`%Honour's Stone",18=>"`&Purity's Stone",19=>"`&Light's Stone",20=>"`&Diamond's Stone");
 
-$logd_version = "TDS-0.01";
+$races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",5=>"Ogre",6=>"Goblin",7=>"Orc",8=>"Vampire",9=>"Stone Giant",10=>"Hobbit",11=>"Minator",12=>"Centar");
+
+$logd_version = "0.9.7+jt - build 1.03";
 $session['user']['laston']=date("Y-m-d H:i:s");
 
 $playermount = getmount($session['user']['hashorse']);
@@ -1635,34 +1901,45 @@ $titles = array(
 	0=>array("Farmboy","Farmgirl"),
 	1=>array("Page", "Page"),
 	2=>array("Squire", "Squire"),
-	3=>array("Gladiator", "Gladiatrix"),
-	4=>array("Legionnaire","Legioness"),
-	5=>array("Centurion","Centurioness"),
-	6=>array("Sir","Madam"),
-	7=>array("Reeve", "Reeve"),
-	8=>array("Steward", "Stewardess"),
-	9=>array("Mayor", "Mayoress"),
-	10=>array("Baron", "Baroness"),
-	11=>array("Count", "Countess"),
-	12=>array("Viscount", "Viscountess"),
-	13=>array("Marquis", "Marquisette"),
-	14=>array("Chancellor", "Chancelress"),
-	15=>array("Prince", "Princess"),
-	16=>array("King", "Queen"),
-	17=>array("Emperor", "Empress"),
-	18=>array("Angel", "Angel"),
-	19=>array("Archangel", "Archangel"),
-	20=>array("Principality", "Principality"),
-	21=>array("Power", "Power"),
-	22=>array("Virtue", "Virtue"),
-	23=>array("Dominion", "Dominion"),
-	24=>array("Throne", "Throne"),
-	25=>array("Cherub", "Cherub"),
-	26=>array("Seraph", "Seraph"),
-	27=>array("Demigod", "Demigoddess"),
-	28=>array("Titan", "Titaness"),
-	29=>array("Archtitan", "Archtitaness"),
-	30=>array("Undergod", "Undergoddess"),
+	3=>array("Protector", "Protector"),
+    4=>array("Defender", "Defender"),
+    5=>array("Guardian", "Guardian"),
+    6=>array("Veteran", "Veteran"),
+	7=>array("Gladiator", "Gladiatrix"),
+	8=>array("Legionnaire","Legioness"),
+	9=>array("Centurion","Centurioness"),
+    10=>array("Sir","Madam"),
+	11=>array("Reeve", "Reeve"),
+	12=>array("Steward", "Stewardess"),
+	13=>array("Mayor", "Mayoress"),
+	14=>array("Baron", "Baroness"),
+	15=>array("Count", "Countess"),
+	16=>array("Viscount", "Viscountess"),
+	17=>array("Marquis", "Marquisette"),
+    18=>array("Earl", "Earless"),
+    19=>array("Duke", "Duchess"),
+    20=>array("Regent", "Regentess"),
+	21=>array("Chancellor", "Chancelress"),
+    22=>array("Lord", "Lady"),
+	23=>array("Prince", "Princess"),
+	24=>array("King", "Queen"),
+	25=>array("Emperor", "Empress"),
+	26=>array("Angel", "Angel"),
+	27=>array("Archangel", "Archangel"),
+	28=>array("Principality", "Principality"),
+	29=>array("Power", "Power"),
+	30=>array("Virtue", "Virtue"),
+	31=>array("Dominion", "Dominion"),
+	32=>array("Throne", "Throne"),
+	33=>array("Cherub", "Cherub"),
+	34=>array("Seraph", "Seraph"),
+    35=>array("Seneschal", "Seneschal"),
+	36=>array("Titan", "Titaness"),
+	37=>array("Archtitan", "Archtitaness"),
+ 	38=>array("Lessergod", "Lessergoddess"),
+	39=>array("Demigod", "Demigoddess"),
+	40=>array("Undergod", "Undergoddess"),
+	41=>array("God", "Goddess"),
 );
 
 $beta = (getsetting("beta",0) == 1 || $session['user']['beta']==1);

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 
 isnewday(2);
@@ -10,9 +10,6 @@ addnav("Refresh the list","badword.php");
 output("Here you can edit the words that the game filters.  Using * at the start or end of a word will be a ");
 output("wildcard matching anything else attached to the word.  These words are only filtered if bad word filtering ");
 output("is turned on in the game settings page.");
-//output("<form action='badword.php?op=add' method='POST'>Add a word: <input name='word'><input type='submit' value='Add'></form>",true);
-//output("<form action='badword.php?op=remove' method='POST'>Remove a word: <input name='word'><input type='submit' value='Remove'></form>",true);
-//output("<form action='badword.php?op=test' method='POST'>Test a word: <input name='word'><input type='submit' value='Test'></form>",true);
 output("<form action='badword.php?op=add' method='POST'>Add a word:<input name='word'><input type='submit' class='button' value='Add'></form>",true);
 output("<form action='badword.php?op=remove' method='POST'>Remove a word: <input name='word'><input type='submit' class='button' value='Remove'></form>",true);
 output("<form action='badword.php?op=test' method='POST'>Test a word: <input name='word'><input type='submit' class='button' value='Test'></form>",true);
