@@ -97,12 +97,12 @@ table.charinfo {
 }
 td.pageheader {
 	background-color: #333399;
-	background-image: url(images/headbkg.GIF);
+	background-image: url(images/headbkg.gif);
 	height: 69px;
 }
 td.popupheader {
 	background-color: #333399;
-	background-image: url(images/headbkg.GIF);
+	background-image: url(images/headbkg.gif);
 	height: 20px;
 }
 td.noborder {
