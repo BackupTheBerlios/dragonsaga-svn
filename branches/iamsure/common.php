@@ -1029,7 +1029,7 @@ function page_footer(){
 function popup_header($title="Legend of the Green Dragon"){
   global $header;
 	$header.="<html><head><title>$title</title>";
-	$header.="<link href=\"newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
+	$header.="<link href=\"templates/newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
 	$header.="</head><body bgcolor='#000000' text='#CCCCCC'><table cellpadding=5 cellspacing=0 width='100%'>";
 	$header.="<tr><td class='popupheader'><b>$title</b></td></tr>";
 	$header.="<tr><td valign='top' width='100%'>";
