@@ -131,10 +131,7 @@ You can't.`n
 Well, sort of.  You can't find her until you've reached a certain level. When you're at that level, it will be immediately obvious.`n
 `n
 `^3.  How do I increase my level?`@`n
-Send us money.`n
-No, don't send money - you increase your experience by fighting creatures in the forest.  Once you've gotten enough experience, you can challenge your master in the village.`n
-`n
-Well, you can send us money if you want (see PayPal link)`n
+You increase your experience by fighting creatures in the forest.  Once you've gotten enough experience, you can challenge your master in the village.`n
 `n
 `^4.  Why can't I beat my master?`@`n
 He's far too wiley for the likes of you.`n

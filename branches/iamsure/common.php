@@ -930,46 +930,11 @@ function page_footer(){
 	$footer = $template['footer'];
 	if (strpos($footer,"{paypal}") || strpos($header,"{paypal}")){ $palreplace="{paypal}"; }else{ $palreplace="{stats}"; }
 	
-	//NOTICE
-	//NOTICE Although I will not deny you the ability to remove the below paypal link, I do request, as the author of this software
-	//NOTICE that you leave it in.
-	//NOTICE
 	$paypalstr = '<table align="center"><tr><td>';
-	$paypalstr .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-<input type="hidden" name="cmd" value="_xclick">
-<input type="hidden" name="business" value="nahdude81@hotmail.com">
-<input type="hidden" name="item_name" value="Legend of the Green Dragon Author Donation from '.preg_replace("/[`]./","",$session['user']['name']).'">
-<input type="hidden" name="item_number" value="'.htmlentities($session['user']['login']).":".$_SERVER['HTTP_HOST']."/".$_SERVER['REQUEST_URI'].'">
-<input type="hidden" name="no_shipping" value="1">
-<input type="hidden" name="cn" value="Your Character Name">
-<input type="hidden" name="cs" value="1">
-<input type="hidden" name="currency_code" value="USD">
-<input type="hidden" name="tax" value="0">
-<input type="image" src="images/paypal1.gif" border="0" name="submit" alt="Donate!">
-</form>';
-	$paysite = getsetting("paypalemail", "");
-	if ($paysite != "") {
-		$paypalstr .= '</td><td>';
-		$paypalstr .= '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-		<input type="hidden" name="cmd" value="_xclick">
-		<input type="hidden" name="business" value="'.$paysite.'">
-<input type="hidden" name="item_name" value="Legend of the Green Dragon Site Donation from '.preg_replace("/[`]./","",$session['user']['name']).'">
-<input type="hidden" name="item_number" value="'.htmlentities($session['user']['login']).":".$_SERVER['HTTP_HOST']."/".$_SERVER['REQUEST_URI'].'">
-<input type="hidden" name="no_shipping" value="1">
-<input type="hidden" name="cn" value="Your Character Name">
-<input type="hidden" name="cs" value="1">
-<input type="hidden" name="currency_code" value="USD">
-<input type="hidden" name="tax" value="0">
-<input type="image" src="images/paypal2.gif" border="0" name="submit" alt="Donate!">
-</form>';
-	}
-    $paypalstr .= '</td></tr></table>';
+        $paypalstr .= '</td></tr></table>';
 	$footer=str_replace($palreplace,(strpos($palreplace,"paypal")?"":"{stats}").$paypalstr,$footer);
 	$header=str_replace($palreplace,(strpos($palreplace,"paypal")?"":"{stats}").$paypalstr,$header);
-	//NOTICE
-	//NOTICE Although I will not deny you the ability to remove the above paypal link, I do request, as the author of this software
-	//NOTICE that you leave it in.
-	//NOTICE
+
 	$header=str_replace("{nav}",$nav,$header);
 	$footer=str_replace("{nav}",$nav,$footer);
 
