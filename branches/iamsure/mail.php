@@ -95,7 +95,7 @@ if ($_GET[op]==""){
 		output("`b`2Sent:`b `^{$row['sent']}`n");
 		output("<img src='images/uscroll.GIF' width='182' height='11' alt='' align='center'>`n",true);
 		output(str_replace("\n","`n","$row[body]"));
-		output("`n<img src='images/lscroll.GIF' width='182' height='11' alt='' align='center'>`n",true);
+		output("`n<img src='images/lscroll.gif' width='182' height='11' alt='' align='center'>`n",true);
 		output("<a href='mail.php?op=write&replyto=$row[messageid]' class='motd'>Reply</a><a href='mail.php?op=del&id=$row[messageid]' class='motd'>Del</a>",true);
 	}else{
 		output("Eek, no such message was found!");
