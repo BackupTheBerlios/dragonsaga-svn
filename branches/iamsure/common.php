@@ -158,11 +158,11 @@ function forest($noshowmessage=false) {
   if ($session['user']['level']>1)
   	addnav("S?Go Slumming","forest.php?op=search&type=slum");
   addnav("T?Go Thrillseeking","forest.php?op=search&type=thrill");
-  //if ($session[user][hashorse]>=2) addnav("D?Dark Horse Tavern","forest.php?op=darkhorse");
+  //if ($session['user'][hashorse]>=2) addnav("D?Dark Horse Tavern","forest.php?op=darkhorse");
   if ($playermount['tavern']>0) addnav("D?Take {$playermount['mountname']} to Dark Horse Tavern","forest.php?op=darkhorse");
   addnav("V?Return to the Village","village.php");
   addnav("","forest.php");
-	if ($session[user][level]>=15  && $session[user][seendragon]==0){
+	if ($session['user'][level]>=15  && $session['user'][seendragon]==0){
 		addnav("G?`@Seek out the Green Dragon","forest.php?op=dragon");
 	}
 	addnav("Other");
@@ -176,7 +176,7 @@ function forest($noshowmessage=false) {
 		output("a twig or any of numerous bleached pieces of bone that perforate the forest floor, lest ");
 		output("you belie your presence to one of the vile beasts that wander the forest.");
 	}
-	if ($session[user][superuser]>1){
+	if ($session['user'][superuser]>1){
 		output("`n`nSUPERUSER special inc's:`n");
 		$d = dir("special");
 		while (false !== ($entry = $d->read())){
@@ -281,16 +281,16 @@ function checkban($login=false){
 
 function increment_specialty(){
   global $session;
-		if ($session[user][specialty]>0){
+		if ($session['user'][specialty]>0){
 			$skillnames = array(1=>"Dark Arts","Mystical Powers","Thievery");
 			$skills = array(1=>"darkarts","magic","thievery");
 			$skillpoints = array(1=>"darkartuses","magicuses","thieveryuses");
-			$session[user][$skills[$session[user][specialty]]]++;
-			output("`nYou gain a level in `&".$skillnames[$session[user][specialty]]."`# to ".$session[user][$skills[$session[user][specialty]]].", ");
-			$x = ($session[user][$skills[$session[user][specialty]]]) % 3;
+			$session['user'][$skills[$session['user'][specialty]]]++;
+			output("`nYou gain a level in `&".$skillnames[$session['user'][specialty]]."`# to ".$session['user'][$skills[$session['user'][specialty]]].", ");
+			$x = ($session['user'][$skills[$session['user'][specialty]]]) % 3;
 			if ($x == 0){
 				output("you gain an extra use point!`n");
-				$session[user][$skillpoints[$session[user][specialty]]]++;
+				$session['user'][$skillpoints[$session['user'][specialty]]]++;
 			}else{
 				output("only ".(3-$x)." more skill levels until you gain an extra use point!`n");
 			}
@@ -309,41 +309,41 @@ function fightnav($allowspecial=true, $allowflee=true){
 	}
 	if ($allowspecial) {
 		addnav("`bSpecial Abilities`b");
-		if ($session[user][darkartuses]>0) {
+		if ($session['user'][darkartuses]>0) {
 			addnav("`\$Dark Arts`0", "");
-			addnav("`\$&#149; Skeleton Crew`7 (1/".$session[user][darkartuses].")`0","$script?op=fight&skill=DA&l=1",true);
+			addnav("`\$&#149; Skeleton Crew`7 (1/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=1",true);
 		}
-		if ($session[user][darkartuses]>1)
-			addnav("`\$&#149; Voodoo`7 (2/".$session[user][darkartuses].")`0","$script?op=fight&skill=DA&l=2",true);
-		if ($session[user][darkartuses]>2)
-			addnav("`\$&#149; Curse Spirit`7 (3/".$session[user][darkartuses].")`0","$script?op=fight&skill=DA&l=3",true);
-		if ($session[user][darkartuses]>4)
-			addnav("`\$&#149; Wither Soul`7 (5/".$session[user][darkartuses].")`0","$script?op=fight&skill=DA&l=5",true);
+		if ($session['user'][darkartuses]>1)
+			addnav("`\$&#149; Voodoo`7 (2/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=2",true);
+		if ($session['user'][darkartuses]>2)
+			addnav("`\$&#149; Curse Spirit`7 (3/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=3",true);
+		if ($session['user'][darkartuses]>4)
+			addnav("`\$&#149; Wither Soul`7 (5/".$session['user'][darkartuses].")`0","$script?op=fight&skill=DA&l=5",true);
 	
-		if ($session[user][thieveryuses]>0) {
+		if ($session['user'][thieveryuses]>0) {
 			addnav("`^Thieving Skills`0","");
-			addnav("`^&#149; Insult`7 (1/".$session[user][thieveryuses].")`0","$script?op=fight&skill=TS&l=1",true);
+			addnav("`^&#149; Insult`7 (1/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=1",true);
 		}
-		if ($session[user][thieveryuses]>1)
-			addnav("`^&#149; Poison Blade`7 (2/".$session[user][thieveryuses].")`0","$script?op=fight&skill=TS&l=2",true);
-		if ($session[user][thieveryuses]>2)
-			addnav("`^&#149; Hidden Attack`7 (3/".$session[user][thieveryuses].")`0","$script?op=fight&skill=TS&l=3",true);
-		if ($session[user][thieveryuses]>4)
-			addnav("`^&#149; Backstab`7 (5/".$session[user][thieveryuses].")`0","$script?op=fight&skill=TS&l=5",true);
+		if ($session['user'][thieveryuses]>1)
+			addnav("`^&#149; Poison Blade`7 (2/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=2",true);
+		if ($session['user'][thieveryuses]>2)
+			addnav("`^&#149; Hidden Attack`7 (3/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=3",true);
+		if ($session['user'][thieveryuses]>4)
+			addnav("`^&#149; Backstab`7 (5/".$session['user'][thieveryuses].")`0","$script?op=fight&skill=TS&l=5",true);
 	
-		if ($session[user][magicuses]>0) {
+		if ($session['user'][magicuses]>0) {
 			addnav("`%Mystical Powers`0","");
 			//disagree with making this 'n', players shouldn't have their behavior dictated by convenience of god mode, hehe
-			addnav("g?`%&#149; Regeneration`7 (1/".$session[user][magicuses].")`0","$script?op=fight&skill=MP&l=1",true);
+			addnav("g?`%&#149; Regeneration`7 (1/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=1",true);
 		}
-		if ($session[user][magicuses]>1)
-			addnav("`%&#149; Earth Fist`7 (2/".$session[user][magicuses].")`0","$script?op=fight&skill=MP&l=2",true);
-		if ($session[user][magicuses]>2)
-			addnav("L?`%&#149; Siphon Life`7 (3/".$session[user][magicuses].")`0","$script?op=fight&skill=MP&l=3",true);
-		if ($session[user][magicuses]>4)
-			addnav("A?`%&#149; Lightning Aura`7 (5/".$session[user][magicuses].")`0","$script?op=fight&skill=MP&l=5",true);
+		if ($session['user'][magicuses]>1)
+			addnav("`%&#149; Earth Fist`7 (2/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=2",true);
+		if ($session['user'][magicuses]>2)
+			addnav("L?`%&#149; Siphon Life`7 (3/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=3",true);
+		if ($session['user'][magicuses]>4)
+			addnav("A?`%&#149; Lightning Aura`7 (5/".$session['user'][magicuses].")`0","$script?op=fight&skill=MP&l=5",true);
 
-		if ($session[user][superuser]>=3) {
+		if ($session['user'][superuser]>=3) {
 			addnav("`&Super user`0","");
 			addnav("!?`&&#149; __GOD MODE","$script?op=fight&skill=godmode",true);
 		}
@@ -360,102 +360,102 @@ function appoencode($data,$priv=false){
 		$data=substr($data,$x+2);
 		switch($tag){
 			case "0":
-			if ($nestedtags[font]) $output.="</span>";
-			unset($nestedtags[font]);
+			if ($nestedtags['font']) $output.="</span>";
+			unset($nestedtags['font']);
 		break;
 			case "1":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkBlue'>";
 		break;
 			case "2":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkGreen'>";
 		break;
 			case "3":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkCyan'>";
 		break;
 			case "4":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkRed'>";
 		break;
 			case "5":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkMagenta'>";
 		break;
 			case "6":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkYellow'>";
 		break;
 			case "7":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colDkWhite'>";
 		break;
 			case "!":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtBlue'>";
 		break;
 			case "@":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtGreen'>";
 		break;
 			case "#":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtCyan'>";
 		break;
 			case "$":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtRed'>";
 		break;
 			case "%":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtMagenta'>";
 		break;
 			case "^":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtYellow'>";
 		break;
 			case "&":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtWhite'>";
 		break;
 			case ")":
-			if ($nestedtags[font]) $output.="</span>"; else $nestedtags[font]=true;
+			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
 			$output.="<span class='colLtBlack'>";
 		break;
 			case "c":
-			if ($nestedtags[div]) {
+			if ($nestedtags['div']) {
 				$output.="</div>";
-				unset($nestedtags[div]);
+				unset($nestedtags['div']);
 			}else{
-				$nestedtags[div]=true;
+				$nestedtags['div']=true;
 				$output.="<div align='center'>";
 			}
 		break;
 			case "H":
-			if ($nestedtags[div]) {
+			if ($nestedtags['div']) {
 				$output.="</span>";
-				unset($nestedtags[div]);
+				unset($nestedtags['div']);
 			}else{
-				$nestedtags[div]=true;
+				$nestedtags['div']=true;
 				$output.="<span class='navhi'>";
 			}
 		break;
 			case "b":
-			if ($nestedtags[b]){
+			if ($nestedtags['b']){
 				$output.="</b>";
-				unset($nestedtags[b]);
+				unset($nestedtags['b']);
 			}else{
-				$nestedtags[b]=true;
+				$nestedtags['b']=true;
 			  $output.="<b>";
 			}
 		break;
 		  case "i":
-		  if ($nestedtags[i]) {
+		  if ($nestedtags['i']) {
 		  	$output.="</i>";
-		  	unset($nestedtags[i]);
+		  	unset($nestedtags['i']);
 		  }else{
-		  	$nestedtags[i]=true;
+		  	$nestedtags['i']=true;
 		  	$output.="<i>";
 		  }
 		break;
@@ -463,7 +463,7 @@ function appoencode($data,$priv=false){
 			$output.="<br>\n";
 		break;
 			case "w":
-			$output.=$session[user][weapon];
+			$output.=$session['user']['weapon'];
 		break;
 			case "`":
 			$output.="`";
@@ -495,8 +495,8 @@ function templatereplace($itemname,$vals=false){
 
 function charstats(){
 	global $session;
-	$u =& $session[user];
-	if ($session[loggedin]){
+	$u =& $session['user'];
+	if ($session['loggedin']){
 		$u['hitpoints']=round($u['hitpoints'],0);
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
@@ -685,9 +685,9 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 				));
 			//$nav.="<a href=\"".HTMLEntities($link.$extra)."\" $keyrep class='nav'>".appoencode($text,$priv)."<br></a>";
 		}
-		$session[allowednavs][$link.$extra]=true;
-		$session[allowednavs][str_replace(" ", "%20", $link).$extra]=true;
-		$session[allowednavs][str_replace(" ", "+", $link).$extra]=true;
+		$session['allowednavs'][$link.$extra]=true;
+		$session['allowednavs'][str_replace(" ", "%20", $link).$extra]=true;
+		$session['allowednavs'][str_replace(" ", "+", $link).$extra]=true;
 	}
 }
 
@@ -718,7 +718,7 @@ function loadsettings(){
 		$result = db_query($sql) or die(db_error(LINK));
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			$settings[$row[setting]] = $row[value];
+			$settings[$row['setting']] = $row['value'];
 		}
 		db_free_result($result);
 		$ch=0;
@@ -802,13 +802,13 @@ function showform($layout,$row,$nosave=false){
 }
 
 function clearnav(){
-	$session[allowednavs]=array();
+	$session['allowednavs']=array();
 }
 
 function redirect($location,$reason=false){
 	global $session,$REQUEST_URI;
 	if ($location!="badnav.php"){
-		$session[allowednavs]=array();
+		$session['allowednavs']=array();
 		addnav("",$location);
 	}
 	if (strpos($location,"badnav.php")===false) $session[output]="<a href=\"".HTMLEntities($location)."\">Click here.</a>";
@@ -835,7 +835,7 @@ function loadtemplate($templatename){
 
 function maillink(){
 	global $session;
-	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session[user][acctid]."\"";
+	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session['user']['acctid']."\"";
 	$result = db_query($sql) or die(mysql_error(LINK));
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
@@ -851,7 +851,7 @@ function maillink(){
 function motdlink(){
     // missing $session caused unread motd's to never highlight the link
 	global $session;
-	if ($session[needtoviewmotd]){
+	if ($session['needtoviewmotd']){
 		return "<a href='motd.php' target='_blank' onClick=\"".popup("motd.php").";return false;\" class='hotmotd'><b>MoTD</b></a>";
 	}else{
 		return "<a href='motd.php' target='_blank' onClick=\"".popup("motd.php").";return false;\" class='motd'><b>MoTD</b></a>";
@@ -872,12 +872,12 @@ function page_header($title="Legend of the Green Dragon"){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	if (($row[motddate]>$session[user][lastmotd]) && $nopopups[$SCRIPT_NAME]!=1 && $session[user][loggedin]){
+	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups['$SCRIPT_NAME']!=1 && $session['user']['loggedin']){
 		$header=str_replace("{headscript}","<script language='JavaScript'>".popup("motd.php")."</script>",$header);
-		$session[needtoviewmotd]=true;
+		$session['needtoviewmotd']=true;
 	}else{
 		$header=str_replace("{headscript}","",$header);
-		$session[needtoviewmotd]=false;
+		$session['needtoviewmotd']=false;
 	}
 	$header=str_replace("{title}",$title,$header);
 }
@@ -934,7 +934,7 @@ function page_footer(){
 	$header = str_replace("{motd}", motdlink(), $header);
 	$footer = str_replace("{motd}", motdlink(), $footer);
 
-	if ($session[user][acctid]>0) {
+	if ($session['user']['acctid']>0) {
 		$header=str_replace("{mail}",maillink(),$header);
 		$footer=str_replace("{mail}",maillink(),$footer);
 	}else{
@@ -962,9 +962,9 @@ function page_footer(){
 	$footer=str_replace("{copyright}","Copyright 2002-2003, Game: Eric Stevens",$footer);
 	$footer=str_replace("{version}", "Version: $logd_version", $footer);
 	$gentime = getmicrotime()-$pagestarttime;
-	$session[user][gentime]+=$gentime;
-	$session[user][gentimecount]++;
-	$footer=str_replace("{pagegen}","Page gen: ".round($gentime,2)."s, Ave: ".round($session[user][gentime]/$session[user][gentimecount],2)."s - ".round($session[user][gentime],2)."/".round($session[user][gentimecount],2)."",$footer);
+	$session['user']['gentime']+=$gentime;
+	$session['user']['gentimecount']++;
+	$footer=str_replace("{pagegen}","Page gen: ".round($gentime,2)."s, Ave: ".round($session['user']['gentime']/$session['user']['gentimecount'],2)."s - ".round($session['user']['gentime'],2)."/".round($session['user']['gentimecount'],2)."",$footer);
 	if (strpos($_SERVER['HTTP_HOST'],"lotgd.net")!==false){
 		$footer=str_replace(
 			"</html>",
@@ -975,7 +975,7 @@ function page_footer(){
 
 	$output=$header.$output.$footer;
 	$session['user']['gensize']+=strlen($output);
-	$session[output]=$output;
+	$session['output']=$output;
 	saveuser();
 
 	session_write_close();
@@ -1010,7 +1010,7 @@ function popup_footer(){
 
 function clearoutput(){
   global $output,$nestedtags,$header,$nav,$session;
-	$session[allowednavs]="";
+	$session['allowednavs']="";
 	$output="";
   unset($nestedtags);
 	$header="";
@@ -1059,16 +1059,16 @@ function saveuser(){
 	global $session,$dbqueriesthishit;
 //	$cmd = date("Y-m-d H:i:s")." $dbqueriesthishit ".$_SERVER['REQUEST_URI'];
 //	@exec("echo $cmd >> /home/groups/l/lo/lotgd/sessiondata/data/queryusage-".$session['user']['login'].".txt");
-	if ($session[loggedin] && $session[user][acctid]!=""){
-  	$session[user][output]=$session[output];
-  	$session[user][allowednavs]=serialize($session[allowednavs]);
-		$session[user][bufflist]=serialize($session[bufflist]);
-		if (is_array($session[user][prefs])) $session[user][prefs]=serialize($session[user][prefs]);
-		if (is_array($session[user][dragonpoints])) $session[user][dragonpoints]=serialize($session[user][dragonpoints]);
-		//$session[user][laston] = date("Y-m-d H:i:s");
+	if ($session['loggedin'] && $session['user']['acctid']!=""){
+  	$session['user'][output]=$session[output];
+  	$session['user'][allowednavs]=serialize($session['allowednavs']);
+		$session['user'][bufflist]=serialize($session[bufflist]);
+		if (is_array($session['user'][prefs])) $session['user'][prefs]=serialize($session['user'][prefs]);
+		if (is_array($session['user'][dragonpoints])) $session['user'][dragonpoints]=serialize($session['user'][dragonpoints]);
+		//$session['user'][laston] = date("Y-m-d H:i:s");
   	$sql="UPDATE accounts SET ";
-  	reset($session[user]);
-  	while(list($key,$val)=each($session[user])){
+  	reset($session['user']);
+  	while(list($key,$val)=each($session['user'])){
   		if (is_array($val)){
 				$sql.="$key='".addslashes(serialize($val))."', ";
 			}else{
@@ -1076,7 +1076,7 @@ function saveuser(){
 			}
   	}
   	$sql = substr($sql,0,strlen($sql)-2);
-  	$sql.=" WHERE acctid = ".$session[user][acctid];
+  	$sql.=" WHERE acctid = ".$session['user']['acctid'];
   	db_query($sql);
   }
 }
@@ -1132,19 +1132,19 @@ function dump_item($item){
 
 function addnews($news){
 	global $session;
-	$sql = "INSERT INTO news(newstext,newsdate,accountid) VALUES ('".addslashes($news)."',NOW(),".$session[user][acctid].")";
+	$sql = "INSERT INTO news(newstext,newsdate,accountid) VALUES ('".addslashes($news)."',NOW(),".$session['user']['acctid'].")";
 	return db_query($sql) or die(db_error($link));
 }
 
 function checkday() {
 	global $session,$revertsession,$REQUEST_URI;
-  //output("`#`iChecking to see if you're due for a new day: ".$session[user][laston].", ".date("Y-m-d H:i:s")."`i`n`0");
+  //output("`#`iChecking to see if you're due for a new day: ".$session['user'][laston].", ".date("Y-m-d H:i:s")."`i`n`0");
 	if ($session['user']['loggedin']){
 		output("<!--CheckNewDay()-->",true);
 		if(is_new_day()){
 			$session=$revertsession;
-			$session[user][restorepage]=$REQUEST_URI;
-			$session[allowednavs]=array();
+			$session['user'][restorepage]=$REQUEST_URI;
+			$session['allowednavs']=array();
 			addnav("","newday.php");
 			redirect("newday.php");
 		}
@@ -1154,7 +1154,7 @@ function checkday() {
 function is_new_day(){
 	global $session;
 	$t1 = gametime(); 
-	$t2 = convertgametime(strtotime($session[user][lasthit]));
+	$t2 = convertgametime(strtotime($session['user'][lasthit]));
 	$d1 = date("Y-m-d",$t1);
 	$d2 = date("Y-m-d",$t2);
 	if ($d1!=$d2){
@@ -1274,8 +1274,8 @@ function addcommentary() {
 		$result = db_query($sql) or die(db_error(LINK));
 		$row = db_fetch_assoc($result);
 		db_free_result($result);
-		if ($row[comment]!=$commentary || $row[author]!=$session[user][acctid]){
-		  $sql = "INSERT INTO commentary (postdate,section,author,comment) VALUES (now(),'$section',".$session[user][acctid].",\"$commentary\")";
+		if ($row[comment]!=$commentary || $row[author]!=$session['user']['acctid']){
+		  $sql = "INSERT INTO commentary (postdate,section,author,comment) VALUES (now(),'$section',".$session['user']['acctid'].",\"$commentary\")";
 			db_query($sql) or die(db_error(LINK));
 		} else {
 			$doublepost = 1;
@@ -1312,7 +1312,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		$row[comment]=preg_replace("'[`][^1234567!@#$%^&]'","",$row[comment]);
 		$commentids[$i] = $row[commentid];
 		if (date("Y-m-d",strtotime($row[postdate]))==date("Y-m-d")){
-			if ($row[name]==$session[user][name]) $counttoday++;
+			if ($row[name]==$session['user'][name]) $counttoday++;
 		}
 		$x=0;
 		$ft="";
@@ -1358,7 +1358,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	$sect="x";
 	for (;$i>=0;$i--){
 		$out="";
-		if ($session[user][superuser]>=3 && $message=="X"){
+		if ($session['user'][superuser]>=3 && $message=="X"){
 			$out.="`0[ <a href='superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI'])."'>Del</a> ]&nbsp;";
 			addnav("","superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI']));
 			$matches=array();
@@ -1380,7 +1380,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		}
 	}
 
-	if ($session[user][loggedin]) {
+	if ($session['user'][loggedin]) {
 		if ($counttoday<($limit/2) || $session['user']['superuser']>=2){
 			if ($message!="X"){
 				if ($talkline!="says") $tll = strlen($talkline)+11; else $tll=0;
@@ -1467,14 +1467,14 @@ $session =& $_SESSION['session'];
 //register_global($_SESSION);
 register_global($_SERVER);
 
-if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session[loggedin]){
+if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session['loggedin']){
 	//force the abandoning of the session when the user should have been sent to the fields.
 	//echo "Session abandon:".(strtotime("now")-$session[lasthit]);
 	
 	$session=array();
 	$session['message'].="`nYour session has expired!`n";
 }
-$session[lasthit]=strtotime("now");
+$session['lasthit']=strtotime("now");
 
 $revertsession=$session;
 
@@ -1507,22 +1507,22 @@ if (strpos($REQUEST_URI,"?")){
 
 $allowanonymous=array("index.php"=>true,"login.php"=>true,"create.php"=>true,"about.php"=>true,"list.php"=>true,"petition.php"=>true,"connector.php"=>true,"logdnet.php"=>true,"referral.php"=>true,"news.php"=>true,"motd.php"=>true,"topwebvote.php"=>true);
 $allownonnav = array("badnav.php"=>true,"motd.php"=>true,"petition.php"=>true,"mail.php"=>true,"topwebvote.php"=>true);
-if ($session[loggedin]){
-	$sql = "SELECT * FROM accounts WHERE acctid = '".$session[user][acctid]."'";
+if ($session['loggedin']){
+	$sql = "SELECT * FROM accounts WHERE acctid = '".$session['user']['acctid']."'";
 	$result = db_query($sql);
 	if (db_num_rows($result)==1){
-		$session[user]=db_fetch_assoc($result);
-		$session[output]=$session[user][output];
-		$session[user][dragonpoints]=unserialize($session[user][dragonpoints]);
-		$session[user][prefs]=unserialize($session[user][prefs]);
-		if (!is_array($session[user][dragonpoints])) $session[user][dragonpoints]=array();
-		if (is_array(unserialize($session[user][allowednavs]))){
-			$session[allowednavs]=unserialize($session[user][allowednavs]);
+		$session['user']=db_fetch_assoc($result);
+		$session['output']=$session['user']['output'];
+		$session['user']['dragonpoints']=unserialize($session['user']['dragonpoints']);
+		$session['user']['prefs']=unserialize($session['user']['prefs']);
+		if (!is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=array();
+		if (is_array(unserialize($session['user']['allowednavs']))){
+			$session['allowednavs']=unserialize($session['user']['allowednavs']);
 		}else{
 			//depreciated, left only for legacy support.
-			$session[allowednavs]=createarray($session[user][allowednavs]);
+			$session['allowednavs']=createarray($session['user']['allowednavs']);
 		}
-		if (!$session[user][loggedin] || (0 && (date("U") - strtotime($session[user][laston])) > getsetting("LOGINTIMEOUT",900)) ){
+		if (!$session['user']['loggedin'] || (0 && (date("U") - strtotime($session['user']['laston'])) > getsetting("LOGINTIMEOUT",900)) ){
 			$session=array();
 			redirect("index.php?op=timeout","Account not logged in but session thinks they are.");
 		}
@@ -1532,8 +1532,8 @@ if ($session[loggedin]){
 		redirect("index.php","Account Disappeared!");
 	}
 	db_free_result($result);
-	if ($session[allowednavs][$REQUEST_URI] && !$allownonnav[$SCRIPT_NAME]){
-		$session[allowednavs]=array();
+	if ($session['allowednavs'][$REQUEST_URI] && !$allownonnav[$SCRIPT_NAME]){
+		$session['allowednavs']=array();
 	}else{
 		if (!$allownonnav[$SCRIPT_NAME]){
 			redirect("badnav.php","Navigation not allowed to $REQUEST_URI");
@@ -1546,15 +1546,15 @@ if ($session[loggedin]){
 		redirect("index.php?op=timeout","Not logged in: $REQUEST_URI");
 	}
 }
-//if ($session[user][loggedin]!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
-if ($session[user][loggedin]!=true && !$allowanonymous[$SCRIPT_NAME]){
+//if ($session['user'][loggedin]!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
+if ($session['user']['loggedin']!=true && !$allowanonymous[$SCRIPT_NAME]){
 	redirect("login.php?op=logout");
 }
 
-$session[counter]++;
+$session['counter']++;
 $nokeeprestore=array("newday.php"=>1,"badnav.php"=>1,"motd.php"=>1,"mail.php"=>1,"petition.php"=>1);
 if (!$nokeeprestore[$SCRIPT_NAME]) { //strpos($REQUEST_URI,"newday.php")===false && strpos($REQUEST_URI,"badnav.php")===false && strpos($REQUEST_URI,"motd.php")===false && strpos($REQUEST_URI,"mail.php")===false
-  $session[user][restorepage]=$REQUEST_URI;
+  $session['user']['restorepage']=$REQUEST_URI;
 }else{
 
 }
@@ -1565,20 +1565,20 @@ if ($session['user']['hitpoints']>0){
 	$session['user']['alive']=false;
 }
 
-$session[bufflist]=unserialize($session[user][bufflist]);
-if (!is_array($session[bufflist])) $session[bufflist]=array();
-$session[user][lastip]=$REMOTE_ADDR;
-if (strlen($_COOKIE[lgi])<32){
-	if (strlen($session[user][uniqueid])<32){
+$session['bufflist']=unserialize($session['user']['bufflist']);
+if (!is_array($session['bufflist'])) $session['bufflist']=array();
+$session['user']['lastip']=$REMOTE_ADDR;
+if (strlen($_COOKIE['lgi'])<32){
+	if (strlen($session['user']['uniqueid'])<32){
 		$u=md5(microtime());
 		setcookie("lgi",$u,strtotime("+365 days"));
 		$_COOKIE['lgi']=$u;
-		$session[user][uniqueid]=$u;
+		$session['user']['uniqueid']=$u;
 	}else{
-		setcookie("lgi",$session[user][uniqueid],strtotime("+365 days"));
+		setcookie("lgi",$session['user']['uniqueid'],strtotime("+365 days"));
 	}
 }else{
-	$session[user][uniqueid]=$_COOKIE[lgi];
+	$session['user']['uniqueid']=$_COOKIE['lgi'];
 }
 $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']);
 $url = substr($url,0,strlen($url)-1);
