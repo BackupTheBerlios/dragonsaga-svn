@@ -109,6 +109,10 @@ td.popupheader {
 td.noborder {
 	border: none;
 }
+table.logintable {
+        background-image: url(../images/logindragon.png);
+        height: 234px;
+}
 table.noborder {
 	border: none;
 }
@@ -174,6 +178,7 @@ a.motd {
 	clear: none;
 }
 a:hover.motd {
+/*
 	height: 14px;
 	width: 179px;
 	background-color: #806B4D;
@@ -181,6 +186,7 @@ a:hover.motd {
 	border-bottom: thin solid #FF9900;
 	border-right: thin solid #FF9900;
 	border-left: thin solid #FF9900;
+*/
 }
 a.hotmotd {
 	text-decoration: none;
