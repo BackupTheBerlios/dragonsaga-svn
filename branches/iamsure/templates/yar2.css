@@ -106,12 +106,12 @@ table.charinfo {
 }
 td.pageheader {
 	background-color: #333399;
-	background-image: url(../images/headbkg.gif);
+	background-image: url(../images/headbkg.png);
 	height: 60px;
 }
 td.popupheader {
 	background-color: #333399;
-	background-image: url(../images/headbkg.gif);
+	background-image: url(../images/headbkg.png);
 	height: 20px;
 }
 td.noborder {
@@ -183,7 +183,7 @@ a.hotmotd {
 	color: #FFFFFF;
 }
 td.footer {
-	background-image: url(../images/rule.gif);
+	background-image: url(../images/rule.png);
 	background-repeat: repeat-x;
 	background-position: top;
 }
