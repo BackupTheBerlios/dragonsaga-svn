@@ -4,9 +4,9 @@ if ($_GET['op']=="primer"){
 popup_header("New Player Primer");
 	output("
 <a href='petition.php?op=faq'>Contents</a>`n`n
-`^Welcome to the Legend of the Green Dragon New Player Primer`n`n
+`^Welcome to the Dragon Saga New Player Primer`n`n
 `^`bThe Village Square`b`n`@
-Legend of the Green Dragon (LotGD) is turning out to be a fairly expansive game, with a lot of areas to explore.  It's easy to get lost with all that there is to do out there,
+The Dragon Saga (TDS) is turning out to be a fairly expansive game, with a lot of areas to explore.  It's easy to get lost with all that there is to do out there,
 so keep in mind that the village square is pretty much the center of the game.  This area will give you access to most other areas that you can get to, with a few exceptions 
 (we'll talk about those in a little while).  If you ever get lost, or are not sure what's going on, head to the village square and regain your bearings.`n
 `n
@@ -33,7 +33,7 @@ output("
 `n
 `n
 `^`bDeath`b`n`@
-Death is a natural part of any games that contains some kind of combat.  In Legend of the Green Dragon, being dead is only a temporary condition.  When you die, you'll
+Death is a natural part of any games that contains some kind of combat.  In The Dragon Saga, being dead is only a temporary condition.  When you die, you'll
 lose any money that you had on hand (money in the bank is safe!), and some of the experience you've accumulated.  While you're dead, you can explore the land of the shades
 and the graveyard.  In the graveyard, you'll find Ramius the Overlord of Death.  He has certain things that he would like you to do for him, and in return, he will grant
 you special powers or favors.  The graveyard is one of those areas that you can't get to from the Village Square.  In fact, while you're dead, you can't go to the village
@@ -53,7 +53,7 @@ NOT get carried over from one day to the next (you can't build up a whole bunch 
 if (getsetting("pvp",1)){
 output("
 `^`bPvP (Player versus Player)`b`n`@
-Legend of the Green Dragon contains a PvP element, where players can attack each other.  As a new player, you are protected from PvP for your first ".getsetting("pvpimmunity",5) . " game days or until you accumulate " . getsetting("pvpminexp",1500) . ", unless
+The Dragon Saga contains a PvP element, where players can attack each other.  As a new player, you are protected from PvP for your first ".getsetting("pvpimmunity",5) . " game days or until you accumulate " . getsetting("pvpminexp",1500) . ", unless
 you choose to attack another player.  Some servers might have the PvP aspect turned off, in which case there is no chance that you'll be attacked by any other players.  You
 can tell if the server you play on has PvP turned off by looking in the Village Square for \"Slay Other Players.\"  If it's not there, you can't engage (or be engaged) in PvP.`n
 `n
@@ -100,7 +100,7 @@ Cookies are little bits of data that websites store on your computer so they can
 }else if ($_GET['op']=="faq"){
 popup_header("Frequently Asked Questions (FAQ)");
 output("
-`^Welcome to Legend of the Green Dragon. `n
+`^Welcome to The Dragon Saga. `n
 `n`@
 You wake up one day, and you're in a village for some reason.  You wander around, bemused, until you stumble upon the Village Square.  Once there you start asking lots of stupid questions.  People (who are mostly naked for some reason) throw things at you.  You escape by ducking into the Inn and find a rack of pamphlets by the door.  The title of the pamphlet reads: \"Everything You Wanted to Know About the LoGD, but Were Afraid to Ask.\"  Looking furtively around to make sure nobody's watching, you open one and read:`n
 `n
