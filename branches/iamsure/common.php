@@ -928,13 +928,6 @@ function page_footer(){
 	
 
 	$footer = $template['footer'];
-	if (strpos($footer,"{paypal}") || strpos($header,"{paypal}")){ $palreplace="{paypal}"; }else{ $palreplace="{stats}"; }
-	
-	$paypalstr = '<table align="center"><tr><td>';
-        $paypalstr .= '</td></tr></table>';
-	$footer=str_replace($palreplace,(strpos($palreplace,"paypal")?"":"{stats}").$paypalstr,$footer);
-	$header=str_replace($palreplace,(strpos($palreplace,"paypal")?"":"{stats}").$paypalstr,$header);
-
 	$header=str_replace("{nav}",$nav,$header);
 	$footer=str_replace("{nav}",$nav,$footer);
 
@@ -1621,7 +1614,7 @@ while (list($key,$val)=each($templatetags)){
 	if (strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in your footer\n";
 }
 //tags that may appear anywhere but must appear
-$templatetags=array("nav","stats","petition","motd","mail","paypal","copyright","source");
+$templatetags=array("nav","stats","petition","motd","mail","copyright","source");
 while (list($key,$val)=each($templatetags)){
 	if (strpos($template['header'],"{".$val."}")===false && strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in either your header or footer\n";
 }
