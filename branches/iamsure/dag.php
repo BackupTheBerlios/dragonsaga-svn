@@ -130,8 +130,8 @@ if ($HTTP_GET_VARS['op']=="list"){
 }else{
 	output("You stroll over to Dag Durnick, who doesn't even bother to look up at you. He takes a long pull on his pipe.`n");
 	output("`7\"Ye probably be wantin' to know if there's a price on yer head, ain't ye.\"`n`n");
-	if ($session[user][bounty]>0){
-		output("\"`3Well, it be lookin like ye have `^".$session[user][bounty]." gold`3 on yer head currently. Ye might wanna be watchin yourself.\"");
+	if ($session['user']['bounty']>0){
+		output("\"`3Well, it be lookin like ye have `^".$session['user']['bounty']." gold`3 on yer head currently. Ye might wanna be watchin yourself.\"");
 	}else{
 		output("\"`3Ye don't have no bounty on ya.  I suggest ye be keepin' it that way.\"");
 	}

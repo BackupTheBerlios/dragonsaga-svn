@@ -4,7 +4,7 @@ isnewday(2);
 addcommentary();
 
 addnav("M?Return to the Mundane","village.php");
-if ($_GET[op]=="newsdelete"){
+if ($_GET['op']=="newsdelete"){
 	$sql = "DELETE FROM news WHERE newsid='$_GET[newsid]'";
 	db_query($sql);
 	$return = $_GET['return'];
@@ -12,7 +12,7 @@ if ($_GET[op]=="newsdelete"){
 	$return = substr($return,strrpos($return,"/")+1);
 	redirect($return);
 }
-if ($_GET[op]=="commentdelete"){
+if ($_GET['op']=="commentdelete"){
 	$sql = "DELETE FROM commentary WHERE commentid='$_GET[commentid]'";
 	db_query($sql);
 	$return = $_GET['return'];
@@ -26,10 +26,10 @@ if ($_GET[op]=="commentdelete"){
 }
 
 page_header("Superuser Grotto");
-if ($_GET[op]=="checkcommentary"){
+if ($_GET['op']=="checkcommentary"){
 	addnav("G?Return to the Grotto","superuser.php");
 	viewcommentary("' or '1'='1","X",100);
-}else if ($_GET[op] == "bounties") {
+}else if ($_GET['op'] == "bounties") {
 	addnav("G?Return to the Grotto","superuser.php");
 	output("`c`bThe Bounty List`b`c`n");
 	$sql = "SELECT name,alive,sex,level,laston,loggedin,lastip,uniqueid,bounty FROM accounts WHERE bounty>0 ORDER BY bounty DESC";
@@ -44,12 +44,12 @@ if ($_GET[op]=="checkcommentary"){
 	  output("`^$row[level]`0");
 	  output("</td><td>",true);
 	  output("`&$row[name]`0");
-	  if ($session[user][loggedin]) output("</a>",true);
+	  if ($session['user'][loggedin]) output("</a>",true);
 	  output("</td><td>",true);
 	  $loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
 	  output($row[location] ?"`3Boar's Head Inn`0" :($loggedin ?"`#Online`0" :"`3The Fields`0"));
 	  output("</td><td>",true);
-	  output($row[sex]?"`!Female`0":"`!Male`0");
+	  output($row['sex']?"`!Female`0":"`!Male`0");
 	  output("</td><td>",true);
 	  output($row[alive]?"`1Yes`0":"`4No`0");
 	  output("</td><td>",true);
@@ -63,7 +63,7 @@ if ($_GET[op]=="checkcommentary"){
 	}
 	output("</table>",true); 
 }else{
-	if ($session[user][sex]){
+	if ($session['user']['sex']){
 		output("`^You duck in to a secret cave that few know about.  Inside you are greeted ");
 		output("by the sight of numerous muscular bare-chested men who wave palm fronds at you ");
 		output("and offer to feed you grapes as you lounge on Greko-Roman couches draped with ");
@@ -77,23 +77,23 @@ if ($_GET[op]=="checkcommentary"){
 	viewcommentary("superuser","Engage in idle conversation with other gods:",25);
 	addnav("Actions");
 	addnav("Petition Viewer","viewpetition.php");
-	if ($session[user][superuser]>=3) addnav("C?Recent Commentary","superuser.php?op=checkcommentary");
+	if ($session['user']['superuser']>=3) addnav("C?Recent Commentary","superuser.php?op=checkcommentary");
 	addnav("B?Player Bios","bios.php");
-	if ($session[user][superuser]>=3) addnav("Donator Page","donators.php");
-	if ($session[user][superuser]>=3) addnav("Retitler","retitle.php");
+	if ($session['user']['superuser']>=3) addnav("Donator Page","donators.php");
+	if ($session['user']['superuser']>=3) addnav("Retitler","retitle.php");
 	addnav("Display Bounties", "superuser.php?op=bounties");
 
 	addnav("Editors");
-	if ($session[user][superuser]>=3) addnav("User Editor","user.php");
+	if ($session['user']['superuser']>=3) addnav("User Editor","user.php");
 	addnav("E?Creature Editor","creatures.php");
-	if ($session[user][superuser]>=3) addnav("Mount Editor","mounts.php");
+	if ($session['user']['superuser']>=3) addnav("Mount Editor","mounts.php");
 	addnav("Taunt Editor","taunt.php");
 	addnav("Weapon Editor","weaponeditor.php");
 	addnav("Armor Editor","armoreditor.php");
 	addnav("Nasty Word Editor","badword.php");
 
 	addnav("Mechanics");
-	if ($session[user][superuser]>=3) addnav("Game Settings","configuration.php");
+	if ($session['user']['superuser']>=3) addnav("Game Settings","configuration.php");
 	addnav("Referring URLs","referers.php");
 	addnav("Stats","stats.php");
 

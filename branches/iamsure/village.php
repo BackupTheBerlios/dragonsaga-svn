@@ -49,7 +49,7 @@ addnav("Preferences","prefs.php");
 addnav("List Warriors","list.php");
 addnav("`%Quit`0 to the fields","login.php?op=logout",true);
 
-if ($session[user][superuser]>=2){
+if ($session['user']['superuser']>=2){
   addnav("X?`bSuperuser Grotto`b","superuser.php");
 }
 //let users try to cheat, we protect against this and will know if they try.
@@ -69,7 +69,7 @@ addnav("","stats.php");
 addnav("","viewpetition.php");
 addnav("","weaponeditor.php");
 
-if ($session[user][superuser]){
+if ($session['user']['superuser']){
   addnav("New Day","newday.php");
 }
 

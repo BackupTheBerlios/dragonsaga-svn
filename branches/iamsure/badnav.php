@@ -1,7 +1,7 @@
 <?
 require_once "common.php";
 if ($session['user']['loggedin'] && $session['loggedin']){
-	if (strpos($session[output],"<!--CheckNewDay()-->")){
+	if (strpos($session['output'],"<!--CheckNewDay()-->")){
 		checkday();
 	}
 	while (list($key,$val)=each($session['allowednavs'])){

@@ -19,19 +19,19 @@ if ($HTTP_GET_VARS[op]=="suicide" && getsetting("selfdelete",0)!=0) {
 } else {
 
 checkday();
-if ($session[user][alive]){
+if ($session['user']['alive']){
 	addnav("Return to the village","village.php");
 }else{
 	addnav("Return to the news","news.php");
 }
 if (count($_POST)==0){
 }else{
-	if ($_POST[pass1]!=$_POST[pass2]){
+	if ($_POST['pass1']!=$_POST['pass2']){
 		output("`#Your passwords do not match.`n");
 	}else{
-		if ($_POST[pass1]!=""){
-			if (strlen($_POST[pass1])>3){
-				$session[user][password]=$_POST[pass1];
+		if ($_POST['pass1']!=""){
+			if (strlen($_POST['pass1'])>3){
+				$session['user']['password']=$_POST['pass1'];
 				output("`#Your password has been changed.`n");
 			}else{
 				output("`#Your password is too short.  It must be at least 4 characters.`n");
@@ -51,20 +51,20 @@ if (count($_POST)==0){
 			$session['user']['biotime']=date("Y-m-d H:i:s");
 		}
 	}
-	if ($_POST[email]!=$session[user][emailaddress]){
-		if (is_email($_POST[email])){
+	if ($_POST['email']!=$session['user']['emailaddress']){
+		if (is_email($_POST['email'])){
 			if (getsetting("requirevalidemail",0)==1){
 				output("`#Your email cannot be changed, system settings prohibit it.  (Emails may only be changed if the server allows more than one account per email).  Use the Petition link to ask the  server administrator to change your email address if this one is no longer valid.`n");
 			}else{
 				output("`#Your email address has been changed.`n");
-				$session[user][emailaddress]=$_POST[email];
+				$session['user']['emailaddress']=$_POST['email'];
 			}
 		}else{
 			if (getsetting("requireemail",0)==1){
 				output("`#That is not a valid email address.`n");
 			}else{
 				output("`#Your email address has been changed.`n");
-				$session[user][emailaddress]=$_POST[email];
+				$session['user']['emailaddress']=$_POST['email'];
 			}
 		}
 	}

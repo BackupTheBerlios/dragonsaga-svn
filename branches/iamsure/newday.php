@@ -134,8 +134,8 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 			output("`@You are resurrected!  This is your ".ordinal($session['user']['resurrections'])." resurrection.`0`n");
 			$session['user']['alive']=true;
 		}
-		$session[user][age]++;
-		$session[user][seenmaster]=0;
+		$session['user']['age']++;
+		$session['user']['seenmaster']=0;
 		output("You open your eyes to discover that a new day has been bestowed upon you, it is your `^".ordinal($session['user']['age'])."`0 day.  ");
 		output("You feel refreshed enough to take on the world!`n");
 		output("`2Turns for today set to `^$turnsperday`n");
@@ -191,7 +191,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 				$dkff++;
 			}
 		}
-		if ($session[user][hashorse]){
+		if ($session['user']['hashorse']){
 			$session['bufflist']['mount']=unserialize($playermount['mountbuff']);
 		}
 		if ($dkff>0) output("`n`2You gain `^$dkff`2 forest fights from spent dragon points!"); 
@@ -233,7 +233,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 			debuglog(($nbgold >= 0 ? "earned " : "paid ") . abs($nbgold) . " gold in interest");
 		}
 		$session['user']['turns']=$turnsperday+$spirits+$dkff;
-		$session['user']['hitpoints'] = $session[user][maxhitpoints];
+		$session['user']['hitpoints'] = $session['user']['maxhitpoints'];
 		$session['user']['spirits'] = $spirits;
 		$session['user']['playerfights'] = $dailypvpfights;
 		$session['user']['transferredtoday'] = 0;

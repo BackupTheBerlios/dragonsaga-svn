@@ -501,26 +501,26 @@ function charstats(){
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
 		$spirits=array("-6"=>"Resurrected","-2"=>"Very Low","-1"=>"Low","0"=>"Normal","1"=>"High","2"=>"Very High");
-		if ($u[alive]){ }else{ $spirits[$u[spirits]] = "DEAD"; }
-		reset($session[bufflist]);
-		$atk=$u[attack];
-		$def=$u[defence];
-		while (list($key,$val)=each($session[bufflist])){
+		if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
+		reset($session['bufflist']);
+		$atk=$u['attack'];
+		$def=$u['defence'];
+		while (list($key,$val)=each($session['bufflist'])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
-			if (isset($val[atkmod])) $atk *= $val[atkmod];
-			if (isset($val[defmod])) $def *= $val[defmod];
+			if (isset($val['atkmod'])) $atk *= $val['atkmod'];
+			if (isset($val['defmod'])) $def *= $val['defmod'];
 		}
 		$atk = round($atk, 2);
 		$def = round($def, 2);
-		$atk = ($atk == $u[attack] ? "`^" : ($atk > $u[attack] ? "`@" : "`$")) . "`b$atk`b`0";
-		$def = ($def == $u[defence] ? "`^" : ($def > $u[defence] ? "`@" : "`$")) . "`b$def`b`0";
+		$atk = ($atk == $u['attack'] ? "`^" : ($atk > $u[attack] ? "`@" : "`$")) . "`b$atk`b`0";
+		$def = ($def == $u['defence'] ? "`^" : ($def > $u[defence] ? "`@" : "`$")) . "`b$def`b`0";
 
-		if (count($session[bufflist])==0){
+		if (count($session['bufflist'])==0){
 			$buffs.=appoencode("`^None`0",true);
 		}
 		$charstat=appoencode(templatereplace("statstart")
 		.templatereplace("stathead",array("title"=>"Vital Info"))
-		.templatereplace("statrow",array("title"=>"Name","value"=>appoencode($u[name],false)))
+		.templatereplace("statrow",array("title"=>"Name","value"=>appoencode($u['name'],false)))
 		,true);
 		if ($session['user']['alive']){
 
@@ -551,7 +551,7 @@ function charstats(){
 		.templatereplace("statrow",array("title"=>"Weapon","value"=>$u['weapon']))
 		.templatereplace("statrow",array("title"=>"Armor","value"=>$u['armor']))
 		,true);
-		if (!is_array($session[bufflist])) $session[bufflist]=array();
+		if (!is_array($session['bufflist'])) $session['bufflist']=array();
 		$charstat.=appoencode(templatereplace("statbuff",array("title"=>"Buffs:","value"=>$buffs)),true);
 		$charstat.=appoencode(templatereplace("statend"),true);
 		return $charstat;
@@ -563,7 +563,7 @@ function charstats(){
 		$result = db_query($sql) or die(sql_error($sql));
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			//$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
+			//$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
 			//if ($loggedin) {
 				$ret.=appoencode("`^$row[name]`n");
 				$onlinecount++;
@@ -839,9 +839,9 @@ function maillink(){
 	$result = db_query($sql) or die(mysql_error(LINK));
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	$row[seencount]=(int)$row[seencount];
-	$row[notseen]=(int)$row[notseen];
-	if ($row[notseen]>0){
+	$row['seencount']=(int)$row['seencount'];
+	$row['notseen']=(int)$row['notseen'];
+	if ($row['notseen']>0){
 		return "<a href='mail.php' target='_blank' onClick=\"".popup("mail.php").";return false;\" class='hotmotd'>Ye Olde Mail: $row[notseen] new, $row[seencount] old</a>";
 	}else{
 		return "<a href='mail.php' target='_blank' onClick=\"".popup("mail.php").";return false;\" class='motd'>Ye Olde Mail: $row[notseen] new, $row[seencount] old</a>";
@@ -1060,11 +1060,11 @@ function saveuser(){
 //	$cmd = date("Y-m-d H:i:s")." $dbqueriesthishit ".$_SERVER['REQUEST_URI'];
 //	@exec("echo $cmd >> /home/groups/l/lo/lotgd/sessiondata/data/queryusage-".$session['user']['login'].".txt");
 	if ($session['loggedin'] && $session['user']['acctid']!=""){
-  	$session['user'][output]=$session[output];
-  	$session['user'][allowednavs]=serialize($session['allowednavs']);
-		$session['user'][bufflist]=serialize($session[bufflist]);
-		if (is_array($session['user'][prefs])) $session['user'][prefs]=serialize($session['user'][prefs]);
-		if (is_array($session['user'][dragonpoints])) $session['user'][dragonpoints]=serialize($session['user'][dragonpoints]);
+  	$session['user']['output']=$session['output'];
+  	$session['user']['allowednavs']=serialize($session['allowednavs']);
+		$session['user']['bufflist']=serialize($session['bufflist']);
+		if (is_array($session['user']['prefs'])) $session['user']['prefs']=serialize($session['user']['prefs']);
+		if (is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=serialize($session['user']['dragonpoints']);
 		//$session['user'][laston] = date("Y-m-d H:i:s");
   	$sql="UPDATE accounts SET ";
   	reset($session['user']);
@@ -1154,7 +1154,7 @@ function checkday() {
 function is_new_day(){
 	global $session;
 	$t1 = gametime(); 
-	$t2 = convertgametime(strtotime($session['user'][lasthit]));
+	$t2 = convertgametime(strtotime($session['user']['lasthit']));
 	$d1 = date("Y-m-d",$t1);
 	$d2 = date("Y-m-d",$t2);
 	if ($d1!=$d2){
@@ -1207,9 +1207,9 @@ function addcommentary() {
 	}
 	$section=$HTTP_POST_VARS['section'];
 	$talkline=$HTTP_POST_VARS['talkline'];
-	if ($HTTP_POST_VARS[insertcommentary][$section]!==NULL &&
-		trim($HTTP_POST_VARS[insertcommentary][$section])!="") {
-		$commentary = str_replace("`n","",soap($HTTP_POST_VARS[insertcommentary][$section]));
+	if ($HTTP_POST_VARS['insertcommentary'][$section]!==NULL &&
+		trim($HTTP_POST_VARS['insertcommentary'][$section])!="") {
+		$commentary = str_replace("`n","",soap($HTTP_POST_VARS['insertcommentary'][$section]));
 		$y = strlen($commentary);
 		for ($x=0;$x<$y;$x++){
 			if (substr($commentary,$x,1)=="`"){
@@ -1294,7 +1294,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		$sql = "DELETE FROM commentary WHERE postdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 		db_query($sql);
 	}
-	$com=(int)$HTTP_GET_VARS[comscroll];
+	$com=(int)$HTTP_GET_VARS['comscroll'];
   $sql = "SELECT commentary.*, 
 	               accounts.name,
 	               accounts.login
@@ -1380,7 +1380,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		}
 	}
 
-	if ($session['user'][loggedin]) {
+	if ($session['user']['loggedin']) {
 		if ($counttoday<($limit/2) || $session['user']['superuser']>=2){
 			if ($message!="X"){
 				if ($talkline!="says") $tll = strlen($talkline)+11; else $tll=0;
@@ -1546,7 +1546,7 @@ if ($session['loggedin']){
 		redirect("index.php?op=timeout","Not logged in: $REQUEST_URI");
 	}
 }
-//if ($session['user'][loggedin]!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
+//if ($session['user']['loggedin']!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
 if ($session['user']['loggedin']!=true && !$allowanonymous[$SCRIPT_NAME]){
 	redirect("login.php?op=logout");
 }

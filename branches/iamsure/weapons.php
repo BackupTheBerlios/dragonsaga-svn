@@ -4,12 +4,12 @@ checkday();
 
 page_header("MightyE's Weapons");
 output("`c`b`&MightyE's Weapons`0`b`c");
-$tradeinvalue = round(($session[user][weaponvalue]*.75),0);
-if ($HTTP_GET_VARS[op]==""){
+$tradeinvalue = round(($session['user']['weaponvalue']*.75),0);
+if ($HTTP_GET_VARS['op']==""){
   output("`!MightyE `7stands behind a counter and appears to pay little attention to you as you enter, ");
 	output("but you know from experience that he has his eye on every move you make.  He may be a humble ");
 	output("weapons merchant, but he still carries himself with the grace of a man who has used his weapons ");
-	output("to kill mightier ".($session[user][gender]?"women":"men")." than you.`n`n");
+	output("to kill mightier ".($session['user']['gender']?"women":"men")." than you.`n`n");
 	output("The massive hilt of a claymore protrudes above his shoulder; its gleam in the torch light not ");
 	output("much brighter than the gleam off of `!MightyE's`7 bald forehead, kept shaved mostly as a strategic ");
 	output("advantage, but in no small part because nature insisted that some level of baldness was necessary. ");
@@ -17,16 +17,16 @@ if ($HTTP_GET_VARS[op]==""){
 	output("have an opportunity to use one of these weapons.");
   addnav("Peruse Weapons","weapons.php?op=peruse");
 	addnav("Return to the village","village.php");
-}else if ($HTTP_GET_VARS[op]=="peruse"){
-	$sql = "SELECT max(level) AS level FROM weapons WHERE level<=".(int)$session[user][dragonkills];
+}else if ($HTTP_GET_VARS['op']=="peruse"){
+	$sql = "SELECT max(level) AS level FROM weapons WHERE level<=".(int)$session['user']['dragonkills'];
 	$result = db_query($sql) or die(db_error(LINK));
 	$row = db_fetch_assoc($result);
 	
-  $sql = "SELECT * FROM weapons WHERE level = ".(int)$row[level]." ORDER BY damage ASC";
+  $sql = "SELECT * FROM weapons WHERE level = ".(int)$row['level']." ORDER BY damage ASC";
 	$result = db_query($sql) or die(db_error(LINK));
 	output("`7You stroll up the counter and try your best to look like you know what most of these contraptions do. ");
 	output("`!MightyE`7 looks at you and says, \"`#I'll give you `^$tradeinvalue`# ");
-	output("tradein value for your `5".$session[user][weapon]."`#.  Just click on the weapon you wish to buy, what ever 'click' means`7,\" and ");
+	output("tradein value for your `5".$session['user']['weapon']."`#.  Just click on the weapon you wish to buy, what ever 'click' means`7,\" and ");
 	output("looks utterly confused.  He stands there a few seconds, snapping his fingers and wondering if that is what ");
 	output("is meant by \"click,\" before returning to his work: standing there and looking good.");
 	output("<table border='0' cellpadding='0'>",true);
@@ -34,7 +34,7 @@ if ($HTTP_GET_VARS[op]==""){
 	for ($i=0;$i<db_num_rows($result);$i++){
 	  $row = db_fetch_assoc($result);
 		$bgcolor=($i%2==1?"trlight":"trdark");
-		if ($row[value]<=($session[user][gold]+$tradeinvalue)){
+		if ($row['value']<=($session['user']['gold']+$tradeinvalue)){
 			output("<tr class='$bgcolor'><td><a href='weapons.php?op=buy&id=$row[weaponid]'>$row[weaponname]</a></td><td align='center'>$row[damage]</td><td align='right'>$row[value]</td></tr>",true);
 			addnav("","weapons.php?op=buy&id=$row[weaponid]");
 		}else{
