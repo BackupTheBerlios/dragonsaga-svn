@@ -26,8 +26,8 @@ if ($session['user']['loggedin']){
 	output("</table>",true);
 	page_footer();
 }else{
-	page_header("Welcome to Legend of the Green Dragon");
-	output("`@Legend of the Green Dragon is a remake of the classic BBS Door Game Legend of the Red Dragon.  
+	page_header("Welcome to The Dragon Saga");
+	output("`@The Dragon Saga is a remake of the classic BBS Door Game Legend of the Red Dragon.  
 	Adventure in to the classic realm that was one of the world's very first multiplayer roleplaying games!
 	");
 	addnav("Create a character","create.php?r=".HTMLEntities($_GET['r']));

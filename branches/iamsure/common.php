@@ -858,7 +858,7 @@ function motdlink(){
 	}
 }
 
-function page_header($title="Legend of the Green Dragon"){
+function page_header($title="The Dragon Saga"){
 	global $header,$SCRIPT_NAME,$session,$template;
 	$nopopups["login.php"]=1;
 	$nopopups["motd.php"]=1;
@@ -984,7 +984,7 @@ function page_footer(){
 	exit();
 }
 
-function popup_header($title="Legend of the Green Dragon"){
+function popup_header($title="The Dragon Saga"){
   global $header;
 	$header.="<html><head><title>$title</title>";
 	$header.="<link href=\"templates/newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";

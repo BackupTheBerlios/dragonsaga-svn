@@ -21,7 +21,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 	$row = db_fetch_assoc($result);
 	mail($row[emailaddress],"LoGD Character Expiration",
 	"
-	One or more of your characters in Legend of the Green Dragon at
+	One or more of your characters in The Dragon Saga at
 	".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."
 	is about to expire.  If you wish to keep this character, you should
 	log on to him or her soon!",
@@ -38,7 +38,7 @@ if ($session['loggedin']){
 	redirect("badnav.php");
 }
 page_header();
-output("`cWelcome to Legend of the Green Dragon, a shameless knockoff of Seth Able's Legend of the Red Dragon.`n");
+output("`cWelcome to The Dragon Saga, a shameless knockoff of Seth Able's Legend of the Red Dragon.`n");
 output("`@The current time in the village is `%".getgametime()."`@.`0`n");
 
 //Next New Day in ... is by JT from logd.dragoncat.net
