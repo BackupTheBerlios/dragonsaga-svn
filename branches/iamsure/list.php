@@ -72,7 +72,7 @@ for($i=0;$i<$max;$i++){
 	output("</td><td>",true);
 	output("`^$row[level]`0");
 	output("</td><td>",true);
-	if ($session[user][loggedin]) output("<a href=\"mail.php?op=write&to=".rawurlencode($row['login'])."\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row['login'])."").";return false;\"><img src='images/newscroll.GIF' width='16' height='16' alt='Write Mail' border='0'></a>",true);
+	if ($session[user][loggedin]) output("<a href=\"mail.php?op=write&to=".rawurlencode($row['login'])."\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row['login'])."").";return false;\"><img src='images/newscroll.gif' width='16' height='16' alt='Write Mail' border='0'></a>",true);
 	if ($session[user][loggedin]) output("<a href='bio.php?char=".rawurlencode($row['login'])."'>",true);
 	if ($session[user][loggedin]) addnav("","bio.php?char=".rawurlencode($row['login'])."");
 	output("`&$row[name]`0");

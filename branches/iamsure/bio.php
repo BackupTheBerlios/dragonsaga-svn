@@ -9,7 +9,7 @@ page_header("Character Biography: ".preg_replace("'[`].'","",$row[name]));
 $specialty=array(0=>"Unspecified","Dark Arts","Mystical Powers","Thieving Skills");
 //$horses=array(0=>"None","Pony","Gelding","Stallion");
 output("`^Biography for $row[name]");
-if ($session[user][loggedin]) output("<a href=\"mail.php?op=write&to=$row[login]\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=$row[login]").";return false;\"><img src='images/newscroll.GIF' width='16' height='16' alt='Write Mail' border='0'></a>",true);
+if ($session[user][loggedin]) output("<a href=\"mail.php?op=write&to=$row[login]\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=$row[login]").";return false;\"><img src='images/newscroll.gif' width='16' height='16' alt='Write Mail' border='0'></a>",true);
 output("`n`n");
 output("`^Title: `@$row[title]`n");
 output("`^Level: `@$row[level]`n");
