@@ -61,7 +61,7 @@ if ($_GET[op]==""){
 			$row = db_fetch_assoc($result);
 			if ((int)$row[msgfrom]==0) $row[name]="`i`^System`0`i";
 			output("<tr>",true);
-			output("<td nowrap><input id='checkbox$i' type='checkbox' name='msg[]' value='$row[messageid]'><img src='images/".($row[seen]?"old":"new")."scroll.GIF' width='16' height='16' alt='".($row[seen]?"Old":"New")."'></td>",true);
+			output("<td nowrap><input id='checkbox$i' type='checkbox' name='msg[]' value='$row[messageid]'><img src='images/".($row[seen]?"old":"new")."newscroll.png' width='16' height='16' alt='".($row[seen]?"Old":"New")."'></td>",true);
 			output("<td><a href='mail.php?op=read&id=$row[messageid]'>",true);
 			output($row[subject]);
 			output("</a></td><td><a href='mail.php?op=read&id=$row[messageid]'>",true);
@@ -93,9 +93,9 @@ if ($_GET[op]==""){
 		output("`b`2From:`b `^$row[name]`n");
 		output("`b`2Subject:`b `^$row[subject]`n");
 		output("`b`2Sent:`b `^{$row['sent']}`n");
-		output("<img src='images/uscroll.GIF' width='182' height='11' alt='' align='center'>`n",true);
+		output("<img src='images/uscroll.png' width='182' height='11' alt='' align='center'>`n",true);
 		output(str_replace("\n","`n","$row[body]"));
-		output("`n<img src='images/lscroll.gif' width='182' height='11' alt='' align='center'>`n",true);
+		output("`n<img src='images/lscroll.png' width='182' height='11' alt='' align='center'>`n",true);
 		output("<a href='mail.php?op=write&replyto=$row[messageid]' class='motd'>Reply</a><a href='mail.php?op=del&id=$row[messageid]' class='motd'>Del</a>",true);
 	}else{
 		output("Eek, no such message was found!");

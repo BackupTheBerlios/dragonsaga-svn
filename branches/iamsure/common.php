@@ -1350,7 +1350,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 				$op[$i] = "`0`&$row[name]`0`3 says, \"`#"
 				    .str_replace("&amp;","&",HTMLEntities($row[comment]))."`3\"`0`n";
 		if ($message=="X") $op[$i]="`0($row[section]) ".$op[$i];
-		if ($row['postdate']>=$session['user']['recentcomments']) $op[$i]="<img src='images/new.gif' alt='&gt;' width='3' height='5' align='absmiddle'> ".$op[$i];
+		if ($row['postdate']>=$session['user']['recentcomments']) $op[$i]="<img src='images/new.png' alt='&gt;' width='3' height='5' align='absmiddle'> ".$op[$i];
 		addnav("",$link);
 	}
 	$i--;

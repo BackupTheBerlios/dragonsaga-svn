@@ -82,7 +82,7 @@ if (getsetting("topwebid", 0) != 0) {
 }
 
 page_header("Village Square");
-//output("<img src='images/trans.gif' width='1' height='700' alt='' align='right'>",true);
+//output("<img src='images/trans.png' width='1' height='700' alt='' align='right'>",true);
 output("`@`c`bVillage Square`b`cThe village hustles and bustles.  No one really notices that you're standing there.");
 output("  You see various shops and businesses along main street.  There is a curious looking rock to one side.  ");
 output("On every side the village is surrounded by deep dark forest.`n`n");

@@ -53,7 +53,7 @@ function pollitem($id,$subject,$body){
 				output(stripslashes($val)." (".(int)$choices[$key]." - $percent%)");
 				if ($maxitem==0){ $width=1; } else { $width = round(($choices[$key]/$maxitem) * 400,0); }
 				$width = max($width,1);
-				output("`n<img src='images/rule.gif' width='$width' height='2' alt='$percent'>",true);
+				output("`n<img src='images/rule.png' width='$width' height='2' alt='$percent'>",true);
 				//output(stripslashes($val)."`n");
 			}
 		}

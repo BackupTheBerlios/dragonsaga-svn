@@ -56,7 +56,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 //	$j++;
 	$class=(date("W",strtotime($row['d']))%2?"trlight":"trdark");
 	$cumul+=$row['c'];
-	$output.="<tr class='$class'><td>{$row['d']}</td><td><img src='images/trans.gif' width='{$row['c']}' border='1' height='5'>{$row['c']}</td><td>$cumul</td></tr>";
+	$output.="<tr class='$class'><td>{$row['d']}</td><td><img src='images/trans.png' width='{$row['c']}' border='1' height='5'>{$row['c']}</td><td>$cumul</td></tr>";
 	$odate = $row['d'];
 }
 $output.="</table>";
