@@ -2,7 +2,7 @@
 require_once "common.php";
 addcommentary();
 session_write_close();
-popup_header("LoGD Message of the Day (MoTD)");
+popup_header("TDS Message of the Day (MoTD)");
 output(($session[user][superuser]>=3?" [<a href='motd.php?op=add'>Add MoTD</a>|<a href='motd.php?op=addpoll'>Add Poll</a>]`n":""),true);
 function motditem($subject,$body){
 	output("`b$subject`b`n",true);

@@ -837,7 +837,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 				output("You entered ".str_replace("`","&#0096;",HTMLEntities($HTTP_POST_VARS[testtext]))."`n",true);
 				output("It looks like ".$HTTP_POST_VARS[testtext]." `n");
 				output("<input name='testtext' id='input'><input type='submit' class='button' value='Try'></form>",true);
-				output("<script language='javascript'>document.getElementById('input').focus();</script>",true);
+				output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
 
 				output("`0`n`nThese colors can be used in your name, and in any conversations you have.");
 				addnav("",$REQUEST_URI);

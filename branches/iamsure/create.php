@@ -38,7 +38,7 @@ if ($_GET[op]=="forgot"){
 				}
 				mail(
 					$row[emailaddress],
-					"LoGD Account Verification",
+					"TDS Account Verification",
 					"Someone from ".$_SERVER['REMOTE_ADDR']." requested a forgotten password link for your account.  If this was you, then here is your"
 					." link, you may click it to log in to your account and change your password from your preferences page in the village square.\n\n"
 					."If you didn't request this email, then don't sweat it, you're the one who are receiving this email, not them."
@@ -170,7 +170,7 @@ if ($HTTP_GET_VARS[op]=="create"){
 					if ($emailverification!=""){
 						mail(
 							$_POST[email],
-							"LoGD Account Verification",
+							"TDS Account Verification",
 							"In order to verify your account, you will need to click on the link below.\n\n  http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?op=val&id=$emailverification\n\nThanks for playing!",
 							"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 						);

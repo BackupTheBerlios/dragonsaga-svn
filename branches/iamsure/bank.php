@@ -27,7 +27,7 @@ if ($HTTP_GET_VARS['op']==""){
 		output("<form action='bank.php?op=transfer2' method='POST'>Transfer <u>h</u>ow much: <input name='amount' id='amount' accesskey='h' width='5'>`n",true);
 		output("T<u>o</u>: <input name='to' accesskey='o'> (partial names are ok, you will be asked to confirm the transaction before it occurs).`n",true);
 		output("<input type='submit' class='button' value='Preview Transfer'></form>",true);
-		output("<script language='javascript'>document.getElementById('amount').focus();</script>",true);
+		output("<script type='text/javascript'>document.getElementById('amount').focus();</script>",true);
 		addnav("","bank.php?op=transfer2");
 	}else{
 		output("`6The little old banker tells you that he refuses to transfer money for someone who is in debt.");
@@ -52,7 +52,7 @@ if ($HTTP_GET_VARS['op']==""){
 		output("<form action='bank.php?op=transfer2' method='POST'>Transfer <u>h</u>ow much: <input name='amount' id='amount' accesskey='h' width='5' value='$amt'>`n",true);
 		output("T<u>o</u>: <input name='to' accesskey='o' value='". $_POST['to'] . "'> (partial names are ok, you will be asked to confirm the transaction before it occurs).`n",true);
 		output("<input type='submit' class='button' value='Preview Transfer'></form>",true);
-		output("<script language='javascript'>document.getElementById('amount').focus();</script>",true);
+		output("<script type='text/javascript'>document.getElementById('amount').focus();</script>",true);
 		addnav("","bank.php?op=transfer2");
 	}elseif(db_num_rows($result)>1){
 		output("<form action='bank.php?op=transfer3' method='POST'>",true);
@@ -109,7 +109,7 @@ if ($HTTP_GET_VARS['op']==""){
 }else if($HTTP_GET_VARS['op']=="deposit"){
   output("<form action='bank.php?op=depositfinish' method='POST'>You have ".($session['user']['goldinbank']>=0?"a balance of":"a debt of")." ".abs($session['user']['goldinbank'])." gold in the bank.`n",true);
 	output("`^".($session['user']['goldinbank']>=0?"Deposit":"Pay off")." <u>h</u>ow much? <input id='input' name='amount' width=5 accesskey='h'> <input type='submit' class='button' value='Deposit'>`n`iEnter 0 or nothing to deposit it all`i</form>",true);
-	output("<script language='javascript'>document.getElementById('input').focus();</script>",true);
+	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=depositfinish");
 }else if($HTTP_GET_VARS['op']=="depositfinish"){
 	$_POST[amount]=abs((int)$_POST[amount]);
@@ -131,12 +131,12 @@ if ($HTTP_GET_VARS['op']==""){
 	$maxborrow = $session['user']['level']*getsetting("borrowperlevel",20);
   output("<form action='bank.php?op=withdrawfinish' method='POST'>You have ".($session['user']['goldinbank']>=0?"a balance of":"a debt of")." ".abs($session['user']['goldinbank'])." gold in the bank.`n",true);
   output("`^Borrow <u>h</u>ow much (you may borrow a max of $maxborrow total at your level)? <input id='input' name='amount' width=5 accesskey='h'> <input type='hidden' name='borrow' value='x'><input type='submit' class='button' value='Borrow'>`n(Money will be withdrawn until you have none left, the remainder will be borrowed)</form>",true);
-	output("<script language='javascript'>document.getElementById('input').focus();</script>",true);
+	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");
 }else if($HTTP_GET_VARS['op']=="withdraw"){
   output("<form action='bank.php?op=withdrawfinish' method='POST'>You have ".$session[user][goldinbank]." gold in the bank.`n",true);
   output("`^Withdraw <u>h</u>ow much? <input id='input' name='amount' width=5 accesskey='h'> <input type='submit' class='button' value='Withdraw'>`n`iEnter 0 or nothing to withdraw it all`i</form>",true);
-	output("<script language='javascript'>document.getElementById('input').focus();</script>",true);
+	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");
 }else if($HTTP_GET_VARS['op']=="withdrawfinish"){
 	$_POST[amount]=abs((int)$_POST[amount]);

@@ -98,7 +98,7 @@ function systemmail($to,$subject,$body,$from=0,$noemail=false){
 		// unreadable
 		$body = preg_replace("'[`]n'", "\n", $body);
 		$body = preg_replace("'[`].'", "", $body);
-		mail($row[emailaddress],"New LoGD Mail","You have received new mail on LoGD at http://".$_SERVER[HTTP_HOST].dirname($_SERVER[SCRIPT_NAME])."\n\n$fromline"
+		mail($row[emailaddress],"New TDS Mail","You have received new mail on TDS at http://".$_SERVER[HTTP_HOST].dirname($_SERVER[SCRIPT_NAME])."\n\n$fromline"
 			."Subject: ".preg_replace("'[`].'","",stripslashes($subject))."\n"
 			."Body: ".stripslashes($body)."\n"
 			."\nYou may turn off these alerts in your preferences page.",
@@ -873,7 +873,7 @@ function page_header($title="The Dragon Saga"){
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
 	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups['$SCRIPT_NAME']!=1 && $session['user']['loggedin']){
-		$header=str_replace("{headscript}","<script language='JavaScript'>".popup("motd.php")."</script>",$header);
+		$header=str_replace("{headscript}","<script type='text/javascript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
 	}else{
 		$header=str_replace("{headscript}","",$header);
@@ -893,7 +893,7 @@ function page_footer(){
 
 		unset($nestedtags[$key]);
 	}
-	$script.="<script language='JavaScript'>
+	$script.="<script type='text/javascript'>
 	<!--
 	document.onkeypress=keyevent;
 	function keyevent(e){
@@ -968,7 +968,7 @@ function page_footer(){
 	if (strpos($_SERVER['HTTP_HOST'],"lotgd.net")!==false){
 		$footer=str_replace(
 			"</html>",
-			'<script language="JavaScript" type="text/JavaScript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?5193"></script></html>',
+			'<script type="text/Javascript" src="http://www.reinvigorate.net/archive/app.bin/jsinclude.php?5193"></script></html>',
 			$footer
 			);
 	}

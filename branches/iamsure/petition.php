@@ -102,7 +102,7 @@ popup_header("Frequently Asked Questions (FAQ)");
 output("
 `^Welcome to The Dragon Saga. `n
 `n`@
-You wake up one day, and you're in a village for some reason.  You wander around, bemused, until you stumble upon the Village Square.  Once there you start asking lots of stupid questions.  People (who are mostly naked for some reason) throw things at you.  You escape by ducking into the Inn and find a rack of pamphlets by the door.  The title of the pamphlet reads: \"Everything You Wanted to Know About the LoGD, but Were Afraid to Ask.\"  Looking furtively around to make sure nobody's watching, you open one and read:`n
+You wake up one day, and you're in a village for some reason.  You wander around, bemused, until you stumble upon the Village Square.  Once there you start asking lots of stupid questions.  People (who are mostly naked for some reason) throw things at you.  You escape by ducking into the Inn and find a rack of pamphlets by the door.  The title of the pamphlet reads: \"Everything You Wanted to Know About the TDS, but Were Afraid to Ask.\"  Looking furtively around to make sure nobody's watching, you open one and read:`n
 `n
 \"So, you're a Newbie.  Welcome to the club.  Here you will find answers to the questions that plague you.  Well, actually you will find answers to the questions that plagued US.  So, here, read and learn, and leave us alone!\" `n
 `n
@@ -148,7 +148,7 @@ Right after the old one ends.`n
 `n
 `^7.  Arghhh, you guys are killing me with your smart answers - can't you just give me a straight answer?`@`n
 Nope.`n
-Well, okay, new days correspond with the clock in the village (can also be viewed in the inn).  When the clock strikes midnight, expect a new day to begin.  The number of times a clock in LoGD strikes midnight per calendar day may vary by server.  Beta server has 4 play days per calendar day, SourceForge server has 2.  Other servers depend on the admin.`nThis server has ".getsetting("daysperday",2) . " days per calendar day.`n
+Well, okay, new days correspond with the clock in the village (can also be viewed in the inn).  When the clock strikes midnight, expect a new day to begin.  The number of times a clock in TDS strikes midnight per calendar day may vary by server.  Beta server has 4 play days per calendar day, SourceForge server has 2.  Other servers depend on the admin.`nThis server has ".getsetting("daysperday",2) . " days per calendar day.`n
 `n
 `^8.  Something's gone wrong!!!  How do I let you know?`@`n
 Send money.  Better yet, send a petition.  A petition should not say 'this doesn't work' or 'I'm broken' or 'I can't log in' or 'yo.  Sup?'  A petition *should* be very complete in describing *what* doesn't work.  Please tell us what happened, what the error message is (copy and paste is your friend), when it occurred, and anything else that may be helpful.  \"I'm broken\" is not helpful.  \"There are salmon flying out of my moniter when I log in\" is much more descriptive.  And humorous.  Although there's not much we can do about it.  In general, please be patient with these requests - many people play the game, and as long as the admin is swamped with 'yo - Sup?' petitions, it will take some time to sift through them. `n
@@ -239,7 +239,7 @@ Lots of at-home facials, my dear!!  MightyE especially enjoys the Grapefruit Ess
 		$p = $session[user][password];
 		unset($session[user][password]);
 		/*
-		mail(getsetting("gameadminemail","postmaster@localhost"),"LoGD Petition",output_array($_POST,"POST:").output_array($session,"Session:"));
+		mail(getsetting("gameadminemail","postmaster@localhost"),"TDS Petition",output_array($_POST,"POST:").output_array($session,"Session:"));
 		$sql = "SELECT acctid FROM accounts WHERE emailaddress='".getsetting("gameadminemail","postmaster@localhost")."'";
 		//output($sql);
 		$result = db_query($sql);

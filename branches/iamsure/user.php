@@ -35,7 +35,7 @@ if ($_GET[op]=="search"){
 
 page_header("User Editor");
 	output("<form action='user.php?op=search' method='POST'>Search by any field below: <input name='q' id='q'><input type='submit' class='button'></form>",true);
-	output("<script language='JavaScript'>document.getElementById('q').focus();</script>",true);
+	output("<script type='text/javascript'>document.getElementById('q').focus();</script>",true);
 	addnav("","user.php?op=search");
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");

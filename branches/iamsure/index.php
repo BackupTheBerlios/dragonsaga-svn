@@ -1,6 +1,5 @@
 <?
 require_once "common.php";
-//echo(strpos($_SERVER['SERVER_NAME'],"logd.mightye.org"));
 $old = getsetting("expireoldacct",45);
 $new = getsetting("expirenewacct",10);
 $trash = getsetting("expiretrashacct",1);
@@ -19,7 +18,7 @@ $sql = "SELECT acctid,emailaddress FROM accounts WHERE 1=0 "
 $result = db_query($sql);
 for ($i=0;$i<db_num_rows($result);$i++){
 	$row = db_fetch_assoc($result);
-	mail($row[emailaddress],"LoGD Character Expiration",
+	mail($row[emailaddress],"TDS Character Expiration",
 	"
 	One or more of your characters in The Dragon Saga at
 	".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."
@@ -41,7 +40,7 @@ page_header();
 output("`cWelcome to The Dragon Saga, a shameless knockoff of Seth Able's Legend of the Red Dragon.`n");
 output("`@The current time in the village is `%".getgametime()."`@.`0`n");
 
-//Next New Day in ... is by JT from logd.dragoncat.net
+//Next New Day in ... is by JT
 $time = gametime();
 $tomorrow = strtotime(date("Y-m-d H:i:s",$time)." + 1 day");
 $tomorrow = strtotime(date("Y-m-d 00:00:00",$tomorrow));
@@ -67,10 +66,10 @@ $session['message']="";
 output("`c`2Game server running version: `@{$logd_version}`0`c");
 
 clearnav();
-addnav("New to LoGD?");
+addnav("New to TDS?");
 addnav("Create a character","create.php");
 addnav("Other");
-addnav("About LoGD","about.php");
+addnav("About TDS","about.php");
 addnav("List Warriors","list.php");
 addnav("Daily News", "news.php");
 addnav("Game Setup Info", "about.php?op=setup");

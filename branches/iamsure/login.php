@@ -17,18 +17,6 @@ if ($HTTP_POST_VARS[name]!=""){
 				//exit();
 				checkban($session[user][login]); //check if this account is banned
 				checkban(); //check if this computer is banned
-				if (strpos($_SERVER['SERVER_NAME'],"logd.mightye.org")!==false && $session['user']['superuser']<1){
-					if (date("H")<2 || date("H")>17){
-					$session[message]="`\$The dev server shuts down in the
-						evening now so that I may partake of my home
-						bandwidth.  This server is only available from
-						2am to 5pm from now on.";
-					//echo $session[message];
-					header("Location: index.php");
-					exit();
-					//redirect("index.php");
-					}
-				}
 				if ($session[user][emailvalidation]!="" && substr($session['user']['emailvalidation'],0,1)!="x"){
 					$session[user]=array();
 					$session[message]="`4Error, you must validate your email address before you can log in.";
