@@ -61,8 +61,8 @@ output("<form action='login.php' method='POST'>"
 ."</form>`c",true);
 // Without this, I had one user constantly get 'badnav.php' :/  Everyone else worked, but he didn't
 addnav("","login.php");
-//output("`n`b`&**BETA**`0 This is a BETA of this website, things are likely to change now and again, as it is under active development (when I have time ;-)) `&**BETA**`0`n");
-output("`n`b`&".getsetting("loginbanner","*BETA* This is a BETA of this website, things are likely to change now and again, as it is under active development *BETA*")."`0`b`n");
+//output("`n`b`&**TESTING**`0 This is a TEST of this website, things are likely to change now and again, as it is under active development (when I have time ;-)) `&**TESTING**`0`n");
+output("`n`b`&".getsetting("loginbanner","*TESTING* This is a TEST of this game, things are likely to change now and again, as it is under active development *TESTING*")."`0`b`n");
 $session['message']="";
 output("`c`2Game server running version: `@{$logd_version}`0`c");
 

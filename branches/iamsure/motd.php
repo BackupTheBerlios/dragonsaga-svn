@@ -147,7 +147,7 @@ if ($_GET[op]=="del"){
 
 if ($_GET[op]==""){
 	output("`&");
-	motditem("Beta!","Please see the beta message below.");
+	motditem("Testing!","Please see the testing message below.");
 	output("`%");
 
 	$sql = "SELECT * FROM motd ORDER BY motddate DESC limit 20";
@@ -163,7 +163,7 @@ if ($_GET[op]==""){
 		}
 	}
 	output("`&");
-	motditem("Beta!","For those who might be unaware, this website is still in beta mode.  I'm working on it when I have time, which generally means a couple of changes a week.  Feel free to drop suggestions, I'm open to anything :-)");
+	motditem("Testing!","For those who might be unaware, this game is in testing.  We are working on it when we have time.  Feel free to drop suggestions, I'm open to anything :-)");
 	output("`@Commentary:`0`n");
 	viewcommentary("motd");
 }
