@@ -3,7 +3,6 @@ require_once "common.php";
 
 if ($session['user']['loggedin']){
 	page_header("Referral Page");
-	addnav("L?Return to the Lodge","lodge.php");
 	output("You will automatically receive 25 points for each person that you refer to this website who makes it to level 4.
 	`n`n
 	How does the site know that I referred a person?`n

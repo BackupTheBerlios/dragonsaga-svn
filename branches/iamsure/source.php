@@ -11,7 +11,6 @@ $illegal_files = array(
 	($subdir=="//"?"/":$subdir)."dbconnect.php"=>"it contains sensitive information specific to this installation.",
 	($subdir=="//"?"/":$subdir)."dragon.php"=>"If you want to read the dragon script, I suggest you do so by defeating it!",
 	($subdir=="//"?"/":$subdir)."topwebvote.php"=>"X", // hide completely
-	($subdir=="//"?"/":$subdir)."lodge.php"=>"Not released at least for now.",
 	($subdir=="//"?"/":$subdir)."remotebackup.php"=>"X" // hide completely
 );
 $legal_files=array();

@@ -38,7 +38,6 @@ if (@file_exists("pavilion.php")) addnav("E?Eye-catching Pavilion","pavilion.php
 addnav("Tavern Street");
 addnav("I?The Inn`0","inn.php",true);
 addnav("Merick's Stables","stables.php");
-if (@file_exists("lodge.php"))	addnav("L?Hunter's Lodge","lodge.php");
 addnav("G?The Garden", "gardens.php");
 addnav("Curious Looking Rock", "rock.php");
 
