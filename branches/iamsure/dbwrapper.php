@@ -1,6 +1,7 @@
 <?
 //do some cleanup here to make sure magic_quotes_gpc is ON, and magic_quotes_runtime is OFF, and error reporting is all but notice.
 error_reporting (E_ALL ^ E_NOTICE);
+ini_set("arg_separator.output","&amp;");
 //error_reporting (E_ALL);
 if (!get_magic_quotes_gpc()){
 	set_magic_quotes($_GET);
