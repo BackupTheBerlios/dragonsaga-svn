@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 $balance = getsetting("creaturebalance", 0.33);
 
@@ -6,21 +6,21 @@ $balance = getsetting("creaturebalance", 0.33);
 addcommentary();
 
 //savesetting("creaturebalance","0.33");
-if ($HTTP_GET_VARS[op]=="darkhorse"){
-	$HTTP_GET_VARS[op]="";
-	$session[user][specialinc]="darkhorse.php";
+if ($HTTP_GET_VARS['op']=="darkhorse"){
+	$HTTP_GET_VARS['op']="";
+	$session['user']['specialinc']="darkhorse.php";
 }
 $fight = false;
 page_header("The Forest");
-if ($session[user][superuser]>1 && $HTTP_GET_VARS[specialinc]!=""){
-  $session[user][specialinc] = $HTTP_GET_VARS[specialinc];
+if ($session['user']['superuser']>1 && $HTTP_GET_VARS['specialinc']!=""){
+  $session['user']['specialinc'] = $HTTP_GET_VARS['specialinc'];
 }
-if ($session[user][specialinc]!=""){
-  //echo "$x including special/".$session[user][specialinc];
+if ($session['user']['specialinc']!=""){
+  //echo "DEBUG:$x including special/".$session['user']['specialinc'];
 	
 	output("`^`c`bSomething Special!`c`b`0");
-	$specialinc = $session[user][specialinc];
-	$session[user][specialinc] = "";
+	$specialinc = $session['user']['specialinc'];
+	$session['user']['specialinc'] = "";
 	include("special/".$specialinc);
 	if (!is_array($session['allowednavs']) || count($session['allowednavs'])==0) {
 		forest(true);
@@ -29,15 +29,15 @@ if ($session[user][specialinc]!=""){
 	page_footer();
 	exit();
 }
-if ($HTTP_GET_VARS[op]=="run"){
+if ($HTTP_GET_VARS['op']=="run"){
 	if (e_rand()%3 == 0){
 		output ("`c`b`&You have successfully fled your oponent!`0`b`c`n");
-		$HTTP_GET_VARS[op]="";
+		$HTTP_GET_VARS['op']="";
 	}else{
 		output("`c`b`\$You failed to flee your oponent!`0`b`c");
 	}
 }
-if ($HTTP_GET_VARS[op]=="dragon"){
+if ($HTTP_GET_VARS['op']=="dragon"){
 	addnav("Enter the cave","dragon.php");
 	addnav("Run away like a baby","inn.php");
 	output("`\$You approach the blackened entrance of a cave deep in the forest, though ");
@@ -55,16 +55,16 @@ if ($HTTP_GET_VARS[op]=="dragon"){
 	output("`n`nYou clamber up the debris pile leading to the mouth of the cave, your feet crunching ");
 	output("on the apparent remains of previous heroes, or perhaps hors d'ouvers.");
 	output("`n`nEvery instinct in your body wants to run, and run quickly, back to the warm inn, and ");
-	output("the even warmer ".($session[user][sex]?"Seth":"Violet").".  What do you do?");
-	$session[user][seendragon]=1;
+	output("the even warmer ".($session['user']['sex']?"Seth":"Violet").".  What do you do?");
+	$session['user']['seendragon']=1;
 }
-if ($HTTP_GET_VARS[op]=="search"){
+if ($HTTP_GET_VARS['op']=="search"){
 	checkday();
-  if ($session[user][turns]<=0){
+  if ($session['user']['turns']<=0){
     output("`\$`bYou are too tired to search the forest any longer today.  Perhaps tomorrow you will have more energy.`b`0");
-    $HTTP_GET_VARS[op]="";
+    $HTTP_GET_VARS['op']="";
   }else{
-	  $session[user][drunkenness]=round($session[user][drunkenness]*.9,0);
+	  $session['user']['drunkenness']=round($session['user']['drunkenness']*.9,0);
   	$specialtychance = e_rand()%7;
   	if ($specialtychance==0){
   		output("`^`c`bSomething Special!`c`b`0");
@@ -85,18 +85,18 @@ if ($HTTP_GET_VARS[op]=="search"){
 				if (count($events)==0){
 				  output("`b`@Aww, your administrator has decided you're not allowed to have any special events.  Complain to them, not me.");
 				}else{
-				  $y = $HTTP_GET_VARS[op];
-					$HTTP_GET_VARS[op]="";
-				  //echo "$x including special/".$events[$x];
+				  $y = $HTTP_GET_VARS['op'];
+					$HTTP_GET_VARS['op']="";
+				  //echo "DEBUG:$x including special/".$events[$x];
 				  include("special/".$events[$x]);
-					$HTTP_GET_VARS[op]=$y;
+					$HTTP_GET_VARS['op']=$y;
 				}
 			}else{
 			  output("`c`b`\$ERROR!!!`b`c`&Unable to open the special events!  Please notify the administrator!!");
 			}
   		if ($nav=="") forest(true);
   	}else{
-      $session[user][turns]--;
+      $session['user']['turns']--;
   		$battle=true;
 			if (e_rand(0,2)==1){
 				$plev = (e_rand(1,5)==1?1:0);
@@ -126,7 +126,7 @@ if ($HTTP_GET_VARS[op]=="search"){
 			//output("`#Debug: badguy gets `%$dk`# dk points, `%+$atkflux`# attack, `%+$defflux`# defense, +`%$hpflux`# hitpoints.`n");
 			$badguy['playerstarthp']=$session['user']['hitpoints'];
 			$dk = 0;
-			while(list($key, $val)=each($session[user][dragonpoints])) {
+			while(list($key, $val)=each($session['user']['dragonpoints'])) {
 				if ($val=="at" || $val=="de") $dk++;
 			}
 			$dk += (int)(($session['user']['maxhitpoints']-
@@ -162,7 +162,7 @@ if ($HTTP_GET_VARS[op]=="search"){
 		}
 	}
 }
-if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
+if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
 	$battle=true;
 }
 if ($battle){
@@ -170,22 +170,22 @@ if ($battle){
 //	output(serialize($badguy));
 	if ($victory){
 		if (getsetting("dropmingold",0)){
-			$badguy[creaturegold]=e_rand($badguy[creaturegold]/4,3*$badguy[creaturegold]/4);
+			$badguy['creaturegold']=e_rand($badguy['creaturegold']/4,3*$badguy['creaturegold']/4);
 		}else{
-			$badguy[creaturegold]=e_rand(0,$badguy[creaturegold]);
+			$badguy['creaturegold']=e_rand(0,$badguy['creaturegold']);
 		}
 		$expbonus = round(
-			($badguy[creatureexp] *
+			($badguy['creatureexp'] *
 				(1 + .25 *
-					($badguy[creaturelevel]-$session[user][level])
+					($badguy['creaturelevel']-$session['user']['level'])
 				)
-			) - $badguy[creatureexp],0
+			) - $badguy['creatureexp'],0
 		);
-		output("`b`&$badguy[creaturelose]`0`b`n"); 
-		output("`b`\$You have slain $badguy[creaturename]!`0`b`n");
-		output("`#You receive `^$badguy[creaturegold]`# gold!`n");
+		output("`b`&".$badguy['creaturelose']."`0`b`n");
+		output("`b`\$You have slain ".$badguy['creaturename']."!`0`b`n");
+		output("`#You receive `^".$badguy['creaturegold']."`# gold!`n");
 		if ($badguy['creaturegold']) {
-			debuglog("received {$badguy['creaturegold']} gold for slaying a monster.");
+			debuglog("received ".$badguy['creaturegold']." gold for slaying a monster.");
 		}
 		if (e_rand(1,25) == 1) {
 		  output("`&You find A GEM!`n`#");
@@ -193,20 +193,20 @@ if ($battle){
 		  debuglog("found a gem when slaying a monster.");
 		}
 		if ($expbonus>0){
-		  output("`#***Because of the difficult nature of this fight, you are awarded an additional `^$expbonus`# experience! `n($badguy[creatureexp] + ".abs($expbonus)." = ".($badguy[creatureexp]+$expbonus).") ");
+		  output("`#***Because of the difficult nature of this fight, you are awarded an additional `^$expbonus`# experience! `n($badguy['creatureexp'] + ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
 		}else if ($expbonus<0){
-		  output("`#***Because of the simplistic nature of this fight, you are penalized `^".abs($expbonus)."`# experience! `n($badguy[creatureexp] - ".abs($expbonus)." = ".($badguy[creatureexp]+$expbonus).") ");
+		  output("`#***Because of the simplistic nature of this fight, you are penalized `^".abs($expbonus)."`# experience! `n($badguy['creatureexp'] - ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
 		}
-		output("You receive `^".($badguy[creatureexp]+$expbonus)."`# total experience!`n`0");
-		$session[user][gold]+=$badguy[creaturegold];
-		$session[user][experience]+=($badguy[creatureexp]+$expbonus);
-		$creaturelevel = $badguy[creaturelevel];
-		$HTTP_GET_VARS[op]="";
+		output("You receive `^".($badguy['creatureexp']+$expbonus)."`# total experience!`n`0");
+		$session['user']['gold']+=$badguy['creaturegold'];
+		$session['user']['experience']+=($badguy['creatureexp']+$expbonus);
+		$creaturelevel = $badguy['creaturelevel'];
+		$HTTP_GET_VARS['op']="";
 		//if ($session[user][hitpoints] == $session[user][maxhitpoints]){
 		if ($badguy['diddamage']!=1){
-			if ($session[user][level]>=getsetting("lowslumlevel",4) || $session[user][level]<=$creaturelevel){
+			if ($session['user']['level']>=getsetting("lowslumlevel",4) || $session['user']['level']<=$creaturelevel){
 				output("`b`c`&~~ Flawless Fight! ~~`\$`n`bYou receive an extra turn!`c`0`n");
-				$session[user][turns]++;
+				$session['user']['turns']++;
 			}else{
 				output("`b`c`&~~ Flawless Fight! ~~`b`\$`nA more difficult fight would have yielded an extra turn.`c`n`0");
 			}
@@ -220,22 +220,22 @@ if ($battle){
 			$sql = "SELECT taunt FROM taunts ORDER BY rand(".e_rand().") LIMIT 1";
 			$result = db_query($sql) or die(db_error(LINK));
 			$taunt = db_fetch_assoc($result);
-			$taunt = str_replace("%s",($session[user][sex]?"her":"him"),$taunt[taunt]);
-			$taunt = str_replace("%o",($session[user][sex]?"she":"he"),$taunt);
-			$taunt = str_replace("%p",($session[user][sex]?"her":"his"),$taunt);
-			$taunt = str_replace("%x",($session[user][weapon]),$taunt);
-			$taunt = str_replace("%X",$badguy[creatureweapon],$taunt);
-			$taunt = str_replace("%W",$badguy[creaturename],$taunt);
-			$taunt = str_replace("%w",$session[user][name],$taunt);
-			addhistory(1);
-			addnews("`%".$session[user][name]."`5 has been slain in the forest by $badguy[creaturename]`n$taunt");
-			$session[user][alive]=false;
-			debuglog("lost {$session['user']['gold']} gold when they were slain in the forest");
-			$session[user][gold]=0;
-			$session[user][hitpoints]=0;
-			$session[user][experience]=round($session[user][experience]*.9,0);
-			$session[user][badguy]="";
-			output("`b`&You have been slain by `%$badguy[creaturename]`&!!!`n");
+			$taunt = str_replace("%s",($session['user']['sex']?"her":"him"),$taunt['taunt']);
+			$taunt = str_replace("%o",($session['user']['sex']?"she":"he"),$taunt);
+			$taunt = str_replace("%p",($session['user']['sex']?"her":"his"),$taunt);
+			$taunt = str_replace("%x",($session['user']['weapon']),$taunt);
+			$taunt = str_replace("%X",$badguy['creatureweapon'],$taunt);
+			$taunt = str_replace("%W",$badguy['creaturename'],$taunt);
+			$taunt = str_replace("%w",$session['user']['name'],$taunt);
+
+			addnews("`%".$session['user']['name']."`5 has been slain in the forest by ".$badguy['creaturename']."`n$taunt");
+			$session['user']['alive']=false;
+			debuglog("lost ".$session['user']['gold']." gold when they were slain in the forest");
+			$session['user']['gold']=0;
+			$session['user']['hitpoints']=0;
+			$session['user']['experience']=round($session['user']['experience']*.9,0);
+			$session['user']['badguy']="";
+			output("`b`&You have been slain by `%".$badguy['creaturename']."`&!!!`n");
 			output("`4All gold on hand has been lost!`n");
 			output("`410% of experience has been lost!`n");
 			output("You may begin fighting again tomorrow.");
@@ -247,30 +247,10 @@ if ($battle){
 	}
 }
 
-if ($HTTP_GET_VARS[op]==""){
+if ($HTTP_GET_VARS['op']==""){
 	// Need to pass the variable here so that we show the forest message
 	// sometimes, but not others.
 	forest($dontdisplayforestmessage);
 }
-
 page_footer();
-
-function addhistory($value){
-/*
-	global $session,$balance;
-	$history = unserialize($session['user']['history']);
-	$historycount=50;
-	for ($x=0;$x<$historycount;$x++){
-		if (!isset($history[$x])) $history[$x]=$balance;
-	}
-	array_shift($history);
-	array_push($history,$value);
-	$history = array_values($history);
-	for ($x=0;$x<$historycount;$x++){
-		$history[$x] = round($history[$x],4);
-		if ($session['user']['superuser']>=3) output("History: {$history[$x]}`n");
-	}
-	$session['user']['history']=serialize($history);
- */
-}
 ?>

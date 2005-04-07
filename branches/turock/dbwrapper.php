@@ -1,6 +1,7 @@
-<?
-//do some cleanup here to make sure magic_quotes_gpc is ON, and magic_quotes_runtime is OFF, and error reporting is all but notice.
-error_reporting (E_ALL ^ E_NOTICE);
+<?php
+// do some cleanup here to make sure magic_quotes_gpc is ON,
+// and magic_quotes_runtime is OFF, and error reporting is all but notice.
+error_reporting (E_ALL ^ E_NOTICE);   // <-- band-aid for poor coding
 //error_reporting (E_ALL);
 if (!get_magic_quotes_gpc()){
 	set_magic_quotes($_GET);
@@ -34,7 +35,7 @@ function db_query($sql){
 	global $session,$dbqueriesthishit;
 	$dbqueriesthishit++;
 	$fname = DBTYPE."_query";
-	$r = $fname($sql) or die(($session[user][superuser]>=3 || 1?"<pre>".HTMLEntities($sql)."</pre>":"").db_error(LINK));
+	$r = $fname($sql) or die(($session['user']['superuser']>=3 || 1?"<pre>".HTMLEntities($sql)."</pre>":"").db_error(LINK));
 	//$x = strpos($sql,"WHERE");
 	//if ($x!==false) {
 	//	$where = substr($sql,$x+6);
@@ -78,11 +79,22 @@ function db_affected_rows($link=false){
 	return $r;
 }
 
+// this function is not a persistant contection to db
+// to use persistant connections uncomment the function below
+// and comment this one out.
+function db_pconnect($host,$user,$pass){
+	$fname = DBTYPE."_connect";
+	$r = $fname($host,$user,$pass);
+	return $r;
+}
+
+/*
 function db_pconnect($host,$user,$pass){
 	$fname = DBTYPE."_pconnect";
 	$r = $fname($host,$user,$pass);
 	return $r;
 }
+*/
 
 function db_select_db($dbname){
 	$fname = DBTYPE."_select_db";
