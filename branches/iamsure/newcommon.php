@@ -1587,13 +1587,12 @@ if (file_exists("dbconnect.php")){
 	exit();
 }
 
-$link = db_connect($server, $user, $password, $database);
-if(!$link) $db->ErrorMsg();
-
+$link = db_pconnect($DB_HOST, $DB_USER, $DB_PASS) or die (db_error($link));
 db_select_db ($DB_NAME) or die (db_error($link));
 define("LINK",$link);
 
-//require_once "translator.php";
+require_once "translator.php";
+
 
 session_register("session");
 function register_global(&$var){
@@ -1609,7 +1608,7 @@ $session =& $_SESSION['session'];
 //register_global($_SESSION);
 register_global($_SERVER);
 
-if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session[loggedin]){
+if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session['loggedin']){
 	//force the abandoning of the session when the user should have been sent to the fields.
 	//echo "Session abandon:".(strtotime("now")-$session[lasthit]);
 	
@@ -1619,6 +1618,11 @@ if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit
 $session['lasthit']=strtotime("now");
 
 $revertsession=$session;
+
+if ($PATH_INFO != "") {
+	$SCRIPT_NAME=$PATH_INFO;
+	$REQUEST_URI="";
+}
 if ($REQUEST_URI==""){
 	//necessary for some IIS installations (CGI in particular)
 	if (is_array($_GET) && count($_GET)>0){
@@ -1641,6 +1645,7 @@ if (strpos($REQUEST_URI,"?")){
 }else{
 	$REQUEST_URI=$SCRIPT_NAME;
 }
+
 $allowanonymous=array("index.php"=>true,"login.php"=>true,"create.php"=>true,"about.php"=>true,"list.php"=>true,"petition.php"=>true,"connector.php"=>true,"logdnet.php"=>true,"referral.php"=>true,"news.php"=>true,"motd.php"=>true,"topwebvote.php"=>true);
 $allownonnav = array("badnav.php"=>true,"motd.php"=>true,"petition.php"=>true,"mail.php"=>true,"topwebvote.php"=>true);
 if ($session['loggedin']){
@@ -1649,7 +1654,9 @@ if ($session['loggedin']){
 	if (db_num_rows($result)==1){
 		$session['user']=db_fetch_assoc($result);
 		$session['output']=$session['user']['output'];
+		$session['user']['dragonpoints']=unserialize($session['user']['dragonpoints']);
 		$session['user']['prefs']=unserialize($session['user']['prefs']);
+		if (!is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=array();
 		if (is_array(unserialize($session['user']['allowednavs']))){
 			$session['allowednavs']=unserialize($session['user']['allowednavs']);
 		}else{
@@ -1680,7 +1687,7 @@ if ($session['loggedin']){
 		redirect("index.php?op=timeout","Not logged in: $REQUEST_URI");
 	}
 }
-//if ($session[user][loggedin]!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
+//if ($session['user']['loggedin']!=true && $SCRIPT_NAME!="index.php" && $SCRIPT_NAME!="login.php" && $SCRIPT_NAME!="create.php" && $SCRIPT_NAME!="about.php"){
 if ($session['user']['loggedin']!=true && !$allowanonymous[$SCRIPT_NAME]){
 	redirect("login.php?op=logout");
 }
@@ -1748,7 +1755,7 @@ while (list($key,$val)=each($templatetags)){
 	if (strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in your footer\n";
 }
 //tags that may appear anywhere but must appear
-$templatetags=array("nav","stats","petition","motd","mail","paypal","copyright","source");
+$templatetags=array("nav","stats","petition","motd","mail","copyright","source");
 while (list($key,$val)=each($templatetags)){
 	if (strpos($template['header'],"{".$val."}")===false && strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in either your header or footer\n";
 }
@@ -1758,9 +1765,7 @@ if ($templatemessage!=""){
 	$template=loadtemplate("yarbrough.htm");
 }
 
-$pietre=array(1=>"`\$Poker's Stone",2=>"`^Love's Stone",3=>"`^Friendship's Stone",4=>"`#King's Stone",5=>"`#Mighthy's Stone",6=>"`#Pegasus' Stone",7=>"`@Aris' Stone",8=>"`@Excalibur's Stone",9=>"`@Luke's Stone",10=>"`&Innocence's Stone",11=>"`#Queen's Stone",12=>"`#Imperator's Stone",13=>"`!Gold's Stone",14=>"`%Power's Stone",15=>"`\$Ramius' Stone",16=>"`#Cedrik's Stone",17=>"`%Honour's Stone",18=>"`&Purity's Stone",19=>"`&Light's Stone",20=>"`&Diamond's Stone");
-
-$races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",5=>"Ogre",6=>"Goblin",7=>"Orc",8=>"Vampire",9=>"Stone Giant",10=>"Hobbit",11=>"Minator",12=>"Centar");
+$races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",0=>"Unknown",50=>"Hoversheep");
 
 $logd_version = "TDS-0.01";
 $session['user']['laston']=date("Y-m-d H:i:s");

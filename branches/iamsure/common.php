@@ -1638,7 +1638,7 @@ if ($session['loggedin']){
 		}
 	}else{
 		$session=array();
-		$session[message]="`4Error, your login was incorrect`0";
+		$session['message']="`4Error, your login was incorrect`0";
 		redirect("index.php","Account Disappeared!");
 	}
 	db_free_result($result);
