@@ -928,7 +928,7 @@ function redirect($location,$reason=false){
 		$session['allowednavs']=array();
 		addnav("",$location);
 	}
-	if (strpos($location,"badnav.php")===false) $session[output]="<a href=\"".HTMLEntities($location)."\">Click here.</a>";
+	if (strpos($location,"badnav.php")===false) $session['output']="<a href=\"".HTMLEntities($location)."\">Click here.</a>";
 	$session['debug'].="Redirected to $location from $REQUEST_URI.  $reason\n";
 	saveuser();
 	header("Location: $location");
@@ -952,7 +952,7 @@ function loadtemplate($templatename){
 
 function maillink(){
 	global $session;
-	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session['user']['acctid']."\"";
+	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session[user][acctid]."\"";
 	$result = db_query($sql) or die(mysql_error(LINK));
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
@@ -989,7 +989,7 @@ function page_header($title="The Dragon Saga"){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups['$SCRIPT_NAME']!=1 && $session['user']['loggedin']){
+	if (($row[motddate]>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
 		$header=str_replace("{headscript}","<script type='text/javascript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
 	}else{
@@ -1010,7 +1010,7 @@ function page_footer(){
 
 		unset($nestedtags[$key]);
 	}
-	$script.="<script type='text/javascript'>
+        $script.="<script type='text/javascript'>
 	<!--
 	document.onkeypress=keyevent;
 	function keyevent(e){
@@ -1042,8 +1042,6 @@ function page_footer(){
 	}
 	//-->
 	</script>";
-	
-
 	$footer = $template['footer'];
 	$header=str_replace("{nav}",$nav,$header);
 	$footer=str_replace("{nav}",$nav,$footer);
@@ -1051,15 +1049,15 @@ function page_footer(){
 	$header = str_replace("{motd}", motdlink(), $header);
 	$footer = str_replace("{motd}", motdlink(), $footer);
 
-	if ($session['user']['acctid']>0) {
+	if ($session[user][acctid]>0) {
 		$header=str_replace("{mail}",maillink(),$header);
 		$footer=str_replace("{mail}",maillink(),$footer);
 	}else{
 		$header=str_replace("{mail}","",$header);
 		$footer=str_replace("{mail}","",$footer);
 	}
-	$header=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$header);
-	$footer=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$footer);
+	$header=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' align='right' class='motd'>Petition for Help</a>",$header);
+	$footer=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' align='right' class='motd'>Petition for Help</a>",$footer);
 	if ($session['user']['superuser']>1){
 		$sql = "SELECT count(petitionid) AS c,status FROM petitions GROUP BY status";
 		$result = db_query($sql);
@@ -1073,6 +1071,8 @@ function page_footer(){
 	}
 	$footer=str_replace("{stats}",charstats(),$footer);
 	$header=str_replace("{stats}",charstats(),$header);
+    //$footer=str_replace("{onlinechars}", onlinechars(), $footer);
+    //$header=str_replace("{onlinechars}", onlinechars(), $header);
 	$header=str_replace("{script}",$script,$header);
 	$footer=str_replace("{source}","<a href='source.php?url=".preg_replace("/[?].*/","",($_SERVER['REQUEST_URI']))."' target='_blank'>View PHP Source</a>",$footer);
 	$header=str_replace("{source}","<a href='source.php?url=".preg_replace("/[?].*/","",($_SERVER['REQUEST_URI']))."' target='_blank'>View PHP Source</a>",$header);
@@ -1082,6 +1082,7 @@ function page_footer(){
 	$session['user']['gentime']+=$gentime;
 	$session['user']['gentimecount']++;
 	$footer=str_replace("{pagegen}","Page gen: ".round($gentime,2)."s, Ave: ".round($session['user']['gentime']/$session['user']['gentimecount'],2)."s - ".round($session['user']['gentime'],2)."/".round($session['user']['gentimecount'],2)."",$footer);
+
 	$output=$header.$output.$footer;
 	$session['user']['gensize']+=strlen($output);
 	$session['output']=$output;
