@@ -126,6 +126,7 @@ function pvpwarning($dokill=false) {
 	$days = getsetting("pvpimmunity", 5);
 	$exp = getsetting("pvpminexp", 1500);
 	if ($session['user']['age'] <= $days &&
+                $session['user']['dragonkills'] == 0 &&
 		$session['user']['user']['pk'] == 0 &&
 		$session['user']['experience'] <= $exp) {
 		if ($dokill) {
@@ -144,7 +145,7 @@ function rawoutput($indata) {
 
 function output($indata,$priv=false){
 	global $nestedtags,$output;
-	$data = $indata;
+	$data = translate($indata);
 	if (date("m-d")=="04-01"){
 		$out = appoencode($data,$priv);
 		if ($priv==false) $out = borkalize($out);
@@ -212,7 +213,7 @@ function systemmail($to,$subject,$body,$from=0,$noemail=false){
 		// unreadable
 		$body = preg_replace("'[`]n'", "\n", $body);
 		$body = preg_replace("'[`].'", "", $body);
-		mail($row['emailaddress'],"New LoGD Mail","You have received new mail on LoGD at http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])."\n\n$fromline"
+		mail($row['emailaddress'],"New TDS Mail","You have received new mail on TDS at http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])."\n\n$fromline"
 			."Subject: ".preg_replace("'[`].'","",stripslashes($subject))."\n"
 			."Body: ".stripslashes($body)."\n"
 			."\nYou may turn off these alerts in your preferences page.",
@@ -290,7 +291,10 @@ function forest($noshowmessage=false) {
 	  output("`n`nSUPERUSER special inc's:`n");
 	  $d = dir("special");
 		while (false !== ($entry = $d->read())){
-		  if (substr($entry,0,1)!="."){
+                  // Skip non php files (including directories)
+                  if (strpos($entry, ".php") === false) continue;
+                  // Skip any hidden files
+                  if (substr($entry,0,1)!="."){
 	  	output("<a href='forest.php?specialinc=$entry'>$entry</a>`n", true);
 		addnav("","forest.php?specialinc=$entry");
 			}
@@ -299,7 +303,18 @@ function forest($noshowmessage=false) {
 }
 
 function borkalize($in){
-// removed april fools joke
+        $out = $in;
+        $out = str_replace(". ",". Bork bork. ",$out);
+        $out = str_replace(", ",", bork, ",$out);
+        $out = str_replace(" h"," hoor",$out);
+        $out = str_replace(" v"," veer",$out);
+        $out = str_replace("g ","gen ",$out);
+        $out = str_replace(" p"," pere",$out);
+        $out = str_replace(" qu"," quee",$out);
+        $out = str_replace("n ","nen ",$out);
+        $out = str_replace("e ","eer ",$out);
+        $out = str_replace("s ","ses ",$out);
+        return $out;
 }
 
 function getmicrotime(){ 
@@ -321,7 +336,7 @@ function e_rand($min=false,$max=false){
   $max+=1; //line added
   $max*=1000;
   $max--;  //line added (instead of having x001 values, only have x000)
-  if ($min==0 && $max==0) return 0; //do NOT as me why this line can be executed, it makes no sense, but it *does* get executed.
+  if ($min==0 && $max==0) return 0; //do NOT ask me why this line can be executed, it makes no sense, but it *does* get executed.
   if ($min<$max){
       return (int)(@mt_rand($min,$max)/1000);
   }else if($min>$max){
