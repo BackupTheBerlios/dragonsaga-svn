@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 if ($session['user']['loggedin'] && $session['loggedin']){
 	if (strpos($session['output'],"<!--CheckNewDay()-->")){
@@ -25,5 +25,4 @@ if ($session['user']['loggedin'] && $session['loggedin']){
 	$session=array();
 	redirect("index.php");
 }
-
 ?>

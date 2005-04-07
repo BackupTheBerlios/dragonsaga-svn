@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 checkday();
 
@@ -55,17 +55,17 @@ if ($HTTP_GET_VARS['op']==""){
 			output("explain what happened here, but your throat doesn't seem to be able to open up to let your voice through, let alone essential oxygen.  ");
 			output("`n`nAs darkness creeps in on the edge of your vision, you glance pleadingly, but futilly at `%Pegasus`5 who is staring dreamily at `!MightyE`5, her ");
 			output("hands clutched next to her face, which is painted with a large admiring smile.");
-			$session['user'][alive]=false;
+			$session['user']['alive']=false;
 			debuglog("lost " . $session['user']['gold'] . " gold on hand due to stealing from Pegasus");
 			$session['user']['gold']=0;
-			$session['user'][hitpoints]=0;
-			$session['user'][experience]=round($session['user'][experience]*.9,0);
+			$session['user']['hitpoints']=0;
+			$session['user']['experience']=round($session['user']['experience']*.9,0);
 			output("`b`&You have been slain by `!MightyE`&!!!`n");
 			output("`4All gold on hand has been lost!`n");
 			output("`410% of experience has been lost!`n");
 			output("You may begin fighting again tomorrow.");
 			addnav("Daily news","news.php");
-			addnews("`%".$session['user'][name]."`5 has been slain by `!MightyE`5 for trying to steal from `#Pegasus`5' Armor Wagon.");
+			addnews("`%".$session['user']['name']."`5 has been slain by `!MightyE`5 for trying to steal from `#Pegasus`5' Armor Wagon.");
 		}else{
 			output("`#Pegasus`5 takes your gold, and much to your surprise she also takes your `%".$session['user']['armor']."`5 and promptly puts a price on it, setting it neatly on another stack of clothes. ");
 			output("`n`nIn return, she hands you a beautiful  new `%$row[armorname]`5.");
@@ -73,11 +73,11 @@ if ($HTTP_GET_VARS['op']==""){
 			output("the town is doing the same thing.  \"`@Oh well, when in Rome...`5\"");
 			debuglog("spent " . ($row['value']-$tradeinvalue) . " gold on the " . $row['armorname'] . " armor");
 		  $session['user']['gold']-=$row['value'];
-			$session['user']['armor'] = $row[armorname];
+			$session['user']['armor'] = $row['armorname'];
 			$session['user']['gold']+=$tradeinvalue;
-			$session['user'][defence]-=$session['user'][armordef];
-			$session['user'][armordef] = $row[defense];
-			$session['user'][defence]+=$session['user'][armordef];
+			$session['user']['defence']-=$session['user']['armordef'];
+			$session['user']['armordef'] = $row['defense'];
+			$session['user']['defence']+=$session['user']['armordef'];
 			$session['user']['armorvalue'] = $row['value'];
 			addnav("Return to the village","village.php");
 		}

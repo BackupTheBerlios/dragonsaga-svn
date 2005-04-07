@@ -1,9 +1,9 @@
-<?
+<?php
 /*
  * Major MAJOR revamps by JT from logd.dragoncat.net  Frankly I threw out my code and used his.
  *
  */
-require_once("common.php");
+require_once "common.php";
 
 function activate_buffs($tag) {
 	global $session, $badguy;
@@ -164,7 +164,7 @@ function process_dmgshield($dshield, $damage) {
 		} else if ($realdamage < 0) {
 			$msg = $buff['effectfailmsg'];
 		}
-		$badguy[creaturehealth] -= $realdamage;
+		$badguy['creaturehealth'] -= $realdamage;
 		$msg = str_replace("{badguy}",$badguy['creaturename'], $msg);
 		$msg = str_replace("{damage}",$realdamage, $msg);
 		if ($msg > "") output("`)$msg`n");
@@ -191,20 +191,20 @@ function expire_buffs() {
 }
 
 
-$badguy = createarray($session[user][badguy]);
+$badguy = createarray($session['user']['badguy']);
 
 if (date("m-d")=="04-01"){
-	if (!strpos($badguy[creaturename],"bork bork")){
-		$badguy[creaturename]=$badguy[creaturename]." bork bork";
+	if (!strpos($badguy['creaturename'],"bork bork")){
+		$badguy['creaturename']=$badguy['creaturename']." bork bork";
 	}
 }
 
-$adjustment = ($session[user][level]/$badguy[creaturelevel]);
-if ($badguy[pvp]) $adjustment=1;
+$adjustment = ($session['user']['level']/$badguy['creaturelevel']);
+if ($badguy['pvp']) $adjustment=1;
 
 if ($HTTP_GET_VARS[op]=="fight"){
-	if ($HTTP_GET_VARS[skill]=="godmode"){
-		$session[bufflist]['godmode']=array(
+	if ($HTTP_GET_VARS['skill']=="godmode"){
+		$session['bufflist']['godmode']=array(
 			"name"=>"`&GOD MODE",
 			"rounds"=>1,
 			"wearoff"=>"You feel mortal again.",
@@ -215,12 +215,12 @@ if ($HTTP_GET_VARS[op]=="fight"){
 			"activate"=>"roundstart"
 		);
 	}
-	if ($HTTP_GET_VARS[skill]=="MP"){
-		if ($session[user][magicuses] >= $HTTP_GET_VARS[l]){
+	if ($HTTP_GET_VARS['skill']=="MP"){
+		if ($session['user']['magicuses'] >= $HTTP_GET_VARS['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS[l]){
+			switch($HTTP_GET_VARS['l']){
 			case 1:
-				$session[bufflist]['mp1'] = array(
+				$session['bufflist']['mp1'] = array(
 					"startmsg"=>"`n`^You begin to regenerate!`n`n",
 					"name"=>"`%Regeneration",
 					"rounds"=>5,
@@ -231,7 +231,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					"activate"=>"roundstart");
 				break;
 			case 2:
-				$session[bufflist]['mp2'] = array(
+				$session['bufflist']['mp2'] = array(
 					"startmsg"=>"`n`^{badguy}`% is clutched by a fist of earth and slammed to the ground!`n`n",
 					"name"=>"`%Earth Fist",
 					"rounds"=>5,
@@ -244,7 +244,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 3:
-				$session[bufflist]['mp3'] = array(
+				$session['bufflist']['mp3'] = array(
 					"startmsg"=>"`n`^Your weapon glows with an unearthly presence.`n`n",
 					"name"=>"`%Siphon Life",
 					"rounds"=>5,
@@ -257,7 +257,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 5:
-				$session[bufflist]['mp5'] = array(
+				$session['bufflist']['mp5'] = array(
 					"startmsg"=>"`n`^Your skin sparkles as you assume an aura of lightning`n`n",
 					"name"=>"`%Lightning Aura",
 					"rounds"=>5,
@@ -270,44 +270,44 @@ if ($HTTP_GET_VARS[op]=="fight"){
 				);
 				break;
 			}
-			$session[user][magicuses]-=$HTTP_GET_VARS[l];
+			$session['user']['magicuses']-=$HTTP_GET_VARS['l'];
 		}else{
-			$session[bufflist]['mp0'] = array(
+			$session['bufflist']['mp0'] = array(
 				"startmsg"=>"`nYou furrow your brow and call on the powers of the elements.  A tiny flame appears.  {badguy} lights a cigarette from it, giving you a word of thanks before swinging at you again.`n`n",
 				"rounds"=>1,
 				"activate"=>"roundstart"
 			);
 		}
 	}
-	if ($HTTP_GET_VARS[skill]=="DA"){
-		if ($session[user][darkartuses] >= $HTTP_GET_VARS[l]){
+	if ($HTTP_GET_VARS['skill']=="DA"){
+		if ($session['user']['darkartuses'] >= $HTTP_GET_VARS['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS[l]){
+			switch($HTTP_GET_VARS['l']){
 			case 1:
-				$session[bufflist]['da1']=array(
+				$session['bufflist']['da1']=array(
 					"startmsg"=>"`n`\$You call on the spirits of the dead, and skeletal hands claw at {badguy} from beyond the grave.`n`n",
 					"name"=>"`\$Skeleton Crew",
 					"rounds"=>5,
 					"wearoff"=>"Your skeleton minions crumble to dust.",
-					"minioncount"=>round($session[user][level]/3)+1,
-					"maxbadguydamage"=>round($session[user][level]/2,0)+1,
+					"minioncount"=>round($session['user']['level']/3)+1,
+					"maxbadguydamage"=>round($session['user']['level']/2,0)+1,
 					"effectmsg"=>"`)An undead minion hits {badguy} for `^{damage}`) damage.",
 					"effectnodmgmsg"=>"`)An undead minion tries to hit {badguy} but `\$MISSES`)!",
 					"activate"=>"roundstart"
 					);
 				break;
 			case 2:
-				$session[bufflist]['da2']=array(
+				$session['bufflist']['da2']=array(
 					"startmsg"=>"`n`\$You pull out a tiny doll that looks like {badguy}`n`n",
 					"effectmsg"=>"You thrust a pin into the {badguy} doll hurting it for `^{damage}`) points!",
 					"minioncount"=>1,
-					"maxbadguydamage"=>round($session[user][attack]*3,0),
-					"minbadguydamage"=>round($session[user][attack]*1.5,0),
+					"maxbadguydamage"=>round($session['user']['attack']*3,0),
+					"minbadguydamage"=>round($session['user']['attack']*1.5,0),
 					"activate"=>"roundstart"
 					);
 				break;
 			case 3:
-				$session[bufflist]['da3']=array(
+				$session['bufflist']['da3']=array(
 					"startmsg"=>"`n`\$You place a curse on {badguy}'s ancestors.`n`n",
 					"name"=>"`\$Curse Spirit",
 					"rounds"=>5,
@@ -318,7 +318,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 5:
-				$session[bufflist]['da5']=array(
+				$session['bufflist']['da5']=array(
 					"startmsg"=>"`n`\$You hold out your hand and {badguy} begins to bleed from its ears.`n`n",
 					"name"=>"`\$Wither Soul",
 					"rounds"=>5,
@@ -330,21 +330,21 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			}
-			$session[user][darkartuses]-=$HTTP_GET_VARS[l];
+			$session['user']['darkartuses']-=$HTTP_GET_VARS['l'];
 		}else{
-			$session[bufflist]['da0'] = array(
+			$session['bufflist']['da0'] = array(
 				"startmsg"=>"`nExhausted, you try your darkest magic, a bad joke.  {badguy} looks at you for a minute, thinking, and finally gets the joke.  Laughing, it swings at you again.`n`n",
 				"rounds"=>1,
 				"activate"=>"roundstart"
 				);
 		}
 	}
-	if ($HTTP_GET_VARS[skill]=="TS"){
-		if ($session[user][thieveryuses] >= $HTTP_GET_VARS[l]){
+	if ($HTTP_GET_VARS['skill']=="TS"){
+		if ($session['user']['thieveryuses'] >= $HTTP_GET_VARS['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS[l]){
+			switch($HTTP_GET_VARS['l']){
 			case 1:
-				$session[bufflist]['ts1']=array(
+				$session['bufflist']['ts1']=array(
 					"startmsg"=>"`n`^You call {badguy} a bad name, making it cry.`n`n",
 					"name"=>"`^Insult",
 					"rounds"=>5,
@@ -355,8 +355,8 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 2:
-				$session[bufflist]['ts2']=array(
-					"startmsg"=>"`n`^You apply some poison to your ".$session[user][weapon].".`n`n",
+				$session['bufflist']['ts2']=array(
+					"startmsg"=>"`n`^You apply some poison to your ".$session['user']['weapon'].".`n`n",
 					"name"=>"`^Poison Attack",
 					"rounds"=>5,
 					"wearoff"=>"Your victim's blood has washed the poison from your blade.",
@@ -366,7 +366,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 3:
-				$session[bufflist]['ts3'] = array(
+				$session['bufflist']['ts3'] = array(
 					"startmsg"=>"`n`^With the skill of an expert thief, you virtually dissapear, and attack {badguy} from a safer vantage point.`n`n",
 					"name"=>"`^Hidden Attack",
 					"rounds"=>5,
@@ -377,7 +377,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			case 5:
-				$session[bufflist]['ts5']=array(
+				$session['bufflist']['ts5']=array(
 					"startmsg"=>"`n`^Using your skills as a thief, dissapear behind {badguy} and slide a thin blade between its vertibrae!`n`n",
 					"name"=>"`^Backstab",
 					"rounds"=>5,
@@ -389,9 +389,9 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			}
-			$session[user][thieveryuses]-=$HTTP_GET_VARS[l];
+			$session['user']['thieveryuses']-=$HTTP_GET_VARS['l'];
 		}else{
-			$session[bufflist]['ts0'] = array(
+			$session['bufflist']['ts0'] = array(
 				"startmsg"=>"`nYou try to attack {badguy} by putting your best thievery skills in to practice, but instead, you trip over your feet.`n`n",
 				"rounds"=>1,
 				"activate"=>"roundstart"
@@ -403,33 +403,33 @@ if ($HTTP_GET_VARS[op]=="fight"){
 if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0) {
 	output ("`\$`c`b~ ~ ~ Fight ~ ~ ~`b`c`0");
 	
-	output("`@You have encountered `^$badguy[creaturename]`@ which lunges at you with `%$badguy[creatureweapon]`@!`0`n`n");
+	output("`@You have encountered `^".$badguy['creaturename']."`@ which lunges at you with `%".$badguy['creatureweapon']."`@!`0`n`n");
 	if ($session['user']['alive']){
-		output("`2Level: `6$badguy[creaturelevel]`0`n");
+		output("`2Level: `6".$badguy['creaturelevel']."`0`n");
 	}else{
 		output("`2Level: `6Undead`0`n");
 	}
 
 	output("`2`bStart of round:`b`n");
-	output("`2$badguy[creaturename]`2's ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6$badguy[creaturehealth]`0`n");
-	output("`2YOUR ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$session[user][hitpoints]."`0`n");
+	output("`2".$badguy['creaturename']."`2's ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$badguy['creaturehealth']."`0`n");
+	output("`2YOUR ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$session['user']['hitpoints']."`0`n");
 }
 
-reset($session[bufflist]);
+reset($session['bufflist']);
 while (list($key,$buff)=each($session['bufflist'])){
 	// reset the 'used this round state'
-	$buff[used]=0;
+	$buff['used']=0;
 }
 
-if ($badguy[pvp] &&
-	count($session[bufflist])>0 &&
-	is_array($session[bufflist])) {
+if ($badguy['pvp'] &&
+	count($session['bufflist'])>0 &&
+	is_array($session['bufflist'])) {
 	if ($session['user']['buffbackup']>""){
 		
 	}else{
 		output("`&The gods have suspended any special effects!`n");
 		$session['user']['buffbackup']=serialize($session['bufflist']);
-		$session[bufflist]=array();
+		$session['bufflist']=array();
 		if ($_GET['bg']==1){
 			$session['bufflist']['bodyguard'] = array(
 				"startmsg"=>"`n`\${$badguy['creaturename']}'s bodyguard protects them!`n`n",
@@ -439,7 +439,7 @@ if ($badguy[pvp] &&
 				"minioncount"=>1,
 				"maxgoodguydamage"=> round($session['user']['level']/2,0) +1,
 				"effectmsg"=>"`7{badguy}'s bodyguard hits you for `\${damage}`7 damage.",
-				"effectnodmgmsg"=>"`7{badguy}'s bodyguard tries to it you but `\$MISSES`7!",
+				"effectnodmgmsg"=>"`7{badguy}'s bodyguard tries to hit you but `\$MISSES`7!",
 				"activate"=>"roundstart"
 				);
 		}
@@ -454,18 +454,18 @@ $atkmod=$buffset['atkmod'];
 $defmod=$buffset['defmod'];
 
 if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
-	if ($badguy[pvp]) {
-		$adjustedcreaturedefense = $badguy[creaturedefense];
+	if ($badguy['pvp']) {
+		$adjustedcreaturedefense = $badguy['creaturedefense'];
 	} else {
 		$adjustedcreaturedefense =
-			 ($creaturedefmod*$badguy[creaturedefense] /
+			 ($creaturedefmod*$badguy['creaturedefense'] /
 			 ($adjustment*$adjustment));
 	}
-	$creatureattack = $badguy[creatureattack]*$creatureatkmod;
-	$adjustedselfdefense = ($session[user][defence] * $adjustment * $defmod);
+	$creatureattack = $badguy['creatureattack']*$creatureatkmod;
+	$adjustedselfdefense = ($session['user']['defence'] * $adjustment * $defmod);
 	
 	while($creaturedmg==0 && $selfdmg==0){//---------------------------------
-		$atk = $session[user][attack]*$atkmod;
+		$atk = $session['user']['attack']*$atkmod;
 		if (e_rand(1,20)==1) $atk*=3;
 		$patkroll = e_rand(0,$atk);
 		$catkroll = e_rand(0,$adjustedcreaturedefense);
@@ -474,12 +474,12 @@ if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 			//output("`#DEBUG: Initial (<0) creature damage $creaturedmg`n");
 			$creaturedmg = (int)($creaturedmg/2);
 			//output("`#DEBUG: Modified (<0) creature damage $creaturedmg`n");
-			$creaturedmg = round($buffset[badguydmgmod]*$creaturedmg,0);
+			$creaturedmg = round($buffset['badguydmgmod']*$creaturedmg,0);
 			//output("`#DEBUG: Modified (<0) creature damage $creaturedmg`n");
 		}
 		if ($creaturedmg > 0) {
 			//output("`#DEBUG: Initial (>0) creature damage $creaturedmg`n");
-			$creaturedmg = round($buffset[dmgmod]*$creaturedmg,0);
+			$creaturedmg = round($buffset['dmgmod']*$creaturedmg,0);
 			//output("`#DEBUG: Modified (>0) creature damage $creaturedmg`n");
 		}
 		//output("`#DEBUG: Attack score: $atk`n");
@@ -494,12 +494,12 @@ if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 			//output("`#DEBUG: Initial (<0) self damage $selfdmg`n");
 			$selfdmg=(int)($selfdmg/2);
 			//output("`#DEBUG: Modified (<0) self damage $selfdmg`n");
-			$selfdmg = round($selfdmg*$buffset[dmgmod], 0);
+			$selfdmg = round($selfdmg*$buffset['dmgmod'], 0);
 			//output("`#DEBUG: Modified (<0) self damage $selfdmg`n");
 		}
 		if ($selfdmg > 0) {
 			//output("`#DEBUG: Initial (>0) self damage $selfdmg`n");
-			$selfdmg = round($selfdmg*$buffset[badguydmgmod], 0);
+			$selfdmg = round($selfdmg*$buffset['badguydmgmod'], 0);
 			//output("`#DEBUG: Modiied (>0) self damage $selfdmg`n");
 		}
 		//output("`#DEBUG: Defense score: $adjustedselfdefense`n");
@@ -513,40 +513,40 @@ if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 	$selfdmg=0;
 }
 // Handle god mode's invulnerability
-if ($buffset[invulnerable]) {
+if ($buffset['invulnerable']) {
 	$creaturedmg = abs($creaturedmg);
 	$selfdmg = -abs($selfdmg);
 }
 
 if (e_rand(1,3)==1 &&
 	($HTTP_GET_VARS[op]=="search" ||
-	 ($badguy[pvp] && $HTTP_GET_VARS[act]=="attack"))) {
-	if ($badguy[pvp]){
-		output("`b`^$badguy[creaturename]`\$'s skill allows them to get the first round of attack!`0`b`n`n");
+	 ($badguy['pvp'] && $HTTP_GET_VARS['act']=="attack"))) {
+	if ($badguy['pvp']){
+		output("`b`^".$badguy['creaturename']."`\$'s skill allows them to get the first round of attack!`0`b`n`n");
 	}else{
-		output("`b`^$badguy[creaturename]`\$ surprises you and gets the first round of attack!`0`b`n`n");
+		output("`b`^".$badguy['creaturename']."`\$ surprises you and gets the first round of attack!`0`b`n`n");
 	}
-	$HTTP_GET_VARS[op]="run";
+	$HTTP_GET_VARS['op']="run";
 	$surprised=true;
 }else{
-	if ($HTTP_GET_VARS[op]=="search")
+	if ($HTTP_GET_VARS['op']=="search")
 		output("`b`\$Your skill allows you to get the first attack!`0`b`n`n");
 	$surprised=false;
 }
 
-if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
-	if ($HTTP_GET_VARS[op]=="fight"){
-		if ($badguy[creaturehealth]>0 && $session[user][hitpoints]>0){
+if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
+	if ($HTTP_GET_VARS['op']=="fight"){
+		if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 			$buffset = activate_buffs("offense");
-			if ($atk > $session[user][attack]) {
-				if ($atk > $session[user][attack]*3){
-					if ($atk>$session[user][attack]*4){
+			if ($atk > $session['user']['attack']) {
+				if ($atk > $session['user']['attack']*3){
+					if ($atk>$session['user']['attack']*4){
 						output("`&`bYou execute a <font size='+1'>MEGA</font> power move!!!`b`n",true);
 					}else{
 						output("`&`bYou execute a DOUBLE power move!!!`b`n");
 					}
 				}else{
-					if ($atk>$session[user][attack]*2){
+					if ($atk>$session['user']['attack']*2){
 						output("`&`bYou execute a power move!!!`b`0`n");
 					}elseif ($atk>$session['user']['attack']*1.25){
 						output("`7`bYou execute a minor power move!`b`0`n");
@@ -554,62 +554,62 @@ if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
 				}
 			}
 			if ($creaturedmg==0){
-				output("`4You try to hit `^$badguy[creaturename]`4 but `\$MISS!`n");
-				process_dmgshield($buffset[dmgshield], 0);
-				process_lifetaps($buffset[lifetap], 0);
+				output("`4You try to hit `^".$badguy['creaturename']."`4 but `\$MISS!`n");
+				process_dmgshield($buffset['dmgshield'], 0);
+				process_lifetaps($buffset['lifetap'], 0);
 			}else if ($creaturedmg<0){
-				output("`4You try to hit `^$badguy[creaturename]`4 but are `\$RIPOSTED `4for `\$".(0-$creaturedmg)."`4 points of damage!`n");
+				output("`4You try to hit `^".$badguy['creaturename']."`4 but are `\$RIPOSTED `4for `\$".(0-$creaturedmg)."`4 points of damage!`n");
 				$badguy['diddamage']=1;
-				$session[user][hitpoints]+=$creaturedmg;
-				process_dmgshield($buffset[dmgshield],-$creaturedmg);
-				process_lifetaps($buffset[lifetap],$creaturedmg);
+				$session['user']['hitpoints']+=$creaturedmg;
+				process_dmgshield($buffset['dmgshield'],-$creaturedmg);
+				process_lifetaps($buffset['lifetap'],$creaturedmg);
 			}else{
-				output("`4You hit `^$badguy[creaturename]`4 for `^$creaturedmg`4 points of damage!`n");
-				$badguy[creaturehealth]-=$creaturedmg;
-				process_dmgshield($buffset[dmgshield],-$creaturedmg);
-				process_lifetaps($buffset[lifetap],$creaturedmg);
+				output("`4You hit `^".$badguy['creaturename']."`4 for `^$creaturedmg`4 points of damage!`n");
+				$badguy['creaturehealth']-=$creaturedmg;
+				process_dmgshield($buffset['dmgshield'],-$creaturedmg);
+				process_lifetaps($buffset['lifetap'],$creaturedmg);
 			}
 		}
 	}else if($HTTP_GET_VARS[op]=="run" && !$surprised){
-		output("`4You are too busy trying to run away like a cowardly dog to try to fight `^$badguy[creaturename]`4.`n");
+		output("`4You are too busy trying to run away like a cowardly dog to try to fight `^".$badguy['creaturename']."`4.`n");
 	}
 	// We need to check both user health and creature health. Otherwise the user
 	 // can win a battle by a RIPOSTE after he has gone <= 0 HP.
 	//-- Gunnar Kreitz
-	if ($badguy[creaturehealth]>0 && $session[user][hitpoints]>0){
+	if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 		$buffset = activate_buffs("defense");
 		if ($selfdmg==0){
-			output("`^$badguy[creaturename]`4 tries to hit you but `\$MISSES!`n");
-			process_dmgshield($buffset[dmgshield], 0);
-			process_lifetaps($buffset[lifetap], 0);
+			output("`^".$badguy['creaturename']."`4 tries to hit you but `\$MISSES!`n");
+			process_dmgshield($buffset['dmgshield'], 0);
+			process_lifetaps($buffset['lifetap'], 0);
 		}else if ($selfdmg<0){
-			output("`^$badguy[creaturename]`4 tries to hit you but you `^RIPOSTE`4 for `^".(0-$selfdmg)."`4 points of damage!`n");
-			$badguy[creaturehealth]+=$selfdmg;
-			process_lifetaps($buffset[lifetap], -$selfdmg);
-			process_dmgshield($buffset[dmgshield], $selfdmg);
+			output("`^".$badguy['creaturename']."`4 tries to hit you but you `^RIPOSTE`4 for `^".(0-$selfdmg)."`4 points of damage!`n");
+			$badguy['creaturehealth']+=$selfdmg;
+			process_lifetaps($buffset['lifetap'], -$selfdmg);
+			process_dmgshield($buffset['dmgshield'], $selfdmg);
 		}else{
-			output("`^$badguy[creaturename]`4 hits you for `\$$selfdmg`4 points of damage!`n");
-			$session[user][hitpoints]-=$selfdmg;
-			process_dmgshield($buffset[dmgshield], $selfdmg);
-			process_lifetaps($buffset[lifetap], -$selfdmg);
+			output("`^".$badguy['creaturename']."`4 hits you for `\$$selfdmg`4 points of damage!`n");
+			$session['user']['hitpoints']-=$selfdmg;
+			process_dmgshield($buffset['dmgshield'], $selfdmg);
+			process_lifetaps($buffset['lifetap'], -$selfdmg);
 			$badguy['diddamage']=1;
 		}
 	}
 }
 expire_buffs();
 
-if ($session[user][hitpoints]>0 &&
-	$badguy[creaturehealth]>0 &&
-	($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run")){
+if ($session['user']['hitpoints']>0 &&
+	$badguy['creaturehealth']>0 &&
+	($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run")){
 	output("`2`bEnd of Round:`b`n");
-	output("`2$badguy[creaturename]`2's ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6$badguy[creaturehealth]`0`n");
-	output("`2YOUR ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$session[user][hitpoints]."`0`n");
+	output("`2".$badguy['creaturename']."`2's ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$badguy['creaturehealth']."`0`n");
+	output("`2YOUR ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$session['user']['hitpoints']."`0`n");
 }
-if ($badguy[creaturehealth]<=0){
+if ($badguy['creaturehealth']<=0){
 	$victory=true;
 	$defeat=false;
 }else{
-	if ($session[user][hitpoints]<=0){
+	if ($session['user']['hitpoints']<=0){
 		$defeat=true;
 		$victory=false;
 	}else{
@@ -634,5 +634,5 @@ if ($victory || $defeat){
 	}
 	$session['user']['buffbackup'] = "";
 }
-$session[user][badguy]=createstring($badguy);
+$session['user']['badguy']=createstring($badguy);
 ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 
 isnewday(2);
@@ -23,13 +23,12 @@ for ($i=0;$i<db_num_rows($result);$i++){
         output("<img src='images/new.png' alt='&gt;' width='3' height='5' align='middle'> ",true);
     output("`![<a href='bios.php?op=block&userid={$row['acctid']}'>Block</a>]",true);
     addnav("","bios.php?op=block&userid={$row['acctid']}");
-    output("`&{$row['name']}: `^".soap($row['bio'])."`n");
+    output("`&".$row['name'].": `^".soap($row['bio'])."`n");
 }
 db_free_result($result);
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
 addnav("Refresh","bios.php");
-//output("`n`n`bBlocked Bios:`b`n"); //This seems unneeded since we print it below
 $sql = "SELECT name,acctid,bio,biotime FROM accounts WHERE biotime>'9000-01-01' AND bio>'' ORDER BY biotime DESC LIMIT 100";
 $result = db_query($sql);
 output("`n`n`b`&Blocked Bios:`0`b`n");
