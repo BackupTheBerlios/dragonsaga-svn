@@ -1094,10 +1094,10 @@ function page_footer(){
 	exit();
 }
 
-function popup_header($title="Legend of the Green Dragon"){
+function popup_header($title="The Dragon Saga"){
   global $header;
 	$header.="<html><head><title>$title</title>";
-	$header.="<link href=\"newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
+	$header.="<link href=\"templates/newstyle.css\" rel=\"stylesheet\" type=\"text/css\">";
 	$header.="</head><body bgcolor='#000000' text='#CCCCCC'><table cellpadding=5 cellspacing=0 width='100%'>";
 	$header.="<tr><td class='popupheader'><b>$title</b></td></tr>";
 	$header.="<tr><td valign='top' width='100%'>";
@@ -1109,7 +1109,7 @@ function popup_footer(){
 		$output.="</$key>";
 		unset($nestedtags[$key]);
 	}
-	$output.="</td></tr><tr><td bgcolor='#330000' align='center'>&nbsp;</td></tr></table></body></html>";
+	$output.="</td></tr><tr><td bgcolor='#330000' align='center'>Copyright 2002, Eric Stevens</td></tr></table></body></html>";
 	$output=$header.$output;
 	//$session[output]=$output;
 	
@@ -1119,10 +1119,10 @@ function popup_footer(){
 }
 
 function clearoutput(){
-    global $output,$nestedtags,$header,$nav,$session;
+  global $output,$nestedtags,$header,$nav,$session;
 	$session['allowednavs']="";
 	$output="";
-    unset($nestedtags);
+  unset($nestedtags);
 	$header="";
 	$nav="";
 }
@@ -1133,8 +1133,8 @@ function soap($input){
 		$search = "*damn* *dyke *fuck* *phuck* *shit* asshole amcik andskota arschloch arse* atouche ayir bastard bitch* boiolas bollock* buceta butt-pirate cabron cawk cazzo chink chraa chuj cipa clit cock* "
 						. "cum cunt* dago daygo dego dick* dildo dike dirsa dupa dziwka ejackulate ekrem* ekto enculer faen fag* fanculo fanny fatass fcuk feces feg felcher ficken fitta fitte flikker foreskin phuck fuk* fut futkretzn fuxor gay gook guiena hor "
 						. "hell helvete hoer* honkey hore huevon hui injun jism jizz kanker* kawk kike klootzak knulle kraut kuk kuksuger kurac kurwa kusi* kyrpä* leitch lesbian lesbo mamhoon masturbat* merd merde mibun monkleigh mouliewop muie "
-						. "mulkku muschi nazis nepesaurio nigga* *nigger* nutsack orospu paska* pendejo penis perse phuck picka pierdol* pillu* pimmel pimpis piss* pizda poontsee porn pron preteen preud prick pula pule pusse pussy puta puto qahbeh queef* queer* "
-						. "qweef rautenberg schaffer scheiss* scheisse schlampe schmuck scrotum sharmuta sharmute shemale shipal shiz skribz skurwysyn slut smut sphencter spic spierdalaj splooge suka teets teez testicle tits titties titty twat twaty vittu "
+						. "mulkku muschi nazis nepesaurio nigga* *nigger* nutsack orospu paska* pendejo penis perse phuck picka pierdol* pillu* pimmel pimpis piss* pizda poontsee poop porn pron preteen preud prick pula pule pusse pussy puta puto qahbeh queef* queer* "
+						. "qweef rautenberg schaffer scheiss* scheisse schlampe schmuck screw scrotum sharmuta sharmute shemale shipal shiz skribz skurwysyn slut smut sphencter spic spierdalaj splooge suka teets teez testicle tits titties titty twat twaty vittu "
 						. "votze woose wank* wetback* whoar whore wichser wop yed zabourah ass";
 	*/
 		$sql = "SELECT * FROM nastywords";
