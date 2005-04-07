@@ -1,8 +1,8 @@
-<?
+<?php
 require_once "common.php";
 
 page_header("The Green Dragon!");
-if ($HTTP_GET_VARS[op]==""){
+if ($HTTP_GET_VARS['op']==""){
   output("`\$Fighting down every urge to flee, you cautiously enter the cave entrance, intent ");
 	output("on catching the great green dragon sleeping, so that you might slay him with a minimum ");
 	output("of pain.  Sadly, this is not to be the case, for as you round a corner within the cave ");
@@ -21,7 +21,7 @@ if ($HTTP_GET_VARS[op]==""){
 	// used on attack and defense.
 	// Coded by JT, based on collaboration with MightyE
 	$points = 0;
-	while(list($key,$val)=each($session[user][dragonpoints])){
+	while(list($key,$val)=each($session['user']['dragonpoints'])){
 		if ($val=="at" || $val == "de") $points++;
 	}
 	// Now, add points for hitpoint buffs that have been done by the dragon
@@ -40,9 +40,9 @@ if ($HTTP_GET_VARS[op]==""){
 	$badguy['creatureattack']+=$atkflux;
 	$badguy['creaturedefense']+=$defflux;
 	$badguy['creaturehealth']+=$hpflux;
-	$session[user][badguy]=createstring($badguy);
+	$session['user']['badguy']=createstring($badguy);
 	$battle=true;
-}else if($HTTP_GET_VARS[op]=="prologue1"){
+}else if($HTTP_GET_VARS['op']=="prologue1"){
 	output("`@Victory!`n`n");
 	$flawless = 0;
   	if ($HTTP_GET_VARS['flawless']) {
@@ -82,85 +82,85 @@ if ($HTTP_GET_VARS[op]==""){
 	addnav("It is a new day","news.php");
 	$sql = "describe accounts";
 	$result = db_query($sql) or die(db_error(LINK));
-	$hpgain = $session[user][maxhitpoints] - ($session[user][level]*10);
+	$hpgain = $session['user']['maxhitpoints'] - ($session['user']['level']*10);
 	$nochange=array("acctid"=>1
-	               ,"name"=>1
-								 ,"sex"=>1
-								 ,"password"=>1
-								 ,"marriedto"=>1
-								 ,"title"=>1
-								 ,"login"=>1
-								 ,"dragonkills"=>1
-								 ,"locked"=>1
-								 ,"loggedin"=>1
-								 ,"superuser"=>1
-								 ,"gems"=>1
-								 ,"hashorse"=>1
-								 ,"gentime"=>1
-								 ,"gentimecount"=>1
-								 ,"lastip"=>1
-								 ,"uniqueid"=>1
-								 ,"dragonpoints"=>1
-								 ,"laston"=>1
-								 ,"prefs"=>1
-								 ,"lastmotd"=>1
-								 ,"emailaddress"=>1
-								 ,"emailvalidation"=>1
-								 ,"gensize"=>1
-								 ,"bestdragonage"=>1
-								 ,"dragonage"=>1
-								 ,"donation"=>1
-								 ,"donationspent"=>1
-								 ,"donationconfig"=>1
-								 ,"bio"=>1
-								 ,"charm"=>1
-								 ,"banoverride"=>1 // jt
-								 ,"referer"=>1 //jt
-								 ,"refererawarded"=>1 //jt
-								 ,"lastwebvote"=>1
-								 ,"ctitle"=>1
-								 ,"beta"=>1
-								 );
-	$session[user][dragonage] = $session[user][age];
-	if ($session[user][dragonage] <  $session[user][bestdragonage] ||
-			$session[user][bestdragonage] == 0) {
-		$session[user][bestdragonage] = $session[user][dragonage];
+	             ,"name"=>1
+				 ,"sex"=>1
+				 ,"password"=>1
+				 ,"marriedto"=>1
+				 ,"title"=>1
+				 ,"login"=>1
+				 ,"dragonkills"=>1
+				 ,"locked"=>1
+				 ,"loggedin"=>1
+				 ,"superuser"=>1
+				 ,"gems"=>1
+				 ,"hashorse"=>1
+				 ,"gentime"=>1
+				 ,"gentimecount"=>1
+				 ,"lastip"=>1
+				 ,"uniqueid"=>1
+				 ,"dragonpoints"=>1
+				 ,"laston"=>1
+				 ,"prefs"=>1
+				 ,"lastmotd"=>1
+				 ,"emailaddress"=>1
+				 ,"emailvalidation"=>1
+				 ,"gensize"=>1
+				 ,"bestdragonage"=>1
+				 ,"dragonage"=>1
+				 ,"donation"=>1
+				 ,"donationspent"=>1
+				 ,"donationconfig"=>1
+				 ,"bio"=>1
+				 ,"charm"=>1
+				 ,"banoverride"=>1 // jt
+				 ,"referer"=>1 //jt
+				 ,"refererawarded"=>1 //jt
+				 ,"lastwebvote"=>1
+				 ,"ctitle"=>1
+				 ,"beta"=>1
+				);
+	$session['user']['dragonage'] = $session['user']['age'];
+	if ($session['user']['dragonage'] <  $session['user']['bestdragonage'] ||
+			$session['user']['bestdragonage'] == 0) {
+		$session['user']['bestdragonage'] = $session['user']['dragonage'];
 	}
 	for ($i=0;$i<db_num_rows($result);$i++){
 	  $row = db_fetch_assoc($result);
-		if ($nochange[$row[Field]]){
+		if ($nochange[$row['Field']]){
 		
 		}else{
-		  $session[user][$row[Field]] = $row["Default"];
+		  $session['user'][$row['Field']] = $row["Default"];
 		}
 	}
-	$session[bufflist] = array();
-	$session[user][gold]=	getsetting("newplayerstartgold",50);
+	$session['bufflist'] = array();
+	$session['user']['gold']=getsetting("newplayerstartgold",50);
 
-	$newtitle=$titles[$session[user][dragonkills]][$session[user][sex]];
+	$newtitle=$titles[$session['user']['dragonkills']][$session['user']['sex']];
 	if ($newtitle==""){
-	  $newtitle = ($session[user][sex]?"Goddess":"God");
+	  $newtitle = ($session['user']['sex']?"Goddess":"God");
 	}
 
 
-	$session[user][gold]+=getsetting("newplayerstartgold",50)*$session[user][dragonkills];
-	if ($session[user][gold]>(6*getsetting("newplayerstartgold",50))){
-	  $session[user][gold]=6*getsetting("newplayerstartgold",50);
-		$session[user][gems]+=($session[user][dragonkills]-5);
+	$session['user']['gold']+=getsetting("newplayerstartgold",50)*$session['user']['dragonkills'];
+	if ($session['user']['gold']>(6*getsetting("newplayerstartgold",50))){
+	  $session['user']['gold']=6*getsetting("newplayerstartgold",50);
+		$session['user']['gems']+=($session['user']['dragonkills']-5);
 	}
 	if ($flawless) {
 		$session['user']['gold'] += 3*getsetting("newplayerstartgold",50);
 		$session['user']['gems'] += 1;
 	}
-	$session[user][maxhitpoints]+=$hpgain;
-	$session[user][hitpoints]=$session[user][maxhitpoints];
+	$session['user']['maxhitpoints']+=$hpgain;
+	$session['user']['hitpoints']=$session['user']['maxhitpoints'];
 	// Handle custom titles
-	if ($session[user][ctitle] == "") {
-		if ($session[user][title]!=""){
-			$n = $session[user][name];
-			$x = strpos($n,$session[user][title]);
+	if ($session['user']['ctitle'] == "") {
+		if ($session['user']['title']!=""){
+			$n = $session['user']['name'];
+			$x = strpos($n,$session['user']['title']);
 			if ($x!==false){
-				$regname=substr($n,$x+strlen($session[user][title]));
+				$regname=substr($n,$x+strlen($session['user']['title']));
 				$session['user']['name'] = substr($n,0,$x).$newtitle.$regname;
 				$session['user']['title'] = $newtitle;
 			}else{
@@ -170,39 +170,39 @@ if ($HTTP_GET_VARS[op]==""){
 			}
 		}else{
 			$regname = $session['user']['name'];
-			$session[user][name] = $newtitle." ".$session[user][name];
-			$session[user][title] = $newtitle;
+			$session['user']['name'] = $newtitle." ".$session['user']['name'];
+			$session['user']['title'] = $newtitle;
 		}
 	} else {
 		$regname = substr($session['user']['name'], strlen($session['user']['ctitle']));
-		$session[user][title] = $newtitle;
+		$session['user']['title'] = $newtitle;
 	}
-	while(list($key,$val)=each($session[user][dragonpoints])){
+	while(list($key,$val)=each($session['user']['dragonpoints'])){
 		if ($val=="at"){
-			$session[user][attack]++;
+			$session['user']['attack']++;
 		}
 		if ($val=="de"){
-			$session[user][defence]++;
+			$session['user']['defence']++;
 		}
 	}
-	$session[user][laston]=date("Y-m-d H:i:s",strtotime("-1 day"));
+	$session['user']['laston']=date("Y-m-d H:i:s",strtotime("-1 day"));
 	output("`n`nYou wake up in the midst of some trees.  Nearby you hear the sounds of a village.  ");
 	output("Dimly you remember that you are a new warrior, and something of a dangerous Green Dragon that is plaguing ");
 	output("the area.  You decide you would like to earn a name for yourself by perhaps some day confronting this ");
 	output("vile creature.");
-	addnews("`#".$regname." has earned the title `&".$session[user][title]."`# for having slain the `@Green Dragon`& `^".$session[user][dragonkills]."`# times!");
-	output("`n`n`^You are now known as `&".$session[user][name]."`^!!");
-	output("`n`n`&Because you have slain the dragon ".$session[user][dragonkills]." times, you start with some extras.  You also keep additional hitpoints you've earned or purchased.`n");
+	addnews("`#".$regname." has earned the title `&".$session['user']['title']."`# for having slain the `@Green Dragon`& `^".$session['user']['dragonkills']."`# times!");
+	output("`n`n`^You are now known as `&".$session['user']['name']."`^!!");
+	output("`n`n`&Because you have slain the dragon ".$session['user']['dragonkills']." times, you start with some extras.  You also keep additional hitpoints you've earned or purchased.`n");
 	$session['user']['charm']+=5;
 	output("`^You gain FIVE charm points for having defeated the dragon!`n");
-	debuglog("slew the dragon and starts with {$session['user']['gold']} gold and {$session['user']['gems']} gems");
+	debuglog("slew the dragon and starts with ".$session['user']['gold']." gold and ".$session['user']['gems']." gems");
 }
 
-if ($HTTP_GET_VARS[op]=="run"){
+if ($HTTP_GET_VARS['op']=="run"){
   output("The creature's tail blocks the only exit to its lair!");
-	$HTTP_GET_VARS[op]="fight";
+	$HTTP_GET_VARS['op']="fight";
 }
-if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
+if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
 	$battle=true;
 }
 if ($battle){
@@ -211,10 +211,10 @@ if ($battle){
 		$flawless = 0;
 		if ($badguy['diddamage'] != 1) $flawless = 1;
 		$badguy=array();
-		$session[user][badguy]="";
-		$session[user][dragonkills]++;
+		$session['user']['badguy']="";
+		$session['user']['dragonkills']++;
 		output("`&With a mighty final blow, `@The Green Dragon`& lets out a tremendous bellow and falls to your feet, dead at last.");
-		addnews("`&".$session[user][name]." has slain the hideous creature known as `@The Green Dragon`&.  Across all the lands, people rejoice!");
+		addnews("`&".$session['user']['name']." has slain the hideous creature known as `@The Green Dragon`&.  Across all the lands, people rejoice!");
 		addnav("Continue","dragon.php?op=prologue1&flawless=$flawless");
 	}else{
 		if($defeat){
@@ -222,24 +222,23 @@ if ($battle){
 			$sql = "SELECT taunt FROM taunts ORDER BY rand(".e_rand().") LIMIT 1";
 			$result = db_query($sql) or die(db_error(LINK));
 			$taunt = db_fetch_assoc($result);
-			$taunt = str_replace("%s",($session[user][sex]?"her":"him"),$taunt[taunt]);
-			$taunt = str_replace("%o",($session[user][sex]?"she":"he"),$taunt);
-			$taunt = str_replace("%p",($session[user][sex]?"her":"his"),$taunt);
-			$taunt = str_replace("%x",($session[user][weapon]),$taunt);
-			$taunt = str_replace("%X",$badguy[creatureweapon],$taunt);
-			$taunt = str_replace("%W",$badguy[creaturename],$taunt);
-			$taunt = str_replace("%w",$session[user][name],$taunt);
+			$taunt = str_replace("%s",($session['user']['sex']?"her":"him"),$taunt['taunt']);
+			$taunt = str_replace("%o",($session['user']['sex']?"she":"he"),$taunt);
+			$taunt = str_replace("%p",($session['user']['sex']?"her":"his"),$taunt);
+			$taunt = str_replace("%x",($session['user']['weapon']),$taunt);
+			$taunt = str_replace("%X",$badguy['creatureweapon'],$taunt);
+			$taunt = str_replace("%W",$badguy['creaturename'],$taunt);
+			$taunt = str_replace("%w",$session['user']['name'],$taunt);
 			
-			addnews("`%".$session[user][name]."`5 has been slain when ".($session[user][sex]?"she":"he")." encountered `@The Green Dragon`5!!!  ".($session[user][sex]?"Her":"His")." bones now litter the cave entrance, just like the bones of those who came before.`n$taunt");
+			addnews("`%".$session['user']['name']."`5 has been slain when ".($session['user']['sex']?"she":"he")." encountered `@The Green Dragon`5!!!  ".($session[user][sex]?"Her":"His")." bones now litter the cave entrance, just like the bones of those who came before.`n$taunt");
 			$session[user][alive]=false;
 			debuglog("lost {$session['user']['gold']} gold when they were slain");
-			$session[user][gold]=0;
-			$session[user][hitpoints]=0;
-			$session[user][badguy]="";
+			$session['user']['gold']=0;
+			$session['user']['hitpoints']=0;
+			$session['user']['badguy']="";
 			output("`b`&You have been slain by `%$badguy[creaturename]`&!!!`n");
 			output("`4All gold on hand has been lost!`n");
 			output("You may begin fighting again tomorrow.");
-			
 			page_footer();
 		}else{
 		  fightnav(true,false);
