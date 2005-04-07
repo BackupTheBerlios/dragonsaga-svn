@@ -1175,7 +1175,7 @@ function saveuser(){
 		$session['user']['bufflist']=serialize($session['bufflist']);
 		if (is_array($session['user']['prefs'])) $session['user']['prefs']=serialize($session['user']['prefs']);
 		if (is_array($session['user']['dragonpoints'])) $session['user']['dragonpoints']=serialize($session['user']['dragonpoints']);
-		//$session['user'][laston] = date("Y-m-d H:i:s");
+		//$session['user']['laston'] = date("Y-m-d H:i:s");
   	$sql="UPDATE accounts SET ";
   	reset($session['user']);
   	while(list($key,$val)=each($session['user'])){
@@ -1248,12 +1248,12 @@ function addnews($news){
 
 function checkday() {
 	global $session,$revertsession,$REQUEST_URI;
-  //output("`#`iChecking to see if you're due for a new day: ".$session['user'][laston].", ".date("Y-m-d H:i:s")."`i`n`0");
+  //output("`#`iChecking to see if you're due for a new day: ".$session['user']['laston'].", ".date("Y-m-d H:i:s")."`i`n`0");
 	if ($session['user']['loggedin']){
 		output("<!--CheckNewDay()-->",true);
 		if(is_new_day()){
 			$session=$revertsession;
-			$session['user'][restorepage]=$REQUEST_URI;
+			$session['user']['restorepage']=$REQUEST_URI;
 			$session['allowednavs']=array();
 			addnav("","newday.php");
 			redirect("newday.php");
@@ -1384,7 +1384,7 @@ function addcommentary() {
 		$result = db_query($sql) or die(db_error(LINK));
 		$row = db_fetch_assoc($result);
 		db_free_result($result);
-		if ($row[comment]!=$commentary || $row[author]!=$session['user']['acctid']){
+		if ($row['comment']!=$commentary || $row['author']!=$session['user']['acctid']){
 		  $sql = "INSERT INTO commentary (postdate,section,author,comment) VALUES (now(),'$section',".$session['user']['acctid'].",\"$commentary\")";
 			db_query($sql) or die(db_error(LINK));
 		} else {
@@ -1419,26 +1419,27 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	$counttoday=0;
 	for ($i=0;$i < db_num_rows($result);$i++){
 	  $row = db_fetch_assoc($result);
-		$row[comment]=preg_replace("'[`][^1234567!@#$%^&]'","",$row[comment]);
-		$commentids[$i] = $row[commentid];
-		if (date("Y-m-d",strtotime($row[postdate]))==date("Y-m-d")){
-			if ($row[name]==$session['user'][name]) $counttoday++;
-		}
-		$x=0;
-		$ft="";
-		for ($x=0;strlen($ft)<3 && $x<strlen($row[comment]);$x++){
-			if (substr($row[comment],$x,1)=="`" && strlen($ft)==0) {
-				$x++;
-			}else{
-				$ft.=substr($row[comment],$x,1);
-			}
-		}
+                $row['comment']=preg_replace("'[`][^1234567!@#$%^&]'","",$row['comment']);
+        $row['comment']=emoticons($row['comment']);
+                $commentids[$i] = $row['commentid'];
+                if (date("Y-m-d",strtotime($row['postdate']))==date("Y-m-d")){
+            if ($row['name']==$session['user']['name'] && $climit=="0") $counttoday++;
+                }
+                $x=0;
+                $ft="";
+                for ($x=0;strlen($ft)<3 && $x<strlen($row['comment']);$x++){
+                        if (substr($row['comment'],$x,1)=="`" && strlen($ft)==0) {
+                                $x++;
+                        }else{
+                                $ft.=substr($row['comment'],$x,1);
+                        }
+                }
 		$link = "bio.php?char=".rawurlencode($row[login]) . "&ret=".URLEncode($_SERVER['REQUEST_URI']);
 		if (substr($ft,0,2)=="::") $ft = substr($ft,0,2);
 		else
 			if (substr($ft,0,1)==":") $ft = substr($ft,0,1);
 		if ($ft=="::" || $ft=="/me" || $ft==":"){
-			$x = strpos($row[comment],$ft);
+			$x = strpos($row['comment'],$ft);
 			if ($x!==false){
 				if ($linkbios)
 					$op[$i] = str_replace("&amp;","&",HTMLEntities(substr($row[comment],0,$x)))
@@ -1468,7 +1469,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	$sect="x";
 	for (;$i>=0;$i--){
 		$out="";
-		if ($session['user'][superuser]>=3 && $message=="X"){
+		if ($session['user']['superuser']>=3 && $message=="X"){
 			$out.="`0[ <a href='superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI'])."'>Del</a> ]&nbsp;";
 			addnav("","superuser.php?op=commentdelete&commentid=$commentids[$i]&return=".URLEncode($_SERVER['REQUEST_URI']));
 			$matches=array();
@@ -1494,7 +1495,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		if ($counttoday<($limit/2) || $session['user']['superuser']>=2){
 			if ($message!="X"){
 				if ($talkline!="says") $tll = strlen($talkline)+11; else $tll=0;
-				output("<form action=\"$REQUEST_URI\" method='POST'>`@$message`n<input name='insertcommentary[$section]' size='40' maxlength='".(200-$tll)."'><input type='hidden' name='talkline' value='$talkline'><input type='hidden' name='section' value='$section'><input type='submit' class='button' value='Add'>`n".(round($limit/2,0)-$counttoday<3?"`)(You have ".(round($limit/2,0)-$counttoday)." posts left today)":"")."`0`n</form>",true);
+				output("<form action=\"$REQUEST_URI\" method='POST'>`@$message`n.<input name='insertcommentary[$section]' size='40' maxlength='".(200-$tll)."'><input type='hidden' name='talkline' value='$talkline'><input type='hidden' name='section' value='$section'><input type='submit' class='button' value='Add'>`n".(round($limit/2,0)-$counttoday<3?"`)(You have ".(round($limit/2,0)-$counttoday)." posts left today)":"")."`0`n</form>",true);
 				addnav("",$REQUEST_URI);
 			}
 		}else{
