@@ -1,6 +1,5 @@
 <?
 require_once "common.php";
-//echo(strpos($_SERVER['SERVER_NAME'],"logd.mightye.org"));
 $old = getsetting("expireoldacct",45);
 $new = getsetting("expirenewacct",10);
 $trash = getsetting("expiretrashacct",1);
@@ -19,9 +18,9 @@ $sql = "SELECT acctid,emailaddress FROM accounts WHERE 1=0 "
 $result = db_query($sql);
 for ($i=0;$i<db_num_rows($result);$i++){
 	$row = db_fetch_assoc($result);
-	mail($row[emailaddress],"LoGD Character Expiration",
+	mail($row[emailaddress],"TDS Character Expiration",
 	"
-	One or more of your characters in Legend of the Green Dragon at
+	One or more of your characters in The Dragon Saga at
 	".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."
 	is about to expire.  If you wish to keep this character, you should
 	log on to him or her soon!",
@@ -34,14 +33,14 @@ for ($i=0;$i<db_num_rows($result);$i++){
 
 //echo "<pre>".HTMLEntities($sql)."</pre>";
 
-if ($session[loggedin]){
+if ($session['loggedin']){
 	redirect("badnav.php");
 }
 page_header();
-output("`cWelcome to Legend of the Green Dragon, a shameless knockoff of Seth Able's Legend of the Red Dragon.`n");
+output("`cWelcome to The Dragon Saga, a shameless knockoff of Seth Able's Legend of the Red Dragon.`n");
 output("`@The current time in the village is `%".getgametime()."`@.`0`n");
 
-//Next New Day in ... is by JT from logd.dragoncat.net
+//Next New Day in ... is by JT
 $time = gametime();
 $tomorrow = strtotime(date("Y-m-d H:i:s",$time)." + 1 day");
 $tomorrow = strtotime(date("Y-m-d 00:00:00",$tomorrow));
@@ -55,22 +54,22 @@ if ($_GET['op']=="timeout"){
 		$session['message'].=" Also, it appears that you may be blocking cookies from this site.  At least session cookies must be enabled in order to use this site.`n";
 	}
 }
-if ($session[message]>"") output("`b`\$$session[message]`b`n");
+if ($session['message']>"") output("`b`\$$session[message]`b`n");
 output("<form action='login.php' method='POST'>"
 .templatereplace("login",array("username"=>translate("<u>U</u>sername"),"password"=>translate("<u>P</u>assword"),"button"=>translate("Log in")))
 ."</form>`c",true);
 // Without this, I had one user constantly get 'badnav.php' :/  Everyone else worked, but he didn't
 addnav("","login.php");
-//output("`n`b`&**BETA**`0 This is a BETA of this website, things are likely to change now and again, as it is under active development (when I have time ;-)) `&**BETA**`0`n");
-output("`n`b`&".getsetting("loginbanner","*BETA* This is a BETA of this website, things are likely to change now and again, as it is under active development *BETA*")."`0`b`n");
-$session[message]="";
+//output("`n`b`&**TESTING**`0 This is a TEST of this website, things are likely to change now and again, as it is under active development (when I have time ;-)) `&**TESTING**`0`n");
+output("`n`b`&".getsetting("loginbanner","*TESTING* This is a TEST of this game, things are likely to change now and again, as it is under active development *TESTING*")."`0`b`n");
+$session['message']="";
 output("`c`2Game server running version: `@{$logd_version}`0`c");
 
 clearnav();
-addnav("New to LoGD?");
+addnav("New to TDS?");
 addnav("Create a character","create.php");
 addnav("Other");
-addnav("About LoGD","about.php");
+addnav("About TDS","about.php");
 addnav("List Warriors","list.php");
 addnav("Daily News", "news.php");
 addnav("Game Setup Info", "about.php?op=setup");

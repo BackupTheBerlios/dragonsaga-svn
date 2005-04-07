@@ -2,7 +2,7 @@
 require_once "common.php";
 addcommentary();
 session_write_close();
-popup_header("LoGD Message of the Day (MoTD)");
+popup_header("TDS Message of the Day (MoTD)");
 output(($session[user][superuser]>=3?" [<a href='motd.php?op=add'>Add MoTD</a>|<a href='motd.php?op=addpoll'>Add Poll</a>]`n":""),true);
 function motditem($subject,$body){
 	output("`b$subject`b`n",true);
@@ -53,7 +53,7 @@ function pollitem($id,$subject,$body){
 				output(stripslashes($val)." (".(int)$choices[$key]." - $percent%)");
 				if ($maxitem==0){ $width=1; } else { $width = round(($choices[$key]/$maxitem) * 400,0); }
 				$width = max($width,1);
-				output("`n<img src='images/rule.gif' width='$width' height='2' alt='$percent'>",true);
+				output("`n<img src='images/rule.png' width='$width' height='2' alt='$percent'>",true);
 				//output(stripslashes($val)."`n");
 			}
 		}
@@ -147,7 +147,7 @@ if ($_GET[op]=="del"){
 
 if ($_GET[op]==""){
 	output("`&");
-	motditem("Beta!","Please see the beta message below.");
+	motditem("Testing!","Please see the testing message below.");
 	output("`%");
 
 	$sql = "SELECT * FROM motd ORDER BY motddate DESC limit 20";
@@ -163,7 +163,7 @@ if ($_GET[op]==""){
 		}
 	}
 	output("`&");
-	motditem("Beta!","For those who might be unaware, this website is still in beta mode.  I'm working on it when I have time, which generally means a couple of changes a week.  Feel free to drop suggestions, I'm open to anything :-)");
+	motditem("Testing!","For those who might be unaware, this game is in testing.  We are working on it when we have time.  Feel free to drop suggestions, I'm open to anything :-)");
 	output("`@Commentary:`0`n");
 	viewcommentary("motd");
 }

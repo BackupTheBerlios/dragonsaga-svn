@@ -79,7 +79,7 @@ if ($_GET[op]==""){
 	}
 	output("`@From: ");
 	$row[body]=stripslashes($row[body]);
-	if ($row['login']>"") output("<a href=\"mail.php?op=write&to=".rawurlencode($row[login])."&body=".URLEncode("\n\n----- Your Petition -----\n".$row[body])."&subject=RE:+Petition\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row[login])."&body=".URLEncode("\n\n----- Your Petition -----\n".$row[body])."&subject=RE:+Petition").";return false;\"><img src='images/newscroll.GIF' width='16' height='16' alt='Write Mail' border='0'></a>",true);
+	if ($row['login']>"") output("<a href=\"mail.php?op=write&to=".rawurlencode($row[login])."&body=".URLEncode("\n\n----- Your Petition -----\n".$row[body])."&subject=RE:+Petition\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row[login])."&body=".URLEncode("\n\n----- Your Petition -----\n".$row[body])."&subject=RE:+Petition").";return false;\"><img src='images/newscroll.png' width='16' height='16' alt='Write Mail' border='0'></a>",true);
 	output("`^`b$row[name]`b`n");
 	output("`@Date: `^`b$row[date]`b`n");
 	output("`@Body:`^`n");

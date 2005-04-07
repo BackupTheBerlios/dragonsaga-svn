@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 checkday();
 
@@ -16,14 +16,14 @@ if ($HTTP_GET_VARS['op']=="list"){
 	for($i=0;$i<db_num_rows($result);$i++){
 		$row = db_fetch_assoc($result);
 		output("<tr class='".($i%2?"trdark":"trlight")."'><td>",true);
-		output("`^$row[bounty]`0");
+		output("`^".$row['bounty']."`0");
 		output("</td><td>",true);
-		output("`^$row[level]`0");
+		output("`^".$row['level']."`0");
 		output("</td><td>",true);
-		output("`&$row[name]`0");
+		output("`&".$row['name']."`0");
 		if ($session['user']['loggedin']) output("</a>",true);
 		output("</td><td>",true);
-		$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
+		$loggedin=(date("U") - strtotime($row['laston']) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
 		output($row['location']
 			?"`3Boar's Head Inn`0"
 			:(
@@ -33,12 +33,12 @@ if ($HTTP_GET_VARS['op']=="list"){
 			)
 		);
 		output("</td><td>",true);
-		output($row[sex]?"`!Female`0":"`!Male`0");
+		output($row['sex']?"`!Female`0":"`!Male`0");
 		output("</td><td>",true);
-		$laston=round((strtotime("0 days")-strtotime($row[laston])) / 86400,0)." days";
+		$laston=round((strtotime("0 days")-strtotime($row['laston'])) / 86400,0)." days";
 		if (substr($laston,0,2)=="1 ") $laston="1 day";
-		if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d")) $laston="Today";
-		if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
+		if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d")) $laston="Today";
+		if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
 		if ($loggedin) $laston="Now";
 		output($laston);
 		output("</td></tr>",true);
@@ -86,10 +86,10 @@ if ($HTTP_GET_VARS['op']=="list"){
 		output("`2Target: <select name='contractname'>",true);
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			output("<option value=\"".rawurlencode($row['name'])."\">".preg_replace("'[`].'","",$row['name'])."</option>",true);
+			output("<option value='".rawurlencode($row['name'])."'>".preg_replace("'[`].'","",$row['name'])."</option>",true);
 		}
 		output("</select>`n`n",true);
-		output("`2Amount to Place: <input name='amount' id='amount' width='5' value='{$_POST['amount']}'>`n`n",true);
+		output("`2Amount to Place: <input name='amount' id='amount' width='5' value='".$_POST['amount']."'>`n`n",true);
 		output("<input type='submit' class='button' value='Finalize Contract'></form>",true);
 		addnav("","dag.php?op=finalize&subfinal=1");
 	} else {
@@ -112,7 +112,7 @@ if ($HTTP_GET_VARS['op']=="list"){
 			$fee = getsetting("bountyfee",10);
 			if ($amt < $min) {
 				output("Dag Durnick scowls, `7\"Ye think I be workin' for that pittance?  Be thinkin' again an come back when ye willing to spend some real coin.  That mark be needin' at least " . $min . " gold to be worth me time.\"");
-			} elseif ($session[user][gold] <round($amt*1.1,0)) {
+			} elseif ($session['user']['gold'] <round($amt*1.1,0)) {
 				output("Dag Durnick scowls, `7\"Ye don't be havin enough gold to be settin' that contract.  Wastin' my time like this, I aught to be puttin' a contract on YE instead!");
 			} elseif ($amt + $row['bounty'] > $max) {
 				output("Dag looks down at the pile of coin and just leaves them there. `7\"I'll just be passin' on that contract.  That's way more'n `^{$row['name']} `7be worth and ye know it.  I ain't no durned assassin. A bounty o' {$row['bounty']} already be on their head.  I might be willin' t'up it to $max, after me $fee% listin' fee of course\"`n`n");
@@ -122,7 +122,7 @@ if ($HTTP_GET_VARS['op']=="list"){
 				$cost = round($amt*1.1,0);
 				$session['user']['gold']-=$cost;
 				debuglog("spent $cost gold for a $amt bounty on", $row['acctid']);
-				$sql = "UPDATE accounts SET bounty=bounty+$amt WHERE login='{$row['login']}'";
+				$sql = "UPDATE accounts SET bounty=bounty+$amt WHERE login='".$row['login']."'";
 				db_query($sql);
 			}
 		}
@@ -130,8 +130,8 @@ if ($HTTP_GET_VARS['op']=="list"){
 }else{
 	output("You stroll over to Dag Durnick, who doesn't even bother to look up at you. He takes a long pull on his pipe.`n");
 	output("`7\"Ye probably be wantin' to know if there's a price on yer head, ain't ye.\"`n`n");
-	if ($session[user][bounty]>0){
-		output("\"`3Well, it be lookin like ye have `^".$session[user][bounty]." gold`3 on yer head currently. Ye might wanna be watchin yourself.\"");
+	if ($session['user']['bounty']>0){
+		output("\"`3Well, it be lookin like ye have `^".$session['user']['bounty']." gold`3 on yer head currently. Ye might wanna be watchin yourself.\"");
 	}else{
 		output("\"`3Ye don't have no bounty on ya.  I suggest ye be keepin' it that way.\"");
 	}
@@ -139,11 +139,8 @@ if ($HTTP_GET_VARS['op']=="list"){
 	addnav("Set a Bounty","dag.php?op=addbounty");
 }
 if ($HTTP_GET_VARS['op'] != '')
-	addnav("Talk to Dag Durnick", "dag.php");
+addnav("Talk to Dag Durnick", "dag.php");
 addnav("Return to the inn","inn.php");
-
-// Whoops, forgot this when you changed from <font> to <span>
 output("</span>",true);
-
 page_footer();
 ?>

@@ -1,8 +1,8 @@
 <?
 require_once "common.php";
-if ($session[user][loggedin]) {
+if ($session['user']['loggedin']) {
 	checkday();
-	if ($session[user][alive]) {
+	if ($session['user']['alive']) {
 		addnav("Return to the village","village.php");
 	} else {
 		addnav("Return to the graveyard", "graveyard.php");
@@ -52,7 +52,7 @@ if ($_GET['page']=="" && $_GET['op']==""){
 	output("`c`bWarriors in the realm (Page ".($pageoffset/$playersperpage+1).": $from-$to of $totalplayers)`b`c");
 	$sql = "SELECT name,login,alive,location,sex,level,laston,loggedin,lastip,uniqueid FROM accounts WHERE locked=0 $search ORDER BY level DESC, dragonkills DESC, login ASC $limit";
 }
-if ($session[user][loggedin]){
+if ($session['user']['loggedin']){
 	output("<form action='list.php?op=search' method='POST'>Search by name: <input name='name'><input type='submit' class='button' value='Search'></form>",true);
 	addnav("","list.php?op=search");
 }
@@ -68,18 +68,18 @@ output("<tr class='trhead'><td><b>Alive</b></td><td><b>Level</b></td><td><b>Name
 for($i=0;$i<$max;$i++){
 	$row = db_fetch_assoc($result);
 	output("<tr class='".($i%2?"trdark":"trlight")."'><td>",true);
-	output($row[alive]?"`1Yes`0":"`4No`0");
+	output($row['alive']?"`1Yes`0":"`4No`0");
 	output("</td><td>",true);
 	output("`^$row[level]`0");
 	output("</td><td>",true);
-	if ($session[user][loggedin]) output("<a href=\"mail.php?op=write&to=".rawurlencode($row['login'])."\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row['login'])."").";return false;\"><img src='images/newscroll.GIF' width='16' height='16' alt='Write Mail' border='0'></a>",true);
-	if ($session[user][loggedin]) output("<a href='bio.php?char=".rawurlencode($row['login'])."'>",true);
-	if ($session[user][loggedin]) addnav("","bio.php?char=".rawurlencode($row['login'])."");
+	if ($session['user']['loggedin']) output("<a href=\"mail.php?op=write&to=".rawurlencode($row['login'])."\" target=\"_blank\" onClick=\"".popup("mail.php?op=write&to=".rawurlencode($row['login'])."").";return false;\"><img src='images/newscroll.png' width='16' height='16' alt='Write Mail' border='0'></a>",true);
+	if ($session['user']['loggedin']) output("<a href='bio.php?char=".rawurlencode($row['login'])."'>",true);
+	if ($session['user']['loggedin']) addnav("","bio.php?char=".rawurlencode($row['login'])."");
 	output("`&$row[name]`0");
-	if ($session[user][loggedin]) output("</a>",true);
+	if ($session['user']['loggedin']) output("</a>",true);
 	output("</td><td>",true);
-	$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
-	output($row[location]
+	$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
+	output($row['location']
 				?"`3Boar's Head Inn`0"
 				:(
 					$loggedin
@@ -88,12 +88,12 @@ for($i=0;$i<$max;$i++){
 					)
 			);
 	output("</td><td>",true);
-	output($row[sex]?"`!Female`0":"`!Male`0");
+	output($row['sex']?"`!Female`0":"`!Male`0");
 	output("</td><td>",true);
 	$laston=round((strtotime("0 days")-strtotime($row[laston])) / 86400,0)." days";
 	if (substr($laston,0,2)=="1 ") $laston="1 day";
-	if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d")) $laston="Today";
-	if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
+	if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d")) $laston="Today";
+	if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
 	if ($loggedin) $laston="Now";
 	output($laston);
 	output("</td></tr>",true);

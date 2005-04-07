@@ -69,7 +69,6 @@ a:hover.navhilite {
 	line-height: 18px;
 	float: left;
 	clear: none;
-	xbackground-color: #000066;
 	font-weight: bold;
 	color: #00CCFF;
 	cursor: default;
@@ -98,16 +97,20 @@ table.charinfo {
 }
 td.pageheader {
 	background-color: #333399;
-	background-image: url(../images/headbkg.GIF);
+	background-image: url(../images/headbkg.png);
 	height: 69px;
 }
 td.popupheader {
 	background-color: #333399;
-	background-image: url(../images/headbkg.GIF);
+	background-image: url(../images/headbkg.png);
 	height: 20px;
 }
 td.noborder {
 	border: none;
+}
+table.logintable {
+        background-image: url(../images/logindragon.png);
+        height: 234px;
 }
 table.noborder {
 	border: none;
@@ -174,6 +177,7 @@ a.motd {
 	clear: none;
 }
 a:hover.motd {
+/*
 	height: 14px;
 	width: 179px;
 	background-color: #806B4D;
@@ -181,6 +185,7 @@ a:hover.motd {
 	border-bottom: thin solid #FF9900;
 	border-right: thin solid #FF9900;
 	border-left: thin solid #FF9900;
+*/
 }
 a.hotmotd {
 	text-decoration: none;
@@ -199,12 +204,12 @@ a.hotmotd {
 	border-left: thin solid #FF9900;
 }
 .pagetitle {
-	font-family: "Old English Text MT", "Times New Roman";
+	font-family: "Old English Text MT", "Times New Roman", serif;
 	font-size: 20px;
 	color: #FFFFFF;
 }
 td.footer {
-	background-image: url(../images/rule.gif);
+	background-image: url(../images/rule.png);
 	background-repeat: repeat-x;
 	background-position: top;
 }

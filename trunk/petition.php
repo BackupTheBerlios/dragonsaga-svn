@@ -4,9 +4,9 @@ if ($_GET['op']=="primer"){
 popup_header("New Player Primer");
 	output("
 <a href='petition.php?op=faq'>Contents</a>`n`n
-`^Welcome to the Legend of the Green Dragon New Player Primer`n`n
+`^Welcome to the Dragon Saga New Player Primer`n`n
 `^`bThe Village Square`b`n`@
-Legend of the Green Dragon (LotGD) is turning out to be a fairly expansive game, with a lot of areas to explore.  It's easy to get lost with all that there is to do out there,
+The Dragon Saga (TDS) is turning out to be a fairly expansive game, with a lot of areas to explore.  It's easy to get lost with all that there is to do out there,
 so keep in mind that the village square is pretty much the center of the game.  This area will give you access to most other areas that you can get to, with a few exceptions 
 (we'll talk about those in a little while).  If you ever get lost, or are not sure what's going on, head to the village square and regain your bearings.`n
 `n
@@ -33,7 +33,7 @@ output("
 `n
 `n
 `^`bDeath`b`n`@
-Death is a natural part of any games that contains some kind of combat.  In Legend of the Green Dragon, being dead is only a temporary condition.  When you die, you'll
+Death is a natural part of any games that contains some kind of combat.  In The Dragon Saga, being dead is only a temporary condition.  When you die, you'll
 lose any money that you had on hand (money in the bank is safe!), and some of the experience you've accumulated.  While you're dead, you can explore the land of the shades
 and the graveyard.  In the graveyard, you'll find Ramius the Overlord of Death.  He has certain things that he would like you to do for him, and in return, he will grant
 you special powers or favors.  The graveyard is one of those areas that you can't get to from the Village Square.  In fact, while you're dead, you can't go to the village
@@ -53,7 +53,7 @@ NOT get carried over from one day to the next (you can't build up a whole bunch 
 if (getsetting("pvp",1)){
 output("
 `^`bPvP (Player versus Player)`b`n`@
-Legend of the Green Dragon contains a PvP element, where players can attack each other.  As a new player, you are protected from PvP for your first ".getsetting("pvpimmunity",5) . " game days or until you accumulate " . getsetting("pvpminexp",1500) . ", unless
+The Dragon Saga contains a PvP element, where players can attack each other.  As a new player, you are protected from PvP for your first ".getsetting("pvpimmunity",5) . " game days or until you accumulate " . getsetting("pvpminexp",1500) . ", unless
 you choose to attack another player.  Some servers might have the PvP aspect turned off, in which case there is no chance that you'll be attacked by any other players.  You
 can tell if the server you play on has PvP turned off by looking in the Village Square for \"Slay Other Players.\"  If it's not there, you can't engage (or be engaged) in PvP.`n
 `n
@@ -100,9 +100,9 @@ Cookies are little bits of data that websites store on your computer so they can
 }else if ($_GET['op']=="faq"){
 popup_header("Frequently Asked Questions (FAQ)");
 output("
-`^Welcome to Legend of the Green Dragon. `n
+`^Welcome to The Dragon Saga. `n
 `n`@
-You wake up one day, and you're in a village for some reason.  You wander around, bemused, until you stumble upon the Village Square.  Once there you start asking lots of stupid questions.  People (who are mostly naked for some reason) throw things at you.  You escape by ducking into the Inn and find a rack of pamphlets by the door.  The title of the pamphlet reads: \"Everything You Wanted to Know About the LoGD, but Were Afraid to Ask.\"  Looking furtively around to make sure nobody's watching, you open one and read:`n
+You wake up one day, and you're in a village for some reason.  You wander around, bemused, until you stumble upon the Village Square.  Once there you start asking lots of stupid questions.  People (who are mostly naked for some reason) throw things at you.  You escape by ducking into the Inn and find a rack of pamphlets by the door.  The title of the pamphlet reads: \"Everything You Wanted to Know About the TDS, but Were Afraid to Ask.\"  Looking furtively around to make sure nobody's watching, you open one and read:`n
 `n
 \"So, you're a Newbie.  Welcome to the club.  Here you will find answers to the questions that plague you.  Well, actually you will find answers to the questions that plagued US.  So, here, read and learn, and leave us alone!\" `n
 `n
@@ -131,10 +131,7 @@ You can't.`n
 Well, sort of.  You can't find her until you've reached a certain level. When you're at that level, it will be immediately obvious.`n
 `n
 `^3.  How do I increase my level?`@`n
-Send us money.`n
-No, don't send money - you increase your experience by fighting creatures in the forest.  Once you've gotten enough experience, you can challenge your master in the village.`n
-`n
-Well, you can send us money if you want (see PayPal link)`n
+You increase your experience by fighting creatures in the forest.  Once you've gotten enough experience, you can challenge your master in the village.`n
 `n
 `^4.  Why can't I beat my master?`@`n
 He's far too wiley for the likes of you.`n
@@ -151,7 +148,7 @@ Right after the old one ends.`n
 `n
 `^7.  Arghhh, you guys are killing me with your smart answers - can't you just give me a straight answer?`@`n
 Nope.`n
-Well, okay, new days correspond with the clock in the village (can also be viewed in the inn).  When the clock strikes midnight, expect a new day to begin.  The number of times a clock in LoGD strikes midnight per calendar day may vary by server.  Beta server has 4 play days per calendar day, SourceForge server has 2.  Other servers depend on the admin.`nThis server has ".getsetting("daysperday",2) . " days per calendar day.`n
+Well, okay, new days correspond with the clock in the village (can also be viewed in the inn).  When the clock strikes midnight, expect a new day to begin.  The number of times a clock in TDS strikes midnight per calendar day may vary by server.  Beta server has 4 play days per calendar day, SourceForge server has 2.  Other servers depend on the admin.`nThis server has ".getsetting("daysperday",2) . " days per calendar day.`n
 `n
 `^8.  Something's gone wrong!!!  How do I let you know?`@`n
 Send money.  Better yet, send a petition.  A petition should not say 'this doesn't work' or 'I'm broken' or 'I can't log in' or 'yo.  Sup?'  A petition *should* be very complete in describing *what* doesn't work.  Please tell us what happened, what the error message is (copy and paste is your friend), when it occurred, and anything else that may be helpful.  \"I'm broken\" is not helpful.  \"There are salmon flying out of my moniter when I log in\" is much more descriptive.  And humorous.  Although there's not much we can do about it.  In general, please be patient with these requests - many people play the game, and as long as the admin is swamped with 'yo - Sup?' petitions, it will take some time to sift through them. `n
@@ -242,7 +239,7 @@ Lots of at-home facials, my dear!!  MightyE especially enjoys the Grapefruit Ess
 		$p = $session[user][password];
 		unset($session[user][password]);
 		/*
-		mail(getsetting("gameadminemail","postmaster@localhost"),"LoGD Petition",output_array($_POST,"POST:").output_array($session,"Session:"));
+		mail(getsetting("gameadminemail","postmaster@localhost"),"TDS Petition",output_array($_POST,"POST:").output_array($session,"Session:"));
 		$sql = "SELECT acctid FROM accounts WHERE emailaddress='".getsetting("gameadminemail","postmaster@localhost")."'";
 		//output($sql);
 		$result = db_query($sql);

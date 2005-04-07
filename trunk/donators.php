@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 isnewday(3);
 
@@ -32,7 +32,7 @@ if ($_GET['op']==""){
 		$row = db_fetch_assoc($result);
 		output("<tr class='".($i%2?"trlight":"trdark")."'>",true);
 		output("<td>",true);
-		output("`^{$row['name']}`0",true);
+		output("`^".$row['name']."`0",true);
 		output("</td><td>`@".number_format($row['donation'])."`0</td>",true);
 		output("<td>`%".number_format($row['donationspent'])."`0</td>",true);
 		output("</tr>",true);
@@ -48,10 +48,10 @@ if ($_GET['op']==""){
 	output("Confirm the addition of {$_POST['amt']} points to:`n`n");
 	for ($i=0;$i<db_num_rows($result);$i++){
 		$row = db_fetch_assoc($result);
-		output("<a href='donators.php?op=add2&id={$row['acctid']}&amt={$_POST['amt']}'>",true);
-		output($row['name']." ({$row['donation']}/{$row['donationspent']})");
+		output("<a href='donators.php?op=add2&id=".$row['acctid']."&amt=".$_POST['amt']."'>",true);
+		output($row['name']." (".$row['donation']."/".$row['donationspent'].")");
 		output("</a>`n",true);
-		addnav("","donators.php?op=add2&id={$row['acctid']}&amt={$_POST['amt']}");
+		addnav("","donators.php?op=add2&id=".$row['acctid']."&amt=".$_POST['amt']."");
 	}
 }
 page_footer();

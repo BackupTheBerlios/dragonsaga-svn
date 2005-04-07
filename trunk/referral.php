@@ -3,7 +3,6 @@ require_once "common.php";
 
 if ($session['user']['loggedin']){
 	page_header("Referral Page");
-	addnav("L?Return to the Lodge","lodge.php");
 	output("You will automatically receive 25 points for each person that you refer to this website who makes it to level 4.
 	`n`n
 	How does the site know that I referred a person?`n
@@ -27,8 +26,8 @@ if ($session['user']['loggedin']){
 	output("</table>",true);
 	page_footer();
 }else{
-	page_header("Welcome to Legend of the Green Dragon");
-	output("`@Legend of the Green Dragon is a remake of the classic BBS Door Game Legend of the Red Dragon.  
+	page_header("Welcome to The Dragon Saga");
+	output("`@The Dragon Saga is a remake of the classic BBS Door Game Legend of the Red Dragon.  
 	Adventure in to the classic realm that was one of the world's very first multiplayer roleplaying games!
 	");
 	addnav("Create a character","create.php?r=".HTMLEntities($_GET['r']));

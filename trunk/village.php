@@ -38,7 +38,6 @@ if (@file_exists("pavilion.php")) addnav("E?Eye-catching Pavilion","pavilion.php
 addnav("Tavern Street");
 addnav("I?The Inn`0","inn.php",true);
 addnav("Merick's Stables","stables.php");
-if (@file_exists("lodge.php"))	addnav("L?Hunter's Lodge","lodge.php");
 addnav("G?The Garden", "gardens.php");
 addnav("Curious Looking Rock", "rock.php");
 
@@ -49,7 +48,7 @@ addnav("Preferences","prefs.php");
 addnav("List Warriors","list.php");
 addnav("`%Quit`0 to the fields","login.php?op=logout",true);
 
-if ($session[user][superuser]>=2){
+if ($session['user']['superuser']>=2){
   addnav("X?`bSuperuser Grotto`b","superuser.php");
 }
 //let users try to cheat, we protect against this and will know if they try.
@@ -69,7 +68,7 @@ addnav("","stats.php");
 addnav("","viewpetition.php");
 addnav("","weaponeditor.php");
 
-if ($session[user][superuser]){
+if ($session['user']['superuser']){
   addnav("New Day","newday.php");
 }
 
@@ -83,7 +82,7 @@ if (getsetting("topwebid", 0) != 0) {
 }
 
 page_header("Village Square");
-//output("<img src='images/trans.gif' width='1' height='700' alt='' align='right'>",true);
+//output("<img src='images/trans.png' width='1' height='700' alt='' align='right'>",true);
 output("`@`c`bVillage Square`b`cThe village hustles and bustles.  No one really notices that you're standing there.");
 output("  You see various shops and businesses along main street.  There is a curious looking rock to one side.  ");
 output("On every side the village is surrounded by deep dark forest.`n`n");

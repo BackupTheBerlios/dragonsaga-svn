@@ -1,4 +1,4 @@
-<?	
+<?php
 require_once "common.php";
 isnewday(2);
 
@@ -53,26 +53,26 @@ while (list($key,$val)=each($creaturestattable)){
 
 page_header("Creature Editor");
 
-if ($session[user][superuser] >= 2){
+if ($session['user']['superuser'] >= 2){
 	addnav("G?Return to the Grotto","superuser.php");
 	addnav("M?Return to the Mundane","village.php");
-	if ($HTTP_POST_VARS[save]<>""){
+	if ($HTTP_POST_VARS['save']<>""){
 		if (!isset($HTTP_POST_VARS['location'])) $HTTP_POST_VARS['location']=0;
-		if ($HTTP_POST_VARS[id]!=""){
+		if ($HTTP_POST_VARS['id']!=""){
 			$sql="UPDATE creatures SET ";
 			//unset($HTTP_POST_VARS[save]);
 			while (list($key,$val)=each($HTTP_POST_VARS)){
 				if (substr($key,0,8)=="creature") $sql.="$key = \"$val\", ";
 			}
-			reset($creaturestats[(int)$HTTP_POST_VARS[creaturelevel]]);
-			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS[creaturelevel]])){
+			reset($creaturestats[(int)$HTTP_POST_VARS['creaturelevel']]);
+			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS['creaturelevel']])){
 				if ( $key!="creaturelevel" && substr($key,0,8)=="creature"){
 					$sql.="$key = \"".addslashes($val)."\", ";
 				}
 			}
 			$sql.=" location=\"".(int)($_POST['location'])."\", ";
 			//$sql = substr($sql,0,strlen($sql)-2);
-			$sql.= " createdby=\"".addslashes($session[user][login])."\" ";
+			$sql.= " createdby=\"".addslashes($session['user']['login'])."\" ";
 			$sql.= " WHERE creatureid='$HTTP_POST_VARS[id]'";
 			//output($sql);
 			db_query($sql) or output("`\$".db_error(LINK)."`0`n`#$sql`0`n");
@@ -88,8 +88,8 @@ if ($session[user][superuser] >= 2){
 					//$sql.="$key = \"$val\", ";
 				}
 			}
-			reset($creaturestats[(int)$HTTP_POST_VARS[creaturelevel]]);
-			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS[creaturelevel]])){
+			reset($creaturestats[(int)$HTTP_POST_VARS['creaturelevel']]);
+			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS['creaturelevel']])){
 				if ($key!="creaturelevel"){
 					//$sql.="$key = \"".addslashes($val)."\", ";
 					array_push($cols,$key);
@@ -101,17 +101,17 @@ if ($session[user][superuser] >= 2){
 			db_query($sql);
 		}
 	}
-	if ($HTTP_GET_VARS[op]=="del"){
-		$sql = "DELETE FROM creatures WHERE creatureid = \"$HTTP_GET_VARS[id]\"";
+	if ($HTTP_GET_VARS['op']=="del"){
+		$sql = "DELETE FROM creatures WHERE creatureid='".$HTTP_GET_VARS['id']."'";
 		db_query($sql);
 		if (db_affected_rows()>0){
 			output("Creature deleted`n`n");
 		}else{
 			output("Creature not deleted: ".db_error(LINK));
 		}
-		$HTTP_GET_VARS[op]="";
+		$HTTP_GET_VARS['op']="";
 	}
-	if ($HTTP_GET_VARS[op]==""){
+	if ($HTTP_GET_VARS['op']==""){
 		$sql = "SELECT * FROM creatures ORDER BY creaturelevel,creaturename";
 		$result = db_query($sql) or die(db_error(LINK));
 		addnav("Add a creature","creatures.php?op=add");
@@ -119,30 +119,30 @@ if ($session[user][superuser] >= 2){
 		addnav("","creatures.php");
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			if ($row[creaturelevel]==17 || $row[creaturelevel]==18){
+			if ($row['creaturelevel']==17 || $row['creaturelevel']==18){
 				output("<tr><td> [Edit|Del] </td><td>",true);
 			}else{
-				output("<tr><td> [<a href='creatures.php?op=edit&id=$row[creatureid]'>Edit</a>|".
-				"<a href='creatures.php?op=del&id=$row[creatureid]' onClick='return confirm(\"Are you sure you wish to delete this creature?\");'>Del</a>] </td><td>",true);
-				addnav("","creatures.php?op=edit&id=$row[creatureid]");
-				addnav("","creatures.php?op=del&id=$row[creatureid]");
+				output("<tr><td> [<a href='creatures.php?op=edit&id='".$row['creatureid']."'>Edit</a>|".
+				"<a href='creatures.php?op=del&id='".$row['creatureid']."' onClick='return confirm(\"Are you sure you wish to delete this creature?\");'>Del</a>] </td><td>",true);
+				addnav("","creatures.php?op=edit&id='".$row['creatureid']."'");
+				addnav("","creatures.php?op=del&id='".$row['creatureid']."'");
 			}
-			output($row[creaturename]);
+			output($row['creaturename']);
 			output("</td><td>",true);
-			output($row[creaturelevel]);
+			output($row['creaturelevel']);
 			output("</td><td>",true);
-			output($row[creatureweapon]);
+			output($row['creatureweapon']);
 			output("</td><td>",true);
-			output($row[creaturelose]);
+			output($row['creaturelose']);
 			output("</td><td>",true);
-			output($row[createdby]);
+			output($row['createdby']);
 			output("</td></tr>",true);
 		}
 		output("</table>",true);
 	}else{
-		if ($HTTP_GET_VARS[op]=="edit" || $HTTP_GET_VARS[op]=="add"){
-			if ($HTTP_GET_VARS[op]=="edit"){
-				$sql = "SELECT * FROM creatures WHERE creatureid=$HTTP_GET_VARS[id]";
+		if ($HTTP_GET_VARS['op']=="edit" || $HTTP_GET_VARS['op']=="add"){
+			if ($HTTP_GET_VARS['op']=="edit"){
+				$sql = "SELECT * FROM creatures WHERE creatureid='".$HTTP_GET_VARS['id']."'";
 				$result = db_query($sql) or die(db_error(LINK));
 				if (db_num_rows($result)<>1){
 					output("`4Error`0, that creature was not found!");
@@ -153,12 +153,12 @@ if ($session[user][superuser] >= 2){
 			output("<form action='creatures.php' method='POST'>",true);
 			output("<input name='id' value=\"".HTMLEntities($HTTP_GET_VARS[id])."\" type='hidden'>",true);
 			output("<table border='0' cellpadding='2' cellspacing='0'>",true);
-			output("<tr><td>Creature Name:</td><td><input name='creaturename' maxlength='50' value=\"".HTMLEntities($row[creaturename])."\"></td></tr>",true);
-			output("<tr><td>Weapon: </td><td><input name='creatureweapon' maxlength='50' value=\"".HTMLEntities($row[creatureweapon])."\"></td></tr>",true);
-			output("<tr><td colspan='2'>Death Message: <br><input name='creaturelose' size='65' maxlength='120' value=\"".HTMLEntities($row[creaturelose])."\"></td></tr>",true);
+			output("<tr><td>Creature Name:</td><td><input name='creaturename' maxlength='50' value='".HTMLEntities($row['creaturename'])."'></td></tr>",true);
+			output("<tr><td>Weapon: </td><td><input name='creatureweapon' maxlength='50' value='".HTMLEntities($row['creatureweapon'])."'></td></tr>",true);
+			output("<tr><td colspan='2'>Death Message: <br><input name='creaturelose' size='65' maxlength='120' value='".HTMLEntities($row['creaturelose'])."'></td></tr>",true);
 			output("<tr><td>Level: </td><td><select name='creaturelevel'>",true);
 			for ($i=1;$i<=16;$i++){
-				output("<option value='$i'".($row[creaturelevel]==$i?" selected":"").">$i</option>\n",true);
+				output("<option value='$i'".($row['creaturelevel']==$i?" selected":"").">$i</option>\n",true);
 			}
 			output("</select></td></tr>",true);
 			output("<tr><td>Creature is also in Graveyard</td><td><input type='radio' name='location' value='1'".($row['location']==1?" checked":"").">Yes <input type='radio' name='location' value='0'".($row['location']==0?" checked":"").">No </td></tr>",true);
@@ -173,8 +173,8 @@ if ($session[user][superuser] >= 2){
 	}
 }else{
 	output("For attempting to defile the gods, you have been smitten down!");
-	addnews("`&".$session[user][name]." was smote down for attempting to defile the gods (they tried to hack superuser pages).");
-	$session[user][hitpoints]=0;
+	addnews("`&".$session['user']['name']." was smote down for attempting to defile the gods (they tried to hack superuser pages).");
+	$session['user']['hitpoints']=0;
 }
 page_footer();
 ?>

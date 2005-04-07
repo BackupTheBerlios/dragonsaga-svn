@@ -14,7 +14,7 @@ $realsecssofartoday = $secssofartoday / getsetting("daysperday",4);
 
 checkday();
 
-if ($_GET[op]==""){
+if ($_GET['op']==""){
 	$order=array("1","2");
 	while (list($key,$val)=each($order)){
 		switch($val){
@@ -67,7 +67,7 @@ if ($_GET[op]==""){
 	}
 	
 	addnav("Game Setup Info","about.php?op=setup");
-}elseif($_GET[op]=="setup"){
+}elseif($_GET['op']=="setup"){
 	addnav("About LoGD","about.php");
 	$setup = array(
 		"Game Setup,title",
@@ -130,7 +130,7 @@ if ($_GET[op]==""){
 }else{
 
 }
-if ($session[user][loggedin]) {
+if ($session['user']['loggedin']) {
 	addnav("Return to the news","news.php");
 }else{
 	addnav("Login Page","index.php");

@@ -6,14 +6,14 @@ addnav("Return to the village","village.php");
 
 $repaygold = round($playermount['mountcostgold']*2/3,0);
 $repaygems = round($playermount['mountcostgems']*2/3,0);
-if ($_GET[op]==""){
+if ($_GET['op']==""){
 	checkday();
 	output("`7Behind the inn, and a little to the left of Pegasus Armor, is as fine a stable as one
 	might expect to find in any village. 
 	In it, Merick, a burly looking dwarf tends to various beasts.
 	`n`n
 	You approach, and he whirls around, pointing a pitchfork in your general direction, \"`&Ach, 
-	sorry m'".($session[user][sex]?"lass":"lad").", I dinnae hear ya' comin' up on me, an' I thoht
+	sorry m'".($session['user']['sex']?"lass":"lad").", I dinnae hear ya' comin' up on me, an' I thoht
 	fer sure ye were Cedrik; he what been tryin' to improve on his dwarf tossin' skills.  Naahw, wha'
 	can oye do fer ya?`7\" he asks.  ");
 }elseif($_GET['op']=="examine"){

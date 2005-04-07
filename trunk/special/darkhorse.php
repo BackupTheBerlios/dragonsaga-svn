@@ -163,7 +163,7 @@ case "oldman":
 			output("`3\"`7".($stones['side']=="likepair"?"Like pair for you, and unlike pair":"Unlike pair for you, and like pair")." for me it is then!");
 			output("How much do you bet?`3\"");
 			output("<form action='forest.php?op=oldman&game=stones' method='POST'><input name='bet' id='bet'><input type='submit' class='button' value='Bet'></form>",true);
-			output("<script language='JavaScript'>document.getElementById('bet').focus();</script>",true);
+			output("<script type='text/javascript'>document.getElementById('bet').focus();</script>",true);
 			addnav("","forest.php?op=oldman&game=stones");
 			addnav("Never Mind","forest.php?op=oldman");
 		}elseif ($stones['red']+$stones['blue'] > 0 && $stones['oldman']<=8 && $stones['player']<=8){
