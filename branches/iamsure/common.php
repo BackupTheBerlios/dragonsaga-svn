@@ -616,10 +616,11 @@ function charstats(){
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
 		$spirits=array("-6"=>"Resurrected","-2"=>"Very Low","-1"=>"Low","0"=>"Normal","1"=>"High","2"=>"Very High");
-		if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
+        if ($u[alive]){ }else{ $spirits[$u[spirits]] = "DEAD"; }
 		reset($session['bufflist']);
 		$atk=$u['attack'];
-		$def=$u['defence'];
+		$def=$u['defense'];
+  
 		while (list($key,$val)=each($session['bufflist'])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
 			if (isset($val['atkmod'])) $atk *= $val['atkmod'];
@@ -628,7 +629,7 @@ function charstats(){
 		$atk = round($atk, 2);
 		$def = round($def, 2);
 		$atk = ($atk == $u['attack'] ? "`^" : ($atk > $u['attack'] ? "`@" : "`$")) . "`b$atk`b`0";
-		$def = ($def == $u['defence'] ? "`^" : ($def > $u['defence'] ? "`@" : "`$")) . "`b$def`b`0";
+		$def = ($def == $u['defense'] ? "`^" : ($def > $u['defense'] ? "`@" : "`$")) . "`b$def`b`0";
 
 		if (count($session['bufflist'])==0){
 			$buffs.=appoencode("`^None`0",true);
@@ -636,7 +637,8 @@ function charstats(){
 		$charstat=appoencode(templatereplace("statstart")
 		.templatereplace("stathead",array("title"=>"Vital Info"))
 		.templatereplace("statrow",array("title"=>"Name","value"=>appoencode($u['name'],false)))
-		,true);
+                ,true);
+
 		if ($session['user']['alive']){
 
 			$charstat.=appoencode(

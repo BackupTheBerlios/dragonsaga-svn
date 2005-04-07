@@ -616,19 +616,12 @@ function charstats(){
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
 		$spirits=array("-6"=>"Resurrected","-2"=>"Very Low","-1"=>"Low","0"=>"Normal","1"=>"High","2"=>"Very High");
-        $job=array("0"=>"None","1"=>"Trashman","2"=>"Farmhand","3"=>"Seamstress","4"=>"Guardsman","5"=>"Carpenter","6"=>"Blacksmith","7"=>"Chef","8"=>"Hostess","9"=>"Lumberjack","10"=>"Rancher","11"=>"Goldminer","12"=>"Doctor","13"=>"Lawyer","14"=>"Judge","15"=>"Banker","16"=>"CEO");
-
-        // added so you can see the race in vitals
-        $races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf");
-        // added so you can see skills in vitals
-   		$skills = array(1=>"Dark Arts","Mystical Powers","Thievery");
-        $mounts = array(0=>"None",1=>"Pony",2=>"Gelding",3=>"Stallion",4=>"War Horse",5=>"Mastadon",6=>"Griffon",8=>"Goat",9=>"Raven",10=>"Eagle",11=>"Wyvern",12=>"Phoenix");
         if ($u[alive]){ }else{ $spirits[$u[spirits]] = "DEAD"; }
-		reset($session[bufflist]);
-		$atk=$u[attack];
-		$def=$u[defense];
+		reset($session['bufflist']);
+		$atk=$u['attack'];
+		$def=$u['defense'];
   
-		while (list($key,$val)=each($session[bufflist])){
+		while (list($key,$val)=each($session['bufflist'])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
 			if (isset($val['atkmod'])) $atk *= $val['atkmod'];
 			if (isset($val['defmod'])) $def *= $val['defmod'];
@@ -644,14 +637,14 @@ function charstats(){
 		$charstat=appoencode(templatereplace("statstart")
 		.templatereplace("stathead",array("title"=>"Vital Info"))
 		.templatereplace("statrow",array("title"=>"Name","value"=>appoencode($u['name'],false)))
-        .templatereplace("statrow",array("title"=>"Race","value"=>"".$races[$u['race']].""))
-        .templatereplace("statrow",array("title"=>"Skill","value"=>"".$skills[$u['specialty']]."")),true);
+                ,true);
 
 		if ($session['user']['alive']){
 
-			$charstat.=appoencode(templatereplace("statrow",array("title"=>"Hitpoints","value"=>"$u[hitpoints]`0/$u[maxhitpoints]"))
-//            .templatereplace("statrow",array("title"=>"Mana","value"=>"$u[mana]`0/$u[maxmana]"))
-			.templatereplace("statrow",array("title"=>"Turns","value"=>$u['turns'])),true);
+			$charstat.=appoencode(
+			templatereplace("statrow",array("title"=>"Hitpoints","value"=>"$u[hitpoints]`0/$u[maxhitpoints]"))
+			.templatereplace("statrow",array("title"=>"Turns","value"=>$u['turns']))
+			,true);
 		}else{
 			$charstat.=appoencode(
 			 templatereplace("statrow",array("title"=>"Soul Points","value"=>$u['soulpoints']))
@@ -664,38 +657,19 @@ function charstats(){
 		.($session['user']['alive']?
 			 templatereplace("statrow",array("title"=>"Attack","value"=>$atk))
 			.templatereplace("statrow",array("title"=>"Defense","value"=>$def))
-            .templatereplace("statrow",array("title"=>"Charm","value"=>$u['charm']))
-            .templatereplace("statrow",array("title"=>"Mount/Pet","value"=>"".$mounts[$u['hashorse'].""]))
-
-            .templatereplace("stathead",array("title"=>"Location info"))
-    	    .templatereplace("statrow",array("title"=>"Latitude","value"=>$u['latitude']." N"))
-		    .templatereplace("statrow",array("title"=>"Longitude","value"=>$u['longitude']." E"))
 			:
 			 templatereplace("statrow",array("title"=>"Psyche","value"=>10 + round(($u['level']-1)*1.5)))
 			.templatereplace("statrow",array("title"=>"Spirit","value"=>10 + round(($u['level']-1)*1.5)))
-            .templatereplace("statrow",array("title"=>"Favor","value"=>$u['deathpower']))
 			)
-        .templatereplace("stathead",array("title"=>"Miscellaneous info"))
-		.templatereplace("statrow",array("title"=>"Clan","value"=>$u['clan']))
-        .templatereplace("statrow",array("title"=>"Inventory","value"=>$inventory))
 		.templatereplace("statrow",array("title"=>"Gems","value"=>$u['gems']))
-        .templatereplace("statrow",array("title"=>"Gold","value"=>commas($u['gold']))),true);
-		if ($session[user][medhunt]==1){
-			$charstat.=appoencode(templatereplace("statrow",array("title"=>"Medallions","value"=>$medallion)),true);
-		}
-		$charstat.=appoencode(
-        // added for the clickable potion mod
-        templatereplace("statrow",array("title"=>"Potions","value"=>$potion))
-        // end mod
-        .templatereplace("statrow",array("title"=>"Exp","value"=>expbar($u)))
-		.templatereplace("statrow",array("title"=>"Head","value"=>stripslashes($u['headgear'])))
-		.templatereplace("statrow",array("title"=>"Body","value"=>stripslashes($u['armor'])))
-		.templatereplace("statrow",array("title"=>"Right","value"=>stripslashes($u['weapon'])))
-  		.templatereplace("statrow",array("title"=>"Left","value"=>stripslashes($u['lefthand'])))
-  		.templatereplace("statrow",array("title"=>"Feet","value"=>stripslashes($u['feet']))), true);
-
-		if (!is_array($session[bufflist])) $session[bufflist]=array();
-		$charstat.=appoencode(templatereplace("statbuff",array("title"=>"Special","value"=>$buffs)),true);
+		.templatereplace("stathead",array("title"=>"Miscellaneous info"))
+		.templatereplace("statrow",array("title"=>"Gold","value"=>$u['gold']))
+		.templatereplace("statrow",array("title"=>"Experience","value"=>$u['experience']))
+		.templatereplace("statrow",array("title"=>"Weapon","value"=>$u['weapon']))
+		.templatereplace("statrow",array("title"=>"Armor","value"=>$u['armor']))
+		,true);
+		if (!is_array($session['bufflist'])) $session['bufflist']=array();
+		$charstat.=appoencode(templatereplace("statbuff",array("title"=>"Buffs:","value"=>$buffs)),true);
 		$charstat.=appoencode(templatereplace("statend"),true);
 		return $charstat;
 	}else{
@@ -706,7 +680,7 @@ function charstats(){
 		$result = db_query($sql) or die(sql_error($sql));
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row = db_fetch_assoc($result);
-			//$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row[loggedin]);
+			//$loggedin=(date("U") - strtotime($row['laston']) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
 			//if ($loggedin) {
 				$ret.=appoencode("`^$row[name]`n");
 				$onlinecount++;
@@ -718,35 +692,11 @@ function charstats(){
 	}
 }
 
-/* this causes major load on the server with larger player bases
-//mod for displaying users online *****************
-function onlinechars(){
-  global $session;
-  if ($session[loggedin]){
-      $sql="SELECT name,alive,location,sex,level,laston,loggedin,lastip,uniqueid,superuser FROM accounts WHERE locked=0 AND loggedin=1 AND laston>'".date("Y-m-d H:i:s",strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds"))."' ORDER BY level DESC";
-      $ret=appoencode(templatereplace(statstart).templatereplace("stathead",array("title"=>"Users Online")),true);
-      $result = db_query($sql) or die(sql_error($sql));
-      for ($i=0;$i<db_num_rows($result);$i++){
-        $row = db_fetch_assoc($result);
-        if($row[superuser]>0) $name = "@ ".$row[name];
-        $ret.=appoencode(templatereplace("statrow",array("title"=>"".$name."","value"=>" ")),true);
-        $onlinecount++;
-      }
-      $ret.=appoencode(templatereplace("statend"),true);
-      db_free_result($result);
-      if ($onlinecount==0) $ret.=appoencode("`iNone`i");
-      return $ret;
-  }
-}
-// end mod ****************************************
-*/
-
 $accesskeys=array();
 $quickkeys=array();
-
 function addnav($text,$link=false,$priv=false,$pop=false){
 	global $nav,$session,$accesskeys,$REQUEST_URI,$quickkeys;
-        $text = translate($text);
+	$text = translate($text);
 	if (date("m-d")=="04-01"){
 		$text = borkalize($text);
 	}
@@ -805,6 +755,7 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 						// output("Not found`n");
 					}
 				}
+				//
 			}
 			if ($key==""){
 				for ($i=0;$i<strlen($text); $i++){
@@ -1817,37 +1768,37 @@ $session['user']['laston']=date("Y-m-d H:i:s");
 $playermount = getmount($session['user']['hashorse']);
 
 $titles = array(
-        0=>array("Farmboy","Farmgirl"),
-        1=>array("Page", "Page"),
-        2=>array("Squire", "Squire"),
-        3=>array("Gladiator", "Gladiatrix"),
-        4=>array("Legionnaire","Legioness"),
-        5=>array("Centurion","Centurioness"),
-        6=>array("Sir","Madam"),
-        7=>array("Reeve", "Reeve"),
-        8=>array("Steward", "Stewardess"),
-        9=>array("Mayor", "Mayoress"),
-        10=>array("Baron", "Baroness"),
-        11=>array("Count", "Countess"),
-        12=>array("Viscount", "Viscountess"),
-        13=>array("Marquis", "Marquisette"),
-        14=>array("Chancellor", "Chancelress"),
-        15=>array("Prince", "Princess"),
-        16=>array("King", "Queen"),
-        17=>array("Emperor", "Empress"),
-        18=>array("Angel", "Angel"),
-        19=>array("Archangel", "Archangel"),
-        20=>array("Principality", "Principality"),
-        21=>array("Power", "Power"),
-        22=>array("Virtue", "Virtue"),
-        23=>array("Dominion", "Dominion"),
-        24=>array("Throne", "Throne"),
-        25=>array("Cherub", "Cherub"),
-        26=>array("Seraph", "Seraph"),
-        27=>array("Demigod", "Demigoddess"),
-        28=>array("Titan", "Titaness"),
-        29=>array("Archtitan", "Archtitaness"),
-        30=>array("Undergod", "Undergoddess"),
+	0=>array("Farmboy","Farmgirl"),
+	1=>array("Page", "Page"),
+	2=>array("Squire", "Squire"),
+	3=>array("Gladiator", "Gladiatrix"),
+	4=>array("Legionnaire","Legioness"),
+	5=>array("Centurion","Centurioness"),
+	6=>array("Sir","Madam"),
+	7=>array("Reeve", "Reeve"),
+	8=>array("Steward", "Stewardess"),
+	9=>array("Mayor", "Mayoress"),
+	10=>array("Baron", "Baroness"),
+	11=>array("Count", "Countess"),
+	12=>array("Viscount", "Viscountess"),
+	13=>array("Marquis", "Marquisette"),
+	14=>array("Chancellor", "Chancelress"),
+	15=>array("Prince", "Princess"),
+	16=>array("King", "Queen"),
+	17=>array("Emperor", "Empress"),
+	18=>array("Angel", "Angel"),
+	19=>array("Archangel", "Archangel"),
+	20=>array("Principality", "Principality"),
+	21=>array("Power", "Power"),
+	22=>array("Virtue", "Virtue"),
+	23=>array("Dominion", "Dominion"),
+	24=>array("Throne", "Throne"),
+	25=>array("Cherub", "Cherub"),
+	26=>array("Seraph", "Seraph"),
+	27=>array("Demigod", "Demigoddess"),
+	28=>array("Titan", "Titaness"),
+	29=>array("Archtitan", "Archtitaness"),
+	30=>array("Undergod", "Undergoddess"),
 );
 
 $beta = (getsetting("beta",0) == 1 || $session['user']['beta']==1);
