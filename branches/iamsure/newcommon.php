@@ -294,7 +294,7 @@ function forest($noshowmessage=false) {
                   // Skip non php files (including directories)
                   if (strpos($entry, ".php") === false) continue;
                   // Skip any hidden files
-                  if (substr($entry,0,1)!="."){
+                if (substr($entry,0,1)!="."){
 	  	output("<a href='forest.php?specialinc=$entry'>$entry</a>`n", true);
 		addnav("","forest.php?specialinc=$entry");
 			}
@@ -608,106 +608,10 @@ function templatereplace($itemname,$vals=false){
 	return $out;
 }
 
-// expbar, hungerbar & thirstbar mods
-function expbar() {
-    global $session;
-    $exparray=array(1=>100,204,349,616,1141,2100,3724,6288,10117,15581,23100,33145,46228,62916,83820,109600,140965,178668,223517,276360,338100,409685,492109,586416,693700,815100,951804,1105049,1276116,1466340,1677100,1909825,2165989,2447116,2754780,3090600,3456245,3853429,4283916,4749520,5252100,5793564,6375869,7001016,7671061,8388100,9154284,9971808,10842916,11769901,12755100,13800904,14909748,16084116,17326541,18639600,20025924,21488188,23029116,24651481,26358100,28151844,30035629,32012416,34085221,36257100,38531164,40910568,43398516,45998261,48713100,51546384,54501509,57581916,60791101,64132600,67610004,71226948,74987116,78894241,82952100,87164524,91535388,96068617,100768181,105638100,110682444,115905328,121310917,126903420,132687100,138666264,144845268,151228517,157820460,164625600,171648484,178893708,186365917,194069801);
-//	while (list($key,$val)=each($exparray)){
-///		$exparray[$key]= round($val + ($session['user']['dragonkills']/4) * $session['user']['level'] * 100,0);
-//	}
-    $min = $exparray[$session['user']['level']-1];
-    $exp = $session['user']['experience'];
-	$req=$exparray[$session['user']['level']];
-    if ($req-$min > 0) $nonpct = round(($req-$exp)/($req-$min) * 100, 0);
-        else $nonpct = 0;
-        $pct = 100-$nonpct;
-    $u = "<font face=\"verdana\" size=1>" . commas($exp) . "/" . commas($req) . "<br><table style=\"border: solid 1px #000000\" cellspacing=\"0\" width=\"70\" height=\"6\">";
-    if ($pct > 0){
-        $u = $u . "<tr><td width=\"" . $pct . "%\" bgcolor=\"red\"></td>";
-        }
-    if ($nonpct >= 0){
-        $u = $u . "<td width=\"".$nonpct."%\" bgcolor=\"white\"></td></tr></table>";
-    }else {
-        $u = $u . "</tr></table>";
-    }
-return($u);
-}
-
-function hungerbar() {
-    global $session;
-    $hmax = 100;
-    $curhunger = $session['user']['hungry'];
-    $pct = ($curhunger/$hmax)*100;
-    $nonpct = $hmax - $pct;
-    $u = "<table style=\"border: solid 1px #000000\" cellspacing=\"0\" width=\"70\" height=\"6\">";
-    if ($pct > 0){
-        $u = $u . "<tr><td width=\"".$pct."%\" bgcolor=\"blue\"></td>";
-        }
-    if ($nonpct > 0){
-        $u = $u . "<td width=\"".$nonpct."%\" bgcolor=\"white\"></td></tr></table>";
-    }else {
-        $u = $u."</tr></table>";
-    }
-return($u);
-}
-
 function charstats(){
 	global $session;
 	$u =& $session['user'];
 	if ($session['loggedin']){
-        // clickable potion mod
-        $currentpage=$_SERVER['REQUEST_URI'];
-
-        if(strstr($currentpage, "?") !=""){
-            $position=strrpos($currentpage,"?");
-            $currentpage=substr($currentpage,0,$position);
-        }
-        $currentpage=str_replace("/logd97/","",$currentpage);
-        if($currentpage != "usepotion.php" || $currentpage != "usechow.php"){
-            $session['user']['pqrestorepage']=$currentpage;
-        }
-    global $badguy;
-	for ($i=0;$i<6;$i+=1){
-		if ($session['user']['potion']>$i){
-			if ($badguy['creaturename']<>"" or $session['user']['alive']==0 or strstr($currentpage, "inventory") !="" or strstr($currentpage, "usepotion") !="" or strstr($currentpage, "usechow") !="" or strstr($currentpage, "newday") !="" or strstr($currentpage, "inventory") !=""){
-				$potion.="<img src=\"./images/potion.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 20px;\">";
-			}else{
-				$potion.="<a href=\"usepotion.php\"><img src=\"./images/potion.gif\" title=\"\" alt=\"\" style=\"border: 0px solid ; width: 14px; height: 20px;\"></a>";
-				addnav("","usepotion.php");
-			}
-		}else{
-			$potion.="<img src=\"./images/potionclear.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 20px;\">";
-		}
-	}
-    // end clickable potion mod
-
-	//begin medallion meter
-	for ($i=0;$i<6;$i+=1){
-		if ($session['user']['medallion']>$i){
-			$medallion.="<img src=\"./images/medallion.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 16px;\">";
-		}else{
-			$medallion.="<img src=\"./images/medallionclear.gif\" title=\"\" alt=\"\" style=\"width: 14px; height: 16px;\">";
-		}
-	}
-	//end medallion meter
-
-    // inventory mod
-    $currentpage=$_SERVER['REQUEST_URI'];
-    if (strstr($currentpage, "?") !=""){
-        $position=strrpos($currentpage,"?");
-        $currentpage=substr($currentpage,0,$position);
-    }
-    $currentpage=str_replace("/logd97/","",$currentpage);
-    if($currentpage != "inventory.php"){
-        $session['user']['invrestorepage']=$currentpage;
-    }
-        if($badguy['creaturename']<>"" or $session['user']['alive']==0 or strstr($currentpage, "inventory") !="" or strstr($currentpage, "usepotion") !="" or strstr($currentpage, "newday") !=""){
-            $inventory.="<img src=\"./images/chest.gif\" border=\"0\">";
-        } else {
-            $inventory.="<a href=\"inventory.php\"><img src=\"./images/chest.gif\" border=\"0\"></a>";
-            addnav("","inventory.php");
-        }
-        // end mod
 		$u['hitpoints']=round($u['hitpoints'],0);
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
@@ -842,7 +746,7 @@ $quickkeys=array();
 
 function addnav($text,$link=false,$priv=false,$pop=false){
 	global $nav,$session,$accesskeys,$REQUEST_URI,$quickkeys;
-	$text = $text;
+        $text = translate($text);
 	if (date("m-d")=="04-01"){
 		$text = borkalize($text);
 	}
@@ -1120,7 +1024,7 @@ function motdlink(){
 	}
 }
 
-function page_header($title="Age of Lords"){
+function page_header($title="The Dragon Saga"){
 	global $header,$SCRIPT_NAME,$session,$template;
 	$nopopups["login.php"]=1;
 	$nopopups["motd.php"]=1;
@@ -1135,7 +1039,7 @@ function page_header($title="Age of Lords"){
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
 	if (($row[motddate]>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
-		$header=str_replace("{headscript}","<script language='JavaScript'>".popup("motd.php")."</script>",$header);
+		$header=str_replace("{headscript}","<script type='text/javascript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
 	}else{
 		$header=str_replace("{headscript}","",$header);
@@ -1155,7 +1059,7 @@ function page_footer(){
 
 		unset($nestedtags[$key]);
 	}
-	$script.="<script language='JavaScript'>
+        $script.="<script type='text/javascript'>
 	<!--
 	document.onkeypress=keyevent;
 	function keyevent(e){
@@ -1907,54 +1811,43 @@ $pietre=array(1=>"`\$Poker's Stone",2=>"`^Love's Stone",3=>"`^Friendship's Stone
 
 $races=array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",5=>"Ogre",6=>"Goblin",7=>"Orc",8=>"Vampire",9=>"Stone Giant",10=>"Hobbit",11=>"Minator",12=>"Centar");
 
-$logd_version = "0.9.7+jt - build 1.03";
+$logd_version = "TDS-0.01";
 $session['user']['laston']=date("Y-m-d H:i:s");
 
 $playermount = getmount($session['user']['hashorse']);
 
 $titles = array(
-	0=>array("Farmboy","Farmgirl"),
-	1=>array("Page", "Page"),
-	2=>array("Squire", "Squire"),
-	3=>array("Protector", "Protector"),
-    4=>array("Defender", "Defender"),
-    5=>array("Guardian", "Guardian"),
-    6=>array("Veteran", "Veteran"),
-	7=>array("Gladiator", "Gladiatrix"),
-	8=>array("Legionnaire","Legioness"),
-	9=>array("Centurion","Centurioness"),
-    10=>array("Sir","Madam"),
-	11=>array("Reeve", "Reeve"),
-	12=>array("Steward", "Stewardess"),
-	13=>array("Mayor", "Mayoress"),
-	14=>array("Baron", "Baroness"),
-	15=>array("Count", "Countess"),
-	16=>array("Viscount", "Viscountess"),
-	17=>array("Marquis", "Marquisette"),
-    18=>array("Earl", "Earless"),
-    19=>array("Duke", "Duchess"),
-    20=>array("Regent", "Regentess"),
-	21=>array("Chancellor", "Chancelress"),
-    22=>array("Lord", "Lady"),
-	23=>array("Prince", "Princess"),
-	24=>array("King", "Queen"),
-	25=>array("Emperor", "Empress"),
-	26=>array("Angel", "Angel"),
-	27=>array("Archangel", "Archangel"),
-	28=>array("Principality", "Principality"),
-	29=>array("Power", "Power"),
-	30=>array("Virtue", "Virtue"),
-	31=>array("Dominion", "Dominion"),
-	32=>array("Throne", "Throne"),
-	33=>array("Cherub", "Cherub"),
-	34=>array("Seraph", "Seraph"),
-    35=>array("Seneschal", "Seneschal"),
-	36=>array("Titan", "Titaness"),
-	37=>array("Archtitan", "Archtitaness"),
- 	38=>array("Lessergod", "Lessergoddess"),
-	39=>array("Demigod", "Demigoddess"),
-	40=>array("Undergod", "Undergoddess"),
-	41=>array("God", "Goddess"),
+        0=>array("Farmboy","Farmgirl"),
+        1=>array("Page", "Page"),
+        2=>array("Squire", "Squire"),
+        3=>array("Gladiator", "Gladiatrix"),
+        4=>array("Legionnaire","Legioness"),
+        5=>array("Centurion","Centurioness"),
+        6=>array("Sir","Madam"),
+        7=>array("Reeve", "Reeve"),
+        8=>array("Steward", "Stewardess"),
+        9=>array("Mayor", "Mayoress"),
+        10=>array("Baron", "Baroness"),
+        11=>array("Count", "Countess"),
+        12=>array("Viscount", "Viscountess"),
+        13=>array("Marquis", "Marquisette"),
+        14=>array("Chancellor", "Chancelress"),
+        15=>array("Prince", "Princess"),
+        16=>array("King", "Queen"),
+        17=>array("Emperor", "Empress"),
+        18=>array("Angel", "Angel"),
+        19=>array("Archangel", "Archangel"),
+        20=>array("Principality", "Principality"),
+        21=>array("Power", "Power"),
+        22=>array("Virtue", "Virtue"),
+        23=>array("Dominion", "Dominion"),
+        24=>array("Throne", "Throne"),
+        25=>array("Cherub", "Cherub"),
+        26=>array("Seraph", "Seraph"),
+        27=>array("Demigod", "Demigoddess"),
+        28=>array("Titan", "Titaness"),
+        29=>array("Archtitan", "Archtitaness"),
+        30=>array("Undergod", "Undergoddess"),
 );
 
 $beta = (getsetting("beta",0) == 1 || $session['user']['beta']==1);
