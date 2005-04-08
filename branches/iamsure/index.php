@@ -26,7 +26,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 	log on to him or her soon!",
 	"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 	);
-	$sql = "UPDATE accounts SET sentnotice=1 WHERE acctid='$row[acctid]'";
+        $sql = "UPDATE accounts SET sentnotice=1 WHERE acctid='".$row['acctid']."'";
 	db_query($sql);
 }
 

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 
 if ($session['user']['alive']) redirect("village.php");
@@ -85,15 +85,15 @@ if ($battle){
 			$sql = "SELECT taunt FROM taunts ORDER BY rand(".e_rand().") LIMIT 1";
 			$result = db_query($sql) or die(db_error(LINK));
 			$taunt = db_fetch_assoc($result);
-			$taunt = str_replace("%s",($session[user][sex]?"her":"him"),$taunt[taunt]);
-			$taunt = str_replace("%o",($session[user][sex]?"she":"he"),$taunt);
-			$taunt = str_replace("%p",($session[user][sex]?"her":"his"),$taunt);
-			$taunt = str_replace("%x",($session[user][weapon]),$taunt);
-			$taunt = str_replace("%X",$badguy[creatureweapon],$taunt);
-			$taunt = str_replace("%W",$badguy[creaturename],$taunt);
-			$taunt = str_replace("%w",$session[user][name],$taunt);
+			$taunt = str_replace("%s",($session['user']['sex']?"her":"him"),$taunt['taunt']);
+			$taunt = str_replace("%o",($session['user']['sex']?"she":"he"),$taunt);
+			$taunt = str_replace("%p",($session['user']['sex']?"her":"his"),$taunt);
+			$taunt = str_replace("%x",($session['user']['weapon']),$taunt);
+			$taunt = str_replace("%X",$badguy['creatureweapon'],$taunt);
+			$taunt = str_replace("%W",$badguy['creaturename'],$taunt);
+			$taunt = str_replace("%w",$session['user']['name'],$taunt);
 			
-			addnews("`)".$session[user][name]."`) has been defeated in the graveyard by {$badguy['creaturename']}`n$taunt");
+			addnews("`)".$session['user']['name']."`) has been defeated in the graveyard by {$badguy['creaturename']}`n$taunt");
 			output("`b`&You have been defeated by `%{$badguy['creaturename']} `&!!!`n");
 			output("You may not torment any more souls today.");
 			$session['user']['gravefights']=0;
