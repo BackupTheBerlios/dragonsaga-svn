@@ -17,7 +17,7 @@ if ($HTTP_GET_VARS[op]==""){
 			output("`3\"`!You have 6 tries to guess the number I am thinking of, from 1 to 100.  Each time I will tell you if you are too high or too low.`3\"`n`n");
 			output("`3\"`!How much would you bet young ".($session[user][sex]?"lady":"man")."?`3\"");
 			output("<form action='forest.php?op=yes' method='POST'><input name='bet' id='bet'><input type='submit' class='button' value='Bet'></form>",true);
-			output("<script language='JavaScript'>document.getElementById('bet').focus();</script>",true); // Bravebrain
+			output("<script type='text/javascript'>document.getElementById('bet').focus();</script>",true); // Bravebrain
 			addnav("","forest.php?op=yes");
 			$session[user][specialmisc]=e_rand(1,100);
 		}else if($bet>$session[user][gold]){
@@ -55,7 +55,7 @@ if ($HTTP_GET_VARS[op]==""){
 						}
 						output("`3You have bet `^$bet`3.  What is your guess?");
 						output("<form action='forest.php?op=yes&bet=$bet&try=".(++$try)."' method='POST'><input name='guess' id='guess'><input type='submit' class='button' value='Guess'></form>",true);
-						output("<script language='JavaScript'>document.getElementById('guess').focus();</script>",true); // Bravebrain
+						output("<script type='text/javascript'>document.getElementById('guess').focus();</script>",true); // Bravebrain
 						addnav("","forest.php?op=yes&bet=$bet&try=$try");
 					}
 				}

@@ -33,13 +33,13 @@ function translate($input){
 	case "index.php":
 		$replace = array(
 			"The current time in the village is"=>"Die gegenwärtige Zeit im Dorf ist"
-			,"About LoGD"=>"Über LoGD"
+			,"About TDS"=>"Über TDS"
 			,"List Warriors"=>"Liste der Kämpfer"
-			,"LoGD Net"=>"LoGD Netz"
+			,"TDS Net"=>"TDS Netz"
 			,"FAQ (for new players)"=>"F.A.Q. (Für neue Spieler)"
 			,"Create a character"=>"Neuen Charakter machen"
 			,"Forgotten Password"=>"Passwort vergessen?"
-			,"New to LoGD?"=>"Neu hier?"
+			,"New to TDS?"=>"Neu hier?"
 			,array(
 				"<u>U</u>sername:"=>"Name:"
 				,"<u>P</u>assword:"=>"<u>P</u>asswort:"

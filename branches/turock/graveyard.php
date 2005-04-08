@@ -173,7 +173,7 @@ if ($_GET['op']==""){
 	addnav("","graveyard.php?op=haunt2");
 	output("Who would you like to haunt? <input name='name' id='name'> <input type='submit' class='button' value='Search'>",true);
 	output("</form>",true);
-	output("<script language='JavaScript'>document.getElementById('name').focus()</script>",true);
+	output("<script type='text/javascript'>document.getElementById('name').focus()</script>",true);
 	addnav("Return to the mausoleum","graveyard.php?op=enter");
 }elseif ($_GET['op']=="haunt2"){
 	$string="%";
@@ -190,7 +190,7 @@ if ($_GET['op']==""){
 		addnav("","graveyard.php?op=haunt2");
 		output("Who would you like to haunt? <input name='name' id='name'> <input type='submit' class='button' value='Search'>",true);
 		output("</form>",true);
-		output("<script language='JavaScript'>document.getElementById('name').focus()</script>",true);
+		output("<script type='text/javascript'>document.getElementById('name').focus()</script>",true);
 	}else{
 		output("`\$Ramius`) will allow you to try to haunt these people:`n");
 		output("<table cellpadding='3' cellspacing='0' border='0'>",true);

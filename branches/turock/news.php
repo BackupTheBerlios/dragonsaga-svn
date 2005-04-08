@@ -27,7 +27,7 @@ if ($session['user']['slainby']!=""){
 	$pageoffset*=$newsperpage;
 	$sql = "SELECT * FROM news WHERE newsdate='".date("Y-m-d",$timestamp)."' ORDER BY newsid DESC LIMIT $pageoffset,$newsperpage";
 	$result = db_query($sql) or die(db_error(LINK));
-	page_header("LoGD News");
+	page_header("TDS News");
 	$date=date("D, M j, Y",$timestamp);
 	
 	output("`c`b`!News for $date".($totaltoday>$newsperpage?" (Items ".($pageoffset+1)." - ".min($pageoffset+$newsperpage,$totaltoday)." of $totaltoday)":"")."`c`b`0");

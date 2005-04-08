@@ -247,6 +247,25 @@ if ($battle){
 	}
 }
 
+function addhistory($value){
+/*
+        global $session,$balance;
+        $history = unserialize($session['user']['history']);
+        $historycount=50;
+        for ($x=0;$x<$historycount;$x++){
+                if (!isset($history[$x])) $history[$x]=$balance;
+        }
+        array_shift($history);
+        array_push($history,$value);
+        $history = array_values($history);
+        for ($x=0;$x<$historycount;$x++){
+                $history[$x] = round($history[$x],4);
+                if ($session['user']['superuser']>=3) output("History: {$history[$x]}`n");
+        }
+        $session['user']['history']=serialize($history);
+ */
+}
+
 if ($HTTP_GET_VARS['op']==""){
 	// Need to pass the variable here so that we show the forest message
 	// sometimes, but not others.
