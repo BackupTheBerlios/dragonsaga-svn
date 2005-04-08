@@ -1,6 +1,6 @@
-<?
+<?php
 require_once "common.php";
-page_header("About Legend of the Green Dragon");
+page_header("About The Dragon Saga");
 $time = (strtotime(date("1971-m-d H:i:s",strtotime("now -".getsetting("gameoffsetseconds",0)." seconds"))))*getsetting("daysperday",4) % strtotime("1971-01-01 00:00:00"); 
 $time = gametime();
 $tomorrow = strtotime(date("Y-m-d H:i:s",$time)." + 1 day");
