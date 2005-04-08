@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 $old = getsetting("expireoldacct",45);
 $new = getsetting("expirenewacct",10);

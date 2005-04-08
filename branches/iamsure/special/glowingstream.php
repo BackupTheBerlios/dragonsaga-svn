@@ -1,4 +1,4 @@
-<?
+<?php
 if ($HTTP_GET_VARS[op]==""){
   output("`#You discover a small stream of faintly glowing water that babbles over round pure white stones.  You can sense a magical ");
 	output("power in the water.  Drinking this water may yield untold powers, or it may result ");

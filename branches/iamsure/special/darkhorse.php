@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 // The addition of the commentary is handled by the forest.php
 // addcommentary();

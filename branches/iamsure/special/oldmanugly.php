@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 if ($session[user][charm]>0){
 	output("`^An old man whacks you with an ugly stick, giggles and runs away!`n`nYou `%lose one`^ charm!`0");

@@ -1,4 +1,4 @@
-<?
+<?php
 $url=$_GET['url'];
 $dir = str_replace("\\","/",dirname($url)."/");
 $subdir = str_replace("\\","/",dirname($_SERVER['SCRIPT_NAME'])."/");

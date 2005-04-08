@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 
 if ($session['user']['loggedin']){
@@ -21,7 +21,7 @@ if ($session['user']['loggedin']){
 		output("</td><td>{$row['level']}</td><td>".($row['refererawarded']?"`@Yes!`0":"`\$No!`0")."</td></tr>",true);
 	}
 	if (db_num_rows($result)==0){
-		output("<tr><td colspan='3' align='center'>`iNone!</td><?tr>",true);
+		output("<tr><td colspan='3' align='center'>`iNone!</td></tr>",true);
 	}
 	output("</table>",true);
 	page_footer();

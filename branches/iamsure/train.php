@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 checkday();
 page_header("Bluspring's Warrior Training");

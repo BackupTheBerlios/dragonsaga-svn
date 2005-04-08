@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 $pvptime = getsetting("pvptimeout",600);
 $pvptimeout = date("Y-m-d H:i:s",strtotime("-$pvptime seconds"));

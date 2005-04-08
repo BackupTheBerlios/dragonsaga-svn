@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 if ($HTTP_GET_VARS[op]==""){
   output("`3An old man stops you as you wander through the woods.  \"`!How would you like to play a little ");

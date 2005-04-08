@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 if ($_GET['op']=="primer"){
 popup_header("New Player Primer");

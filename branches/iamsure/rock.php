@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("common.php");
 // This idea is Imusade's from lotgd.net
 if ($session['user']['dragonkills']>0 || $session['user']['superuser']>1){

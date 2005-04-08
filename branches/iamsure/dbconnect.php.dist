@@ -1,4 +1,4 @@
-<?
+<?php
 $DB_USER=""; //Database Username
 $DB_PASS=""; //Database Password
 $DB_HOST=""; //Database Hostname

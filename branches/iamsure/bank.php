@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 page_header("Ye Olde Bank");
 output("`^`c`bYe Olde Bank`b`c`6");

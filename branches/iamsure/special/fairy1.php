@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 if ($HTTP_GET_VARS[op]==""){
 	output("`%You encounter a fairy in the forest.  \"`^Give me a gem!`%\" she demands.  What do you do?");

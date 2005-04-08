@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 if ($HTTP_GET_VARS[op]==""){
   output("`@You encounter a strange old man!`n`n\"`#I am lost,`@\" he says, \"`#can you lead me back to town?`@\"`n`n");

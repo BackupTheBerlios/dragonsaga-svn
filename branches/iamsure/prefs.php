@@ -1,4 +1,4 @@
-<?
+<?php
 if (isset($_POST['template'])){
 	setcookie("template",$_POST['template'],strtotime("+45 days"));
 	$_COOKIE['template']=$_POST['template'];

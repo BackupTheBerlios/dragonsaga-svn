@@ -1,4 +1,4 @@
-<?
+<?php
 /* ******************* 
 Gold-mine 
 Written by Ville Valtokari

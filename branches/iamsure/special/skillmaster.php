@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 $session[user][specialinc]="skillmaster.php";
 switch((int)$session[user][specialty]){

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 page_header("Merick's Stables");
 

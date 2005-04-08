@@ -1,4 +1,4 @@
-<?
+<?php
 //Original idea by Sean McKillion
 //modifications by Eric Stevens
 //further modifications by JT Traub

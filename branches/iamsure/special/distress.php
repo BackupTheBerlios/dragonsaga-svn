@@ -1,4 +1,4 @@
-<?
+<?php
 /* *******************
 The damsel in distress was written by Joe Naylor
 Much of the event text was written by Matt Clift, I understand it is

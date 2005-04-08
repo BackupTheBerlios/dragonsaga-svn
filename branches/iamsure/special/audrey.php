@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($session)) exit();
 if ($HTTP_GET_VARS[op]==""){
 	output("`5You stumble across a clearing that is oddly quiet.  To one side are three baskets, tightly lidded.  Finding this 

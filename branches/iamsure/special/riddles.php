@@ -1,4 +1,4 @@
-<?
+<?php
 /* *******************
 The riddling gnome was written by Joe Naylor
 Feel free to use this any way you want to, but please give credit where due.
