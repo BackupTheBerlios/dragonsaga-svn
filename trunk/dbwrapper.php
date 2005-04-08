@@ -34,22 +34,21 @@ define('DBTYPE',"mysql");
 $dbqueriesthishit=0;
 
 function db_query($sql){
-	global $session,$dbqueriesthishit;
+	global $session,$dbqueriesthishit, $db;
 	$dbqueriesthishit++;
 	$fname = DBTYPE."_query";
 	$r = $fname($sql) or die(($session['user']['superuser']>=3 || 1?"<pre>".HTMLEntities($sql)."</pre>":"").db_error(LINK));
-	//$x = strpos($sql,"WHERE");
-	//if ($x!==false) {
-	//	$where = substr($sql,$x+6);
-	//	$x = strpos($where,"ORDER BY");
-	//	if ($x!==false) $where = substr($where,0,$x);
-	//	$x = strpos($where,"LIMIT");
-	//	if ($x!==false) $where = substr($where,0,$x);
-	//	$where = preg_replace("/'[^']*'/","",$where);
-	//	$where = preg_replace('/"[^"]*"/',"",$where);
-	//	$where = preg_replace("/[^a-zA-Z ]/","",$where);
-	//	mysql_query("INSERT DELAYED INTO queryanalysis VALUES (0,\"".addslashes($where)."\",0)");
-	//}
+	return $r;
+}
+
+function new_db_query($sql){
+	global $session,$dbqueriesthishit, $db;
+	$dbqueriesthishit++;
+	$fname = DBTYPE."_query";
+//	$r = $fname($sql) or die(($session['user']['superuser']>=3 || 1?"<pre>".HTMLEntities($sql)."</pre>":"").db_error(LINK));
+
+        $executed = $db->Execute($sql);
+        $r = $executed->fields;
 	return $r;
 }
 
@@ -87,7 +86,62 @@ function db_affected_rows($link=false){
 function db_pconnect($host,$user,$pass){
 	$fname = DBTYPE."_connect";
 	$r = $fname($host,$user,$pass);
+
+/* This is a horrible way to shoehorn this in, but for the time being, it works. */
+// Adodb handles database abstraction
+if (!@include_once ("./backends/adodb/adodb.inc.php"))
+{
+    echo "adodb.inc.php ";
+    echo "cannot be found, and it is required for TKI/BNT to run.";
+    die();
+}
+
+// Adodb handles database abstraction
+if (!@include_once ("./backends/adodb/adodb-perf.inc.php"))
+{
+    echo "adodb-perf.inc.php ";
+    echo "cannot be found, and it is required for TKI/BNT to run.";
+    die();
+}
+
+// XML Schema handler
+if (!@include_once ("./backends/adodb/adodb-xmlschema.inc.php"))
+{
+    echo "adodb-xmlschema.inc.php ";
+    echo "cannot be found, and it is required for TKI/BNT to run.";
+    die();
+}
+
+/*
+// encrypted session handler
+if (!@include_once ("./backends/adodb/session/adodb-cryptsession.php"))
+{
+    echo "adodb-cryptsession.php ";
+    echo "cannot be found, and it is required for TKI/BNT to run.";
+    die();
+}
+
+// compressed session handler
+if (!@include_once ("./backends/adodb/session/adodb-compress-gzip.php"))
+{
+    echo "adodb-compress-gzip.php ";
+    echo "cannot be found, and it is required for TKI/BNT to run.";
+    die();
+}
+*/
+global $dbport, $ADODB_SESSION_USER, $ADODB_SESSION_PWD, $ADODB_SESSION_CONNECT;
+global $db, $ADODB_SESSION_DB, $ADODB_SESSION_DRIVER;
+
+$dbport = '3306';
+$ADODB_SESSION_USER = $user;
+$ADODB_SESSION_PWD = $pass;
+$ADODB_SESSION_CONNECT = 'localhost';
+$ADODB_SESSION_DB = '';
+$ADODB_SESSION_DRIVER = 'mysqlt';
+
+adodb_connectdb();
 	return $r;
+
 }
 
 /*
@@ -107,5 +161,37 @@ function db_free_result($result){
 	$fname = DBTYPE."_free_result";
 	$r = $fname($result);
 	return $r;
+}
+
+function adodb_connectdb()
+{
+    // connect to database - and if we can't stop right there
+    global $dbport, $ADODB_SESSION_USER, $ADODB_SESSION_PWD, $ADODB_SESSION_CONNECT;
+    global $db, $ADODB_SESSION_DB, $ADODB_SESSION_DRIVER;
+
+    $ADODB_NEVER_PERSIST   = true; // Prevent any persistent connections ever.
+    $ADODB_COUNTRECS = false; // This *deeply* improves the speed of adodb.
+
+    if (!function_exists('mysql_connect'))
+    {
+        die ("The mysql_connect function is not loaded - you need the php-mysql module installed for this game to function");
+        return 0;
+    }
+
+    if (!empty($dbport))
+    {
+        $ADODB_SESSION_CONNECT.= ":$dbport";
+    }
+
+    $db = ADONewConnection("$ADODB_SESSION_DRIVER");
+    $db->debug=0;
+    $db->autoRollback = true;
+    $result = $db->Connect("$ADODB_SESSION_CONNECT", "$ADODB_SESSION_USER", "$ADODB_SESSION_PWD", "$ADODB_SESSION_DB");
+
+    if (!$result)
+    {
+        die ("Unable to connect to the database: " . $db->ErrorMsg());
+        return 0;
+    }
 }
 ?>

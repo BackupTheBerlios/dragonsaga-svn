@@ -12,6 +12,14 @@ $sql = "DELETE FROM accounts WHERE superuser<=1 AND (1=0\n"
 db_query($sql) or die(db_error(LINK));
 
 $old-=5;
+
+/*        $testing = $db->Execute("SELECT acctid, emailaddress FROM accounts where 1=0 " . 
+                                ($old>0?"OR (laston < \"".date("Y-m-d H:i:s",strtotime("-$old days"))."\")\n":"") .
+                                " AND emailaddress!='' AND sentnotice=0");*/
+        $testing = $db->Execute("SELECT * FROM accounts");
+        $testinginfo = $testing->fields;
+//        var_dump($testinginfo);
+
 $sql = "SELECT acctid,emailaddress FROM accounts WHERE 1=0 "
 .($old>0?"OR (laston < \"".date("Y-m-d H:i:s",strtotime("-$old days"))."\")\n":"")
 ." AND emailaddress!='' AND sentnotice=0";
@@ -27,7 +35,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 	"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 	);
         $sql = "UPDATE accounts SET sentnotice=1 WHERE acctid='".$row['acctid']."'";
-	db_query($sql);
+	new_db_query($sql);
 }
 
 
