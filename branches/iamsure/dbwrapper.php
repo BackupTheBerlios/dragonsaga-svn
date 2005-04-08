@@ -49,20 +49,7 @@ function new_db_query($sql){
 
         $executed = $db->Execute($sql);
         $r = $executed->fields;
-
 	return $r;
-	//$x = strpos($sql,"WHERE");
-	//if ($x!==false) {
-	//	$where = substr($sql,$x+6);
-	//	$x = strpos($where,"ORDER BY");
-	//	if ($x!==false) $where = substr($where,0,$x);
-	//	$x = strpos($where,"LIMIT");
-	//	if ($x!==false) $where = substr($where,0,$x);
-	//	$where = preg_replace("/'[^']*'/","",$where);
-	//	$where = preg_replace('/"[^"]*"/',"",$where);
-	//	$where = preg_replace("/[^a-zA-Z ]/","",$where);
-	//	mysql_query("INSERT DELAYED INTO queryanalysis VALUES (0,\"".addslashes($where)."\",0)");
-	//}
 }
 
 function db_error($link){
