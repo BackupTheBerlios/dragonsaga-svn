@@ -1,7 +1,7 @@
 <?php
 $url=$_GET['url'];
 $dir = str_replace("\\","/",dirname($url)."/");
-$subdir = str_replace("\\","/",dirname($_SERVER['SCRIPT_NAME'])."/");
+$subdir = str_replace("\\","/",dirname($_SERVER['PHP_SELF'])."/");
 //echo "<pre>$subdir</pre>";
 $legal_dirs = array(
 	$subdir."" => 1,
@@ -22,7 +22,7 @@ while (list($key,$val)=each($legal_dirs)){
 	//echo "<pre>$key</pre>";
 	$skey = substr($key,strlen($subdir));
 	//echo $skey." ".$key;
-	if ($key==dirname($_SERVER[SCRIPT_NAME])) $skey="";
+	if ($key==dirname($_SERVER['PHP_SELF'])) $skey="";
 	$d = dir("./$skey");
 	if (substr($key,0,2)=="//") $key = substr($key,1);
 	if ($key=="//") $key="/";

@@ -42,7 +42,7 @@ if ($_GET['op']=="forgot"){
 					"Someone from ".$_SERVER['REMOTE_ADDR']." requested a forgotten password link for your account.  If this was you, then here is your"
 					." link, you may click it to log in to your account and change your password from your preferences page in the village square.\n\n"
 					."If you didn't request this email, then don't sweat it, you're the one who are receiving this email, not them."
-					."\n\n  http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?op=val&id='".$row['emailvalidation']."'\n\nThanks for playing!",
+					."\n\n  http://".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."?op=val&id='".$row['emailvalidation']."'\n\nThanks for playing!",
 					"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 				);
 				output("`#Sent a new validation email to the address on file for that account.  You may use the validation email to log in and change your password.");
@@ -171,7 +171,7 @@ if ($HTTP_GET_VARS['op']=="create"){
 						mail(
 							$_POST['email'],
 							"LoGD Account Verification",
-							"In order to verify your account, you will need to click on the link below.\n\n  http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?op=val&id=$emailverification\n\nThanks for playing!",
+							"In order to verify your account, you will need to click on the link below.\n\n  http://".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."?op=val&id=$emailverification\n\nThanks for playing!",
 							"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 						);
 						output("`4An email was sent to `\$".$_POST['email']."`4 to validate your address.  Click the link in the email to activate your account.`0`n`n");

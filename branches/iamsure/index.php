@@ -29,7 +29,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 	mail($row[emailaddress],"TDS Character Expiration",
 	"
 	One or more of your characters in The Dragon Saga at
-	".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."
+	".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']."
 	is about to expire.  If you wish to keep this character, you should
 	log on to him or her soon!",
 	"From: ".getsetting("gameadminemail","postmaster@localhost.com")
