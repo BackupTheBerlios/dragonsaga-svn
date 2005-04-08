@@ -41,7 +41,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 
 //echo "<pre>".HTMLEntities($sql)."</pre>";
 
-if ($session['loggedin']){
+if (isset($session['loggedin']) && ($session['loggedin'])){
 	redirect("badnav.php");
 }
 page_header();
@@ -56,7 +56,7 @@ $secstotomorrow = $tomorrow-$time;
 $realsecstotomorrow = $secstotomorrow / getsetting("daysperday",4);
 output("`@Next new game day in: `$".date("G\\h, i\\m, s\\s \\(\\r\\e\\a\\l\\ \\t\\i\\m\\e\\)",strtotime("1970-01-01 00:00:00 + $realsecstotomorrow seconds"))."`0`n`n");
 output("Enter your name and password to enter the realm.`n");
-if ($_GET['op']=="timeout"){
+if (isset($_GET['op']) &&($_GET['op']=="timeout")){
 	$session['message'].=" Your session has timed out, you must log in again.`n";
 	if (!isset($_COOKIE['PHPSESSID'])){
 		$session['message'].=" Also, it appears that you may be blocking cookies from this site.  At least session cookies must be enabled in order to use this site.`n";
