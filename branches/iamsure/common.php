@@ -1056,8 +1056,8 @@ function page_footer(){
 		$header=str_replace("{mail}","",$header);
 		$footer=str_replace("{mail}","",$footer);
 	}
-	$header=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' align='right' class='motd'>Petition for Help</a>",$header);
-	$footer=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' align='right' class='motd'>Petition for Help</a>",$footer);
+	$header=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$header);
+	$footer=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$footer);
 	if ($session['user']['superuser']>1){
 		$sql = "SELECT count(petitionid) AS c,status FROM petitions GROUP BY status";
 		$result = db_query($sql);
