@@ -213,7 +213,8 @@ function systemmail($to,$subject,$body,$from=0,$noemail=false){
 		// unreadable
 		$body = preg_replace("'[`]n'", "\n", $body);
 		$body = preg_replace("'[`].'", "", $body);
-		mail($row['emailaddress'],"New TDS Mail","You have received new mail on TDS at http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])."\n\n$fromline"
+		mail($row['emailaddress'],"New TDS Mail","You have received new mail on TDS at http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."\n\n$fromline"
+
 			."Subject: ".preg_replace("'[`].'","",stripslashes($subject))."\n"
 			."Body: ".stripslashes($body)."\n"
 			."\nYou may turn off these alerts in your preferences page.",
@@ -415,9 +416,9 @@ function increment_specialty(){
 }
 
 function fightnav($allowspecial=true, $allowflee=true){
-  global $PHP_SELF,$session;
-	//$script = str_replace("/","",$PHP_SELF);
-	$script = substr($PHP_SELF,strrpos($PHP_SELF,"/")+1);
+  global $session;
+	//$script = str_replace("/","",$_SERVER['PHP_SELF']);
+	$script = substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],"/")+1);
 	addnav("Fight","$script?op=fight");
 	if ($allowflee) {
 		addnav("Run","$script?op=run");
@@ -840,10 +841,6 @@ function loadsettings(){
 			$settings[$row['setting']] = $row['value'];
 		}
 		db_free_result($result);
-		$ch=0;
-		if ($ch=1 && strpos($_SERVER['SCRIPT_NAME'],"login.php")){
-			//@file("http://www.mightye.org/logdserver?".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		}
 	}
 }
 
@@ -1562,8 +1559,6 @@ $link = db_pconnect($DB_HOST, $DB_USER, $DB_PASS) or die (db_error($link));
 //define("LINK",$link);
 
 require_once "translator.php";
-
-
 session_register("session");
 function register_global(&$var){
 	@reset($var);
@@ -1589,8 +1584,8 @@ $session['lasthit']=strtotime("now");
 
 $revertsession=$session;
 
-if ($PATH_INFO != "") {
-	$SCRIPT_NAME=$PATH_INFO;
+if ($_SERVER['PATH_INFO'] != "") {
+	$SCRIPT_NAME=$_SERVER['PATH_INFO'];
 	$REQUEST_URI="";
 }
 if ($REQUEST_URI==""){

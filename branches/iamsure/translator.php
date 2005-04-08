@@ -25,8 +25,24 @@
 */
 //output(output_array($session['user']['prefs']));
 
-$language = $session['user']['prefs']['language'];
-if ($language=="") $language=$_COOKIE['language'];
+if (isset($session))
+{
+    $language = $session['user']['prefs']['language'];
+}
+
+if (!isset($language))
+{
+    $language = '';
+}
+
+if ($language=="")
+{
+    if (isset($_COOKIE['language']))
+    {
+        $language=$_COOKIE['language'];
+    }
+}
+
 if ($language=="") $language=getsetting("defaultlanguage","en");
 
 if (file_exists("translator_".$language.".php")){
