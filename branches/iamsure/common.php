@@ -616,7 +616,7 @@ function charstats(){
 		$u['experience']=round($u['experience'],0);
 		$u['maxhitpoints']=round($u['maxhitpoints'],0);
 		$spirits=array("-6"=>"Resurrected","-2"=>"Very Low","-1"=>"Low","0"=>"Normal","1"=>"High","2"=>"Very High");
-        if ($u[alive]){ }else{ $spirits[$u[spirits]] = "DEAD"; }
+        if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
 		reset($session['bufflist']);
 		$atk=$u['attack'];
 		$def=$u['defense'];
@@ -813,7 +813,9 @@ function savesetting($settingname,$value){
 	loadsettings();
 	if ($value>""){
 		if (!isset($settings[$settingname])){
-			$sql = "INSERT INTO settings (setting,value) VALUES (\"".addslashes($settingname)."\",\"".addslashes($value)."\")";
+			$sql = "UPDATE settings SET value=\"".addslashes($value)."\" WHERE setting=\"".addslashes($settingname)."\"";
+//			$sql = "INSERT INTO settings (setting,value) VALUES (\"".addslashes($settingname)."\",\"".addslashes($value)."\")";
+// With the adodb changes, for some reason, this always ends up causing a duplicate key issue.
 		}else{
 			$sql = "UPDATE settings SET value=\"".addslashes($value)."\" WHERE setting=\"".addslashes($settingname)."\"";
 		}
@@ -952,7 +954,7 @@ function loadtemplate($templatename){
 
 function maillink(){
 	global $session;
-	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session[user][acctid]."\"";
+	$sql = "SELECT sum(if(seen=1,1,0)) AS seencount, sum(if(seen=0,1,0)) AS notseen FROM mail WHERE msgto=\"".$session['user']['acctid']."\"";
 	$result = db_query($sql) or die(mysql_error(LINK));
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
@@ -989,7 +991,7 @@ function page_header($title="The Dragon Saga"){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
-	if (($row[motddate]>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
+	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
 		$header=str_replace("{headscript}","<script type='text/javascript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
 	}else{
@@ -1049,7 +1051,7 @@ function page_footer(){
 	$header = str_replace("{motd}", motdlink(), $header);
 	$footer = str_replace("{motd}", motdlink(), $footer);
 
-	if ($session[user][acctid]>0) {
+	if ($session['user']['acctid']>0) {
 		$header=str_replace("{mail}",maillink(),$header);
 		$footer=str_replace("{mail}",maillink(),$footer);
 	}else{
@@ -1420,7 +1422,6 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	for ($i=0;$i < db_num_rows($result);$i++){
 	  $row = db_fetch_assoc($result);
                 $row['comment']=preg_replace("'[`][^1234567!@#$%^&]'","",$row['comment']);
-        $row['comment']=emoticons($row['comment']);
                 $commentids[$i] = $row['commentid'];
                 if (date("Y-m-d",strtotime($row['postdate']))==date("Y-m-d")){
             if ($row['name']==$session['user']['name'] && $climit=="0") $counttoday++;
@@ -1558,8 +1559,7 @@ if (file_exists("dbconnect.php")){
 }
 
 $link = db_pconnect($DB_HOST, $DB_USER, $DB_PASS) or die (db_error($link));
-db_select_db ($DB_NAME) or die (db_error($link));
-define("LINK",$link);
+//define("LINK",$link);
 
 require_once "translator.php";
 
