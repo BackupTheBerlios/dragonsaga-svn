@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 
 /***************
@@ -15,7 +15,7 @@ $resline = $_GET['resurrection']=="true" ? "&resurrection=true" : "" ;
  ** End Settings **
  ******************/
 if (count($session['user']['dragonpoints']) <$session['user']['dragonkills']&&$_GET['dk']!=""){
-	array_push($session['user']['dragonpoints'],$_GET[dk]);
+	array_push($session['user']['dragonpoints'],$_GET['dk']);
 	switch($_GET['dk']){
 	case "hp":
 		$session['user']['maxhitpoints']+=5;
