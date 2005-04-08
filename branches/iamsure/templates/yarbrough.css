@@ -170,28 +170,26 @@ a.motd {
 	text-decoration: none;
 	text-align: center;
 	color:#FF9900;
-	width: 181px;
 	height: 16px;
+	width: 182px;
 	padding: 1px;
 	float: left;
 	clear: none;
 }
 a:hover.motd {
-/*
-	height: 14px;
-	width: 179px;
+	height: 16px;
+	width: 182px;
 	background-color: #806B4D;
-	border-top: thin solid #FF9900;
-	border-bottom: thin solid #FF9900;
-	border-right: thin solid #FF9900;
-	border-left: thin solid #FF9900;
-*/
+//	border-top: thin solid #FF9900;
+//	border-bottom: thin solid #FF9900;
+//	border-right: thin solid #FF9900;
+//	border-left: thin solid #FF9900;
 }
 a.hotmotd {
 	text-decoration: none;
 	text-align: center;
 	color:#FF9900;
-	width: 181px;
+	width: 182px;
 	height: auto;
 	padding: 1px;
 	float: left;
