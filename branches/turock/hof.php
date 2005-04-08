@@ -1,4 +1,4 @@
-<?
+<?php
 require_once "common.php";
 page_header("Hall of Fame");
 checkday();
@@ -11,7 +11,7 @@ if (db_num_rows($result)==0){
 }
 for ($i=0;$i<db_num_rows($result);$i++){
     $row = db_fetch_assoc($result);
-  output("<tr class='".($i%2?"trlight":"trdark")."'><td>".($i+1).".</td><td>$row[name]</td><td>$row[dragonkills]</td><td>{$row['level']}</td><td>&nbsp;</td><td>".($row[dragonage]?$row[dragonage]:"unknown")."</td><td>&nbsp;</td><td>".($row[bestdragonage]?$row[bestdragonage]:"unknown")."</td></tr>",true);
+  output("<tr class='".($i%2?"trlight":"trdark")."'><td>".($i+1).".</td><td>".$row['name']."</td><td>".$row['dragonkills']."</td><td>".$row['level']."</td><td>&nbsp;</td><td>".($row['dragonage']?$row['dragonage']:"unknown")."</td><td>&nbsp;</td><td>".($row['bestdragonage']?$row['bestdragonage']:"unknown")."</td></tr>",true);
 }
 output("</table>",true);
 addnav("Return to the village","village.php");

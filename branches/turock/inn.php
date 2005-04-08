@@ -1,11 +1,15 @@
-<?
+<?php
+// this is the old version of the inn
+// dosen't make much since to update this one
+// see inn_new.php
+
 require_once "common.php";
 addcommentary();
 checkday();
 
 if ($session['user']['slainby']!=""){
 	page_header("You have been slain!");
-		output("`\$You were slain in ".$session['user'][killedin]."`\$ by `%".$session['user']['slainby']."`\$.  They cost you 5% of your experience, and took any gold you had.  Don't you think it's time for some revenge?");
+		output("`\$You were slain in ".$session['user']['killedin']."`\$ by `%".$session['user']['slainby']."`\$.  They cost you 5% of your experience, and took any gold you had.  Don't you think it's time for some revenge?");
 	addnav("Continue",$REQUEST_URI);
 	$session['user']['slainby']="";
 	page_footer();

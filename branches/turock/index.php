@@ -1,6 +1,5 @@
-<?
+<?php
 require_once "common.php";
-//echo(strpos($_SERVER['SERVER_NAME'],"logd.mightye.org"));
 $old = getsetting("expireoldacct",45);
 $new = getsetting("expirenewacct",10);
 $trash = getsetting("expiretrashacct",1);
@@ -19,7 +18,7 @@ $sql = "SELECT acctid,emailaddress FROM accounts WHERE 1=0 "
 $result = db_query($sql);
 for ($i=0;$i<db_num_rows($result);$i++){
 	$row = db_fetch_assoc($result);
-	mail($row[emailaddress],"LoGD Character Expiration",
+	mail($row['emailaddress'],"LoGD Character Expiration",
 	"
 	One or more of your characters in The Dragon Saga at
 	".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."
@@ -27,7 +26,7 @@ for ($i=0;$i<db_num_rows($result);$i++){
 	log on to him or her soon!",
 	"From: ".getsetting("gameadminemail","postmaster@localhost.com")
 	);
-	$sql = "UPDATE accounts SET sentnotice=1 WHERE acctid='$row[acctid]'";
+	$sql = "UPDATE accounts SET sentnotice=1 WHERE acctid='".$row['acctid']."'";
 	db_query($sql);
 }
 
