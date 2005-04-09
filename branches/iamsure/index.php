@@ -62,6 +62,11 @@ if (isset($_GET['op']) &&($_GET['op']=="timeout")){
 		$session['message'].=" Also, it appears that you may be blocking cookies from this site.  At least session cookies must be enabled in order to use this site.`n";
 	}
 }
+
+if (!isset($session['message']))
+{
+    $session['message']='';
+}
 if ($session['message']>"") output("`b`\$$session[message]`b`n");
 output("<form action='login.php' method='POST'>"
 .templatereplace("login",array("username"=>translate("<u>U</u>sername"),"password"=>translate("<u>P</u>assword"),"button"=>translate("Log in")))
