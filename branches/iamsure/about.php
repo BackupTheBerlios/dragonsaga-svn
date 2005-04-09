@@ -14,6 +14,11 @@ $realsecssofartoday = $secssofartoday / getsetting("daysperday",4);
 
 checkday();
 
+if (!isset($_GET['op']))
+{
+    $_GET['op']='';
+}
+
 if ($_GET['op']==""){
 	$order=array("1","2");
 	while (list($key,$val)=each($order)){
