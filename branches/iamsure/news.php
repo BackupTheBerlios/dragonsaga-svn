@@ -16,13 +16,29 @@ if ($session['user']['slainby']!=""){
 	if ($session['user']['loggedin']) checkday();
 	$newsperpage=50;
 	
-	$offset = (int)$HTTP_GET_VARS['offset'];
+        if (isset($_GET['offset']))
+        {
+	    $offset = (int)$_GET['offset'];
+        }
+        else
+        {
+	    $offset = '';
+        }
+
 	$timestamp=strtotime((0-$offset)." days");
 	$sql = "SELECT count(newsid) AS c FROM news WHERE newsdate='".date("Y-m-d",$timestamp)."'";
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	$totaltoday=$row['c'];
-	$pageoffset = (int)$_GET['page'];
+        if (isset($_GET['page']))
+        {
+	    $pageoffset = (int)$_GET['page'];
+        }
+        else
+        {
+            $pageoffset = '';
+        }
+
 	if ($pageoffset>0) $pageoffset--;
 	$pageoffset*=$newsperpage;
 	$sql = "SELECT * FROM news WHERE newsdate='".date("Y-m-d",$timestamp)."' ORDER BY newsid DESC LIMIT $pageoffset,$newsperpage";
