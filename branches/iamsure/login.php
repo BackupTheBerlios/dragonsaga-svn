@@ -2,7 +2,7 @@
 require_once "common.php";
 
 
-if ($HTTP_POST_VARS['name']!=""){
+if (isset($HTTP_POST_VARS['name']) && ($HTTP_POST_VARS['name']!="")){
 	if ($session['loggedin']){
 		redirect("badnav.php");
 	}else{
@@ -110,7 +110,12 @@ if ($HTTP_POST_VARS['name']!=""){
 			}
 		}
 	}
-}else if ($HTTP_GET_VARS[op]=="logout"){
+}else if ($HTTP_GET_VARS['op']=="logout"){
+        if (!isset($session['user']['loggedin']))
+        {
+            $session['user']['loggedin']='';
+        }
+
 	if ($session['user']['loggedin']){
 	  $sql = "UPDATE accounts SET loggedin=0 WHERE acctid = ".$session['user']['acctid'];
 		db_query($sql) or die(sql_error($sql));
