@@ -10,6 +10,11 @@ $mininterest = ((float)getsetting("mininterest",1)/100) + 1; //1.1;
 //$mininterest = 1.01;
 $dailypvpfights = getsetting("pvpday",3);
 
+if (!isset($_GET['resurrection']))
+{
+    $_GET['resurrection']='';
+}
+
 $resline = $_GET['resurrection']=="true" ? "&resurrection=true" : "" ;
 /******************
  ** End Settings **
@@ -39,7 +44,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 	output("You earn one dragon point each time you slay the dragon.  Advancements made by spending dragon points are permanent!");
 }else if ((int)$session['user']['race']==0){
 	page_header("A little history about yourself");
-	if ($_GET['setrace']!=""){
+	if (isset($_GET['setrace']) && ($_GET['setrace']!="")){
 		$session['user']['race']=(int)($_GET['setrace']);
 		switch($_GET['setrace']){
 		case "1":
