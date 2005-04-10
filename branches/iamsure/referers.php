@@ -2,6 +2,14 @@
 require_once "common.php";
 isnewday(2);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['sort']))
+{
+    $_GET['sort'] = '';
+}
 $sql = "DELETE FROM referers WHERE last<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 db_query($sql);
 if ($_GET['op']=="rebuild"){

@@ -2,8 +2,16 @@
 require_once "common.php";
 isnewday(2);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['level']))
+{
+    $_GET['level'] = '';
+}
 page_header("Weapon Editor");
-$weaponlevel = (int)$_GET[level];
+$weaponlevel = (int)$_GET['level'];
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
 addnav("Weapon Editor Home","weaponeditor.php?level=$weaponlevel");
@@ -18,8 +26,8 @@ $weaponarray=array(
 	"weaponname"=>"Weapon Name",
 	"damage"=>"Damage,enum,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15",
 	"Weapon,title");
-if($_GET[op]=="edit" || $_GET[op]=="add"){
-	if ($_GET[op]=="edit"){
+if($_GET['op']=="edit" || $_GET['op']=="add"){
+	if ($_GET['op']=="edit"){
 		$sql = "SELECT * FROM weapons WHERE weaponid='$_GET[id]'";
 		$result = db_query($sql);
 		$row = db_fetch_assoc($result);
@@ -32,12 +40,12 @@ if($_GET[op]=="edit" || $_GET[op]=="add"){
 	addnav("","weaponeditor.php?op=save&level=$weaponlevel");
 	showform($weaponarray,$row);
 	output("</form>",true);
-}else if($_GET[op]=="del"){
+}else if($_GET['op']=="del"){
 	$sql = "DELETE FROM weapons WHERE weaponid='$_GET[id]'";
 	db_query($sql);
 	//output($sql);
 	redirect("weaponeditor.php?level=$weaponlevel");
-}else if($_GET[op]=="save"){
+}else if($_GET['op']=="save"){
 	if ((int)$_POST[weaponid]>0){
 		$sql = "UPDATE weapons SET weaponname=\"$_POST[weaponname]\",damage=\"$_POST[damage]\",value=".$values[$_POST[damage]]." WHERE weaponid='$_POST[weaponid]'";
 	}else{
@@ -46,7 +54,7 @@ if($_GET[op]=="edit" || $_GET[op]=="add"){
 	db_query($sql);
 	//output($sql);
 	redirect("weaponeditor.php?level=$weaponlevel");
-}else if ($_GET[op]==""){
+}else if ($_GET['op']==""){
 	$sql = "SELECT max(level+1) as level FROM weapons";
 	$res = db_query($sql);
 	$row = db_fetch_assoc($res);
@@ -55,7 +63,7 @@ if($_GET[op]=="edit" || $_GET[op]=="add"){
 		addnav("Weapons for $i DK's","weaponeditor.php?level=$i");
 	}
 	output("<table>",true);
-	$sql = "SELECT * FROM weapons WHERE level=".(int)$_GET[level]." ORDER BY damage";
+	$sql = "SELECT * FROM weapons WHERE level=".(int)$_GET['level']." ORDER BY damage";
 	$result= db_query($sql) or die(db_error(LINK));
 	for ($i=0;$i<db_num_rows($result);$i++){
 		$row = db_fetch_assoc($result);

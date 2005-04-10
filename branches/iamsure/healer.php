@@ -3,6 +3,14 @@ require_once "common.php";
 $config = unserialize($session['user']['donationconfig']);
 if ($config['healer']) $golinda = 1;
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($golinda))
+{
+    $golinda = '';
+}
 if ($golinda) {
 	page_header("Golinda's Hut");
 	output("`#`b`cGolinda's Hut`c`b`n");

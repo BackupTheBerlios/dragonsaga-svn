@@ -2,18 +2,26 @@
 require_once "common.php";
 isnewday(2);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['tauntid']))
+{
+    $_GET['tauntid'] = '';
+}
 page_header("Taunt Editor");
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
-if ($_GET[op]=="edit"){
+if ($_GET['op']=="edit"){
 	addnav("Return to the taunt editor","taunt.php");
 	output("<form action='taunt.php?op=save&tauntid=$_GET[tauntid]' method='POST'>",true);
 	addnav("","taunt.php?op=save&tauntid=$_GET[tauntid]");
-	if ($_GET[tauntid]!=""){
+	if ($_GET['tauntid']!=""){
 		$sql = "SELECT * FROM taunts WHERE tauntid=\"$_GET[tauntid]\"";
 		$result = db_query($sql) or die(db_error(LINK));
 		$row = db_fetch_assoc($result);
-		$taunt = $row[taunt];
+		$taunt = $row['taunt'];
 		$taunt = str_replace("%s","him",$taunt);
 		$taunt = str_replace("%o","he",$taunt);
 		$taunt = str_replace("%p","his",$taunt);
@@ -23,7 +31,7 @@ if ($_GET[op]=="edit"){
 		$taunt = str_replace("%w","JoeBloe",$taunt);
 		output("Preview: $taunt`0`n`n");
 	}
-	$output.="Taunt: <input name='taunt' value=\"".HTMLEntities($row[taunt])."\" size='70'><br>";
+	$output.="Taunt: <input name='taunt' value=\"".HTMLEntities($row['taunt'])."\" size='70'><br>";
 	output("The following codes are supported (case matters):`n");
 	output("%w = Fight loser name`n");
 	output("%x = Fight loser weapon`n");
@@ -34,13 +42,13 @@ if ($_GET[op]=="edit"){
 	output("%X = Fight winner weapon`n");
 	output("<input type='submit' class='button' value='Save'>",true);
 	output("</form>",true);
-}else if($_GET[op]=="del"){
+}else if($_GET['op']=="del"){
 	$sql = "DELETE FROM taunts WHERE tauntid=\"$_GET[tauntid]\"";
 	db_query($sql) or die(db_error(LINK));
 	redirect("taunt.php?c=x");
-}else if($_GET[op]=="save"){
-	if ($_GET[tauntid]!=""){
-		$sql = "UPDATE taunts SET taunt=\"$_POST[taunt]\",editor=\"".addslashes($session[user][login])."\" WHERE tauntid=\"$_GET[tauntid]\"";
+}else if($_GET['op']=="save"){
+	if ($_GET['tauntid']!=""){
+		$sql = "UPDATE taunts SET taunt=\"$_POST[taunt]\",editor=\"".addslashes($session['user']['login'])."\" WHERE tauntid=\"$_GET[tauntid]\"";
 	}else{
 		$sql = "INSERT INTO taunts (taunt,editor) VALUES (\"$_POST[taunt]\",\"".addslashes($session[user][login])."\")";
 	}
@@ -59,10 +67,10 @@ if ($_GET[op]=="edit"){
 		addnav("","taunt.php?op=del&tauntid=$row[tauntid]");
 		output("</td>",true);
 		output("<td>",true);
-		output($row[taunt]);
+		output($row['taunt']);
 		output("</td>",true);
 		output("<td>",true);
-		output($row[editor]);
+		output($row['editor']);
 		output("</td>",true);
 		output("</tr>",true);
 	}

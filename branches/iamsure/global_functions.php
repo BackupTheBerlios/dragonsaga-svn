@@ -642,11 +642,8 @@ function templatereplace($itemname,$vals=false){
 }
 
 function charstats(){
-        // The $u[attack] and $u[defense] warnings dont seem to have an easy fix - either setting them to '' or only setting them selectively causes
-        // bad nav repeatedly. 
 	global $session;
 	$u =& $session['user'];
-
         if (!isset($buffs))
         {
             $buffs = '';
@@ -664,7 +661,14 @@ function charstats(){
         if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
 		reset($session['bufflist']);
 		$atk=$u['attack'];
-                $def=$u['defense'];
+                if (isset($u['defense']))
+                {
+                    $def=$u['defense'];
+                }
+                else
+                {
+                    $def = 0;
+                }
   
 		while (list($key,$val)=each($session['bufflist'])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
@@ -674,7 +678,14 @@ function charstats(){
 		$atk = round($atk, 2);
 		$def = round($def, 2);
 		$atk = ($atk == $u['attack'] ? "`^" : ($atk > $u['attack'] ? "`@" : "`$")) . "`b$atk`b`0";
-		$def = ($def == $u['defense'] ? "`^" : ($def > $u['defense'] ? "`@" : "`$")) . "`b$def`b`0";
+                if (isset($u['defense']))
+                {
+		    $def = ($def == $u['defense'] ? "`^" : ($def > $u['defense'] ? "`@" : "`$")) . "`b$def`b`0";
+                }
+                else
+                {
+		    $def = ($def == 0 ? "`^" : ($def > $u['defense'] ? "`@" : "`$")) . "`b$def`b`0";
+                }
 
 		if (count($session['bufflist'])==0){
 			$buffs.=appoencode("`^None`0",true);
@@ -984,16 +995,32 @@ function showform($layout,$row,$nosave=false){
 			$output.="</select>";
 			break;
 		case "hidden":
+                        if (!isset($row[$key]))
+                        {
+                            $row[$key] = '';
+                        }
 			$output.="<input type='hidden' name='$key' value=\"".HTMLEntities($row[$key])."\">".HTMLEntities($row[$key]);
 			break;
 		case "viewonly":
+                        if (!isset($row[$key]))
+                        {
+                            $row[$key] = '';
+                        }
 			output(dump_item($row[$key]), true);
 //			output(str_replace("{","<blockquote>{",str_replace("}","}</blockquote>",HTMLEntities(preg_replace("'(b:[[:digit:]]+;)'","\\1`n",$row[$key])))),true);
 			break;
 		case "int":
+                        if (!isset($row[$key]))
+                        {
+                            $row[$key] = '';
+                        }
 			$output.="<input name='$key' value=\"".HTMLEntities($row[$key])."\" size='5'>";
 			break;
 		default:
+                        if (!isset($row[$key]))
+                        {
+                            $row[$key] = '';
+                        }
 			$output.=("<input size='50' name='$key' value=\"".HTMLEntities($row[$key])."\">");
 			//output("`n$val");
 		}

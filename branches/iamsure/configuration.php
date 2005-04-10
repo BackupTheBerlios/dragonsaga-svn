@@ -2,7 +2,11 @@
 require_once "common.php";
 isnewday(3);
 
-if ($_GET[op]=="save"){
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if ($_GET['op']=="save"){
 	if ($_POST['blockdupeemail']==1) $_POST['requirevalidemail']=1;
 	if ($_POST['requirevalidemail']==1) $_POST['requireemail']=1;
 	reset($_POST);
@@ -123,7 +127,7 @@ $setup = array(
 	"End Game Setup,title"
 	);
 	
-if ($_GET[op]==""){
+if ($_GET['op']==""){
 	loadsettings();
 	output("<form action='configuration.php?op=save' method='POST'>",true);
 	addnav("","configuration.php?op=save");

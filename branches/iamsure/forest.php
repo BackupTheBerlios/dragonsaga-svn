@@ -6,6 +6,11 @@ if (!isset($_GET['op']))
     $_GET['op'] = '';
 }
 
+if (!isset($_GET['type']))
+{
+    $_GET['type'] = '';
+}
+
 // Handle updating any commentary that might be around.
 addcommentary();
 

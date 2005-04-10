@@ -5,6 +5,15 @@
  */
 require_once "common.php";
 
+if (!isset($creaturedmg))
+{
+    $creaturedmg = '';
+}
+
+if (!isset($selfdmg))
+{
+    $selfdmg = '';
+}
 function activate_buffs($tag) {
 	global $session, $badguy;
 	reset($session['bufflist']);
@@ -20,6 +29,10 @@ function activate_buffs($tag) {
 	$result['dmgshield'] = array();
 
 	while(list($key,$buff) = each($session['bufflist'])) {
+                if (!isset($buff['used']))
+                {
+                    $buff['used'] = '';
+                }
 		if (isset($buff['startmsg'])) {
 			$msg = $buff['startmsg'];
 			$msg = str_replace("{badguy}", $badguy['creaturename'], $msg);
@@ -176,6 +189,14 @@ function expire_buffs() {
 	reset($session['bufflist']);
 	while (list($key, $buff) = each($session['bufflist'])) {
 		if ($buff['used']) {
+                        if (!isset($session['bufflist'][$key]['rounds']))
+                        {
+                            $session['bufflist'][$key]['rounds'] = '';
+                        }
+                        if (!isset($buff['wearoff']))
+                        {
+                            $buff['wearoff'] = '';
+                        }
 			$session['bufflist'][$key]['used'] = 0;
 			$session['bufflist'][$key]['rounds']--;
 			if ($session['bufflist'][$key]['rounds'] <= 0) {
@@ -200,9 +221,24 @@ if (date("m-d")=="04-01"){
 }
 
 $adjustment = ($session['user']['level']/$badguy['creaturelevel']);
+if (!isset($badguy['pvp']))
+{
+    $badguy['pvp'] = '';
+}
+
+if (!isset($badguy['skill']))
+{
+    $badguy['skill'] = '';
+}
+
+if (!isset($_GET['skill']))
+{
+    $_GET['skill'] = '';
+}
+
 if ($badguy['pvp']) $adjustment=1;
 
-if ($_GET[op]=="fight"){
+if ($_GET['op']=="fight"){
 	if ($_GET['skill']=="godmode"){
 		$session['bufflist']['godmode']=array(
 			"name"=>"`&GOD MODE",
@@ -519,7 +555,7 @@ if ($buffset['invulnerable']) {
 }
 
 if (e_rand(1,3)==1 &&
-	($_GET[op]=="search" ||
+	($_GET['op']=="search" ||
 	 ($badguy['pvp'] && $_GET['act']=="attack"))) {
 	if ($badguy['pvp']){
 		output("`b`^".$badguy['creaturename']."`\$'s skill allows them to get the first round of attack!`0`b`n`n");
@@ -570,7 +606,7 @@ if ($_GET['op']=="fight" || $_GET['op']=="run"){
 				process_lifetaps($buffset['lifetap'],$creaturedmg);
 			}
 		}
-	}else if($_GET[op]=="run" && !$surprised){
+	}else if($_GET['op']=="run" && !$surprised){
 		output("`4You are too busy trying to run away like a cowardly dog to try to fight `^".$badguy['creaturename']."`4.`n");
 	}
 	// We need to check both user health and creature health. Otherwise the user

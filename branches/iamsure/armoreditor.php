@@ -2,6 +2,14 @@
 require_once "common.php";
 isnewday(2);
 
+if (!isset($_GET['level']))
+{
+    $_GET['level'] = '';
+}
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 page_header("Armor Editor");
 $armorlevel = (int)$_GET['level'];
 addnav("G?Return to the Grotto","superuser.php");

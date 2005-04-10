@@ -15,6 +15,14 @@
 */
 require_once("common.php");
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($musthit))
+{
+    $musthit = '';
+}
 // How much does it cost to use the Private Toilet?
 $cost = 5;
 // How much gold must user have in hand before they can lose money

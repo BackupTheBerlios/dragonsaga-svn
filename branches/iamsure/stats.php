@@ -2,6 +2,10 @@
 require_once "common.php";
 isnewday(2);
 
+if (!isset($cumul))
+{
+    $cumul = '';
+}
 page_header("Stats");
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");

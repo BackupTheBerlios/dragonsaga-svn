@@ -3,6 +3,10 @@ require_once "common.php";
 
 isnewday(2);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 page_header("Bad word editor.");
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
