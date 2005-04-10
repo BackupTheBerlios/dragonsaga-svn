@@ -1,11 +1,11 @@
 <?php
 if (!isset($session)) exit();
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET[op]==""){
 	output("`%You encounter a fairy in the forest.  \"`^Give me a gem!`%\" she demands.  What do you do?");
 	addnav("Give her a gem","forest.php?op=give");
 	addnav("Don't give her a gem","forest.php?op=dont");
 	$session[user][specialinc]="fairy1.php";
-}else if ($HTTP_GET_VARS[op]=="give"){
+}else if ($_GET[op]=="give"){
   if ($session[user][gems]>0){
 	  output("`%You give the fairy one of your hard-earned gems.  She looks at it, squeals with delight, ");
 		output("and promises a gift in return.  She hovers over your head, sprinkles golden fairy dust down ");

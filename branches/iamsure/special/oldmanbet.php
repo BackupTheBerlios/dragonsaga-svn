@@ -1,6 +1,6 @@
 <?php
 if (!isset($session)) exit();
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET['op']==""){
   output("`3An old man stops you as you wander through the woods.  \"`!How would you like to play a little ");
 	output("guessing game?`3\" he asks.  Knowing his sort, you know he will insist on a small wager if you do. ");
 	output("`n`nDo you wish to play his game?`n`n<a href='forest.php?op=yes'>Yes</a>`n<a href='forest.php?op=no'>No</a>",true);
@@ -9,10 +9,10 @@ if ($HTTP_GET_VARS[op]==""){
 	addnav("","forest.php?op=yes");
 	addnav("","forest.php?op=no");
 	$session[user][specialinc]="oldmanbet.php";
-}else if($HTTP_GET_VARS[op]=="yes"){
+}else if($_GET['op']=="yes"){
   if ($session[user][gold]>0){
 		$session[user][specialinc]="oldmanbet.php";
-		$bet = abs((int)$HTTP_GET_VARS[bet] + (int)$HTTP_POST_VARS[bet]);
+		$bet = abs((int)$_GET[bet] + (int)$_POST[bet]);
 		if ($bet<=0){
 			output("`3\"`!You have 6 tries to guess the number I am thinking of, from 1 to 100.  Each time I will tell you if you are too high or too low.`3\"`n`n");
 			output("`3\"`!How much would you bet young ".($session[user][sex]?"lady":"man")."?`3\"");
@@ -27,9 +27,9 @@ if ($HTTP_GET_VARS[op]==""){
 			$session[user][specialinc]="";
 			//addnav("Return to the forest","forest.php");
 		}else{
-			if ($HTTP_POST_VARS[guess]!==NULL){
-			  $try = (int)$HTTP_GET_VARS[try];
-			  if ($HTTP_POST_VARS[guess]==$session[user][specialmisc]){
+			if ($_POST[guess]!==NULL){
+			  $try = (int)$_GET[try];
+			  if ($_POST[guess]==$session[user][specialmisc]){
 			  	if ($try == 1) {
 						output("`3\"`!INCREDIBLE!!!!`3\" the old man shouts, \"`!You guessed the number in only `^one try`!! Well, congratulations to you, and I am thoroughly impressed! It is almost as if you read my mind.`3\" He looks at you suspiciously and thinks about trying to make off with your winnings, but remembers your seemingly psychic abilities and hands over the `^$bet`3 gold that he owes you.");
 					} else {
@@ -41,17 +41,17 @@ if ($HTTP_GET_VARS[op]==""){
 					debuglog("won $bet gold from the old man in the forest");
 					$session[user][specialinc]="";
 				}else{
-				  if ($HTTP_GET_VARS[try]>=6){
+				  if ($_GET[try]>=6){
 					  output("`3The old man chuckles.  \"`!The number was `^".$session[user][specialmisc]."`!,`3\" he says.  You, being the honorable citizen ");
 						output("that you are, give the man the `^$bet`3 gold that you owe him, ready to be away from here.");
 						$session[user][specialinc]="";
 						$session[user][gold]-=$bet;
 						debuglog("lost $bet gold to the old man in the forest");
 					}else{
-					  if ((int)$HTTP_POST_VARS[guess]>$session[user][specialmisc]){
-						  output("`3\"`!Nope, not `^".(int)$HTTP_POST_VARS[guess]."`!, it's lower than that!  That was try `^$try`!.`3\"`n`n");
+					  if ((int)$_POST[guess]>$session[user][specialmisc]){
+						  output("`3\"`!Nope, not `^".(int)$_POST[guess]."`!, it's lower than that!  That was try `^$try`!.`3\"`n`n");
 						}else{
-						  output("`3\"`!Nope, not `^".(int)$HTTP_POST_VARS[guess]."`!, it's higher than that!  That was try `^$try`!.`3\"`n`n");
+						  output("`3\"`!Nope, not `^".(int)$_POST[guess]."`!, it's higher than that!  That was try `^$try`!.`3\"`n`n");
 						}
 						output("`3You have bet `^$bet`3.  What is your guess?");
 						output("<form action='forest.php?op=yes&bet=$bet&try=".(++$try)."' method='POST'><input name='guess' id='guess'><input type='submit' class='button' value='Guess'></form>",true);
@@ -71,7 +71,7 @@ if ($HTTP_GET_VARS[op]==""){
 		//addnav("Return to the forest","forest.php");
 		$session[user][specialinc]="";
 	}
-}else if($HTTP_GET_VARS[op]=="no"){
+}else if($_GET['op']=="no"){
   output("`3Afraid to part with your precious precious money, you decline the old man his game.  There wasn't ");
 	output("much point to it anyhow, as you certainly would have won.  Yep, definately not afraid of the old man, nope.");
 	//addnav("Return to the forest","forest.php");

@@ -6,8 +6,8 @@ if (isset($_POST['template'])){
 require_once "common.php";
 page_header("Preferences");
 
-if ($HTTP_GET_VARS[op]=="suicide" && getsetting("selfdelete",0)!=0) {
-    $sql = "DELETE FROM accounts WHERE acctid='$HTTP_GET_VARS[userid]'";
+if ($_GET[op]=="suicide" && getsetting("selfdelete",0)!=0) {
+    $sql = "DELETE FROM accounts WHERE acctid='$_GET[userid]'";
 	db_query($sql);
 	output("Your character has been deleted!");
 	addnews("`#{$session['user']['name']} committed suicide.");

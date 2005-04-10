@@ -1,5 +1,5 @@
 <?php
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET['op']==""){
   output("`#You discover a small stream of faintly glowing water that babbles over round pure white stones.  You can sense a magical ");
 	output("power in the water.  Drinking this water may yield untold powers, or it may result ");
 	output("in crippling disability.  Do you wish to take a drink?");
@@ -11,7 +11,7 @@ if ($HTTP_GET_VARS[op]==""){
 	$session[user][specialinc]="glowingstream.php";
 }else{
   $session[user][specialinc]="";
-	if ($HTTP_GET_VARS[op]=="drink"){
+	if ($_GET['op']=="drink"){
 	  $rand = e_rand(1,10);
 		output("`#Knowing that the water could yield deadly, you decide to take your chances.  Kneeling down ");
 		output("at the edge of the stream, you take a long hard draught from the cold stream.  You feel a warmth ");

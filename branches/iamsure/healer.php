@@ -15,7 +15,7 @@ $cost = ($loglev * ($session['user']['maxhitpoints']-$session['user']['hitpoints
 if ($golinda) $cost *= .5;
 $cost = round($cost,0);
 
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
   	checkday();
 	if ($golinda) {
 		output("`3A very petite and beautiful brunette looks up as you enter.  \"`6Ahh.. You must be {$session['user']['name']}.`6  I was told to expect you.  Come in.. come in!`3\" she exclaims.`n`nYou make your way deeper into the hut.`n`n");
@@ -53,11 +53,11 @@ if ($HTTP_GET_VARS['op']==""){
 		forest(true);
 	}
 }else{
-	$newcost=round($HTTP_GET_VARS['pct']*$cost/100,0);
+	$newcost=round($_GET['pct']*$cost/100,0);
 	if ($session['user']['gold']>=$newcost){
 		$session['user']['gold']-=$newcost;
 		debuglog("spent $newcost gold on healing");
-		$diff = round(($session['user']['maxhitpoints']-$session['user']['hitpoints'])*$HTTP_GET_VARS['pct']/100,0);
+		$diff = round(($session['user']['maxhitpoints']-$session['user']['hitpoints'])*$_GET['pct']/100,0);
 		$session['user']['hitpoints'] += $diff;
 		if ($golinda) {
 			output("`3Expecting a foul concoction you begin to up-end the potion.  As it slides down your throat however, you taste cinnamon, honey, and a fruit flavor.  You feel warmth spread throughout your body as your muscles knit themselves back together.  Clear-headed and feeling much better, you hand Golinda the gold you owe and head back to the forest.");

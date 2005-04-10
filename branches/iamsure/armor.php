@@ -5,7 +5,7 @@ checkday();
 page_header("Pegasus Armor");
 output("`c`b`%Pegasus Armor`0`b`c");
 $tradeinvalue = round(($session['user']['armorvalue']*.75),0);
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
 	output("`5The fair and beautiful `#Pegasus`5 greets you with a warm smile as you stroll over to her brightly colored ");
 	output("gypsy wagon, which is placed, not out of coincidence, right next to `!MightyE`5's weapon shop.  Her outfit is ");
 	output("as brightly colored and outrageous as her wagon, and it is almost (but not quite) enough to make you look away from her huge ");
@@ -13,7 +13,7 @@ if ($HTTP_GET_VARS['op']==""){
 	output("`n`n");
 	addnav("Browse `#Pegasus`0' wares","armor.php?op=browse");
 	addnav("Return to the village","village.php");
-}else if ($HTTP_GET_VARS['op']=="browse"){
+}else if ($_GET['op']=="browse"){
 	$sql = "SELECT max(level) AS level FROM armor WHERE level<=".$session['user']['dragonkills'];
 	$result = db_query($sql) or die(db_error(LINK));
 	$row = db_fetch_assoc($result);
@@ -39,8 +39,8 @@ if ($HTTP_GET_VARS['op']==""){
 	}
 	output("</table>",true);
 	addnav("Return to the village","village.php");
-}else if ($HTTP_GET_VARS['op']=="buy"){
-  $sql = "SELECT * FROM armor WHERE armorid='$HTTP_GET_VARS[id]'";
+}else if ($_GET['op']=="buy"){
+  $sql = "SELECT * FROM armor WHERE armorid='$_GET[id]'";
 	$result = db_query($sql) or die(db_error(LINK));
 	if (db_num_rows($result)==0){
 	  output("`#Pegasus`5 looks at you, confused for a second, then realizes that you've apparently taken one too many bonks on the head, and nods and smiles.");

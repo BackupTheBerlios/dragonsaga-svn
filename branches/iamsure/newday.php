@@ -80,7 +80,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 		addnav("","newday.php?setrace=4$resline");
 	}
 }else if ((int)$session['user']['specialty']==0){
-  if ($HTTP_GET_VARS['setspecialty']===NULL){
+  if ($_GET['setspecialty']===NULL){
 		addnav("","newday.php?setspecialty=1$resline");
 		addnav("","newday.php?setspecialty=2$resline");
 		addnav("","newday.php?setspecialty=3$resline");
@@ -95,7 +95,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 		addnav("`^Thievery","newday.php?setspecialty=3$resline");
   }else{
 	  addnav("Continue","newday.php?continue=1$resline");
-		switch($HTTP_GET_VARS['setspecialty']){
+		switch($_GET['setspecialty']){
 		  case 1:
 			  page_header("Dark Arts");
 				output("`5Growing up, you recall killing many small woodland creatures, insisting that they were ");
@@ -121,7 +121,7 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 				output("front side was to even a powerful weapon.");
 				break;
 		}
-		$session['user']['specialty']=$HTTP_GET_VARS['setspecialty'];
+		$session['user']['specialty']=$_GET['setspecialty'];
 	}
 }else{
   if ($session['user']['slainby']!=""){

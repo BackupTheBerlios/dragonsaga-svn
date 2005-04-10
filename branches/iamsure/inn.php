@@ -20,14 +20,14 @@ $buff = array("name"=>"`!Lover's Protection","rounds"=>60,"wearoff"=>"`!You miss
 page_header("The Boar's Head Inn");
 output("<span style='color: #9900FF'>",true);
 output("`c`bThe Boar's Head Inn`b`c");
-if ($HTTP_GET_VARS['op']=="strolldown"){
+if ($_GET['op']=="strolldown"){
 	output("You stroll down the stairs of the inn, once again ready for adventure!  ");
 }
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
 	output("You duck in to a dim tavern that you know well.  The pungent aroma of pipe tobacco fills ");
 	output("the air.");
 }
-if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
+if ($_GET['op']=="" || $_GET['op']=="strolldown"){
 	output("  You wave to several patrons that you know, and wink at ".
 				($session['user']['sex']?
 				"`^Seth`0 who is tuning his harp by the fire.":
@@ -68,7 +68,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 	addnav("Get a room (log out)","inn.php?op=room");
 	addnav("Return to the village","village.php");
 }else{
-  switch($HTTP_GET_VARS['op']){
+  switch($_GET['op']){
 	  case "violet":
 			/*
 			Wink
@@ -80,17 +80,17 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 			Marry her
 			*/
 			if ($session['user']['sex']==1){
-				if ($HTTP_GET_VARS['act']==""){
+				if ($_GET['act']==""){
 					addnav("Gossip","inn.php?op=violet&act=gossip");
 					addnav("Ask if your ".$session['user'][armor]." makes you look fat","inn.php?op=violet&act=fat");
 					output("You go over to `5Violet`0 and help her with the ales she is carrying.  Once they are passed out, ");
 					output("she takes a cloth and wipes the sweat off of her brow, thanking you much.  Of course you didn't ");
 					output("mind, as she is one of your oldest and truest friends!");
-				}else if($HTTP_GET_VARS['act']=="gossip"){
+				}else if($_GET['act']=="gossip"){
 					output("You and `5Violet`0 gossip quietly for a few minutes about not much at all.  She offers you a pickle.  ");
 					output("You accept, knowing that it's in her nature to do so as a former pickle wench.  After a few minutes, ");
 					output("Cedrik begins to cast burning looks your way, and you decide you had best let Violet get back to work.");
-				}else if($HTTP_GET_VARS['act']=="fat"){
+				}else if($_GET['act']=="fat"){
 					$charm = $session['user']['charm']+e_rand(-1,1);
 					output("Violet looks you up and down very seriously.  Only a friend can be truly honest, and that is why you ");
 					output("asked her.  Finally she reaches a conclusion and states, \"`%");
@@ -168,7 +168,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 						output("`n`n`^You gain a charm point!");
 					}
 					$session['user']['seenlover']=1;
-				  } elseif ($HTTP_GET_VARS['flirt']==""){
+				  } elseif ($_GET['flirt']==""){
 						output("You stare dreamily across the room at `5Violet`0, who leans across a table ");
 						output("to serve a patron a drink.  In doing so, she shows perhaps a bit more skin ");
 						output("than is necessary, but you don't feel the need to object.");
@@ -183,7 +183,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					}else{
 					  $c = $session['user']['charm'];
 						$session['user']['seenlover']=1;
-					  switch($HTTP_GET_VARS['flirt']){
+					  switch($_GET['flirt']){
 						  case 1:
 							  if (e_rand($c,2)>=2){
 								  output("You wink at `5Violet`0, and she gives you a warm smile in return.");
@@ -302,7 +302,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 			Completely seduce the bard
 			Marry him
 			*/
-      if ($HTTP_GET_VARS['subop']=="" && $HTTP_GET_VARS['flirt']==""){
+      if ($_GET['subop']=="" && $_GET['flirt']==""){
         output("Seth looks at you expectantly.");
         addnav("Ask Seth to entertain","inn.php?op=seth&subop=hear");
         if ($session['user']['sex']==1){
@@ -322,7 +322,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 			addnav("Ask Seth how he likes your new ".$session['user']['armor'],"inn.php?op=seth&act=armor");
 		}
       }
-			if ($HTTP_GET_VARS['act']=="armor"){
+			if ($_GET['act']=="armor"){
 				$charm = $session['user']['charm']+e_rand(-1,1);
 				output("Seth looks you up and down very seriously.  Only a friend can be truly honest, and that is why you ");
 				output("asked him.  Finally he reaches a conclusion and states, \"`%");
@@ -368,7 +368,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 				}
 				output("`0\"");
 			}
-      if ($HTTP_GET_VARS['subop']=="hear"){
+      if ($_GET['subop']=="hear"){
         //$session['user']['seenbard']=0;
         if($session['user']['seenbard']){
           output("Seth clears his throat and drinks some water.  \"I'm sorry, my throat is just too dry.\"");
@@ -500,7 +500,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
           }
         }
       }
-			if ($session['user']['sex']==1 && $HTTP_GET_VARS['flirt']<>""){
+			if ($session['user']['sex']==1 && $_GET['flirt']<>""){
 			  //$session['user']['seenlover']=0;
 			  if ($session['user']['seenlover']==0){
 			  	  if ($session['user']['marriedto']==4294967295){
@@ -530,11 +530,11 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					  output("`n`n`^You gain a charm point!");
 					}
 				    $session['user']['seenlover']=1;
-				  } elseif ($HTTP_GET_VARS['flirt']==""){
+				  } elseif ($_GET['flirt']==""){
 					}else{
 					  $c = $session['user']['charm'];
 						$session['user']['seenlover']=1;
-					  switch($HTTP_GET_VARS['flirt']){
+					  switch($_GET['flirt']){
 						  case 1:
 							  if (e_rand($c,2)>=2){
 								  output("Seth grins a big toothy grin.  My, isn't the dimple in his chin cute??");
@@ -622,7 +622,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 			break;
 		case "bartender":
 		  $alecost = $session['user']['level']*10;
-		  if ($HTTP_GET_VARS['act']==""){
+		  if ($_GET['act']==""){
 				output("Cedrik looks at you sort-of sideways like.  He never was the sort who would trust a man any ");
 				output("farther than he could throw them, which gave dwarves a decided advantage, except in provinces ");
 				output("where dwarf tossing was made illegal.  Cedrik polishes a glass, holds it up to the light of the door as ");
@@ -645,8 +645,8 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 									);
 				$drunk = round($session['user']['drunkenness']/10-.5,0);
 				output("`n`n`7You now feel ".$drunkenness[$drunk]."`n`n");
-			}else if ($HTTP_GET_VARS['act']=="gems"){
-			  if ($HTTP_POST_VARS['gemcount']==""){
+			}else if ($_GET['act']=="gems"){
+			  if ($_POST['gemcount']==""){
 					output("\"`%You have gems, do ya?`0\" Cedrik asks.  \"`%Well, I'll make you a magic elixir for `^two gems`%!`0\"");
 					output("`n`nGive him how many gems?");
 					output("<form action='inn.php?op=bartender&act=gems' method='POST'><input name='gemcount' value='0'><input type='submit' class='button' value='Give'>`n",true);
@@ -656,7 +656,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					output("<input type='radio' name='wish' value='4'> Forgetfulness`n",true);
 					output("<input type='radio' name='wish' value='5'> Transmutation</form>",true);
 				}else{
-				  $gemcount = abs((int)$HTTP_POST_VARS[gemcount]);
+				  $gemcount = abs((int)$_POST[gemcount]);
 					if ($gemcount>$session['user'][gems]){
 					  output("Cedrik stares at you blankly.  \"`%You don't have that many gems, `bgo get some more gems!`b`0\" he says.");
 					}else{
@@ -672,7 +672,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 						$session['user'][gems]-=$gemcount;
 			  			debuglog("used $gemcount gems on potions");
 						if ($gemcount>0){
-							switch($HTTP_POST_VARS[wish]){
+							switch($_POST[wish]){
 								case 1:
 									$session['user']['charm']+=($gemcount/2);
 									output("`&You feel charming! `^(You gain charm points)");
@@ -718,11 +718,11 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 						}
 					}
 				}				
-			}else if ($HTTP_GET_VARS['act']=="bribe"){
+			}else if ($_GET['act']=="bribe"){
 				$g1 = $session['user']['level']*10;
 				$g2 = $session['user']['level']*50;
 				$g3 = $session['user']['level']*100;
-				if ($HTTP_GET_VARS[type]==""){
+				if ($_GET[type]==""){
 					output("How much would you like to offer him?");
 					addnav("1 gem","inn.php?op=bartender&act=bribe&type=gem&amt=1");
 					addnav("2 gems","inn.php?op=bartender&act=bribe&type=gem&amt=2");
@@ -731,14 +731,14 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					addnav("$g2 gold","inn.php?op=bartender&act=bribe&type=gold&amt=$g2");
 					addnav("$g3 gold","inn.php?op=bartender&act=bribe&type=gold&amt=$g3");
 				}else{
-				  if ($HTTP_GET_VARS[type]=="gem"){
+				  if ($_GET[type]=="gem"){
 						if ($session['user']['gems']<$_GET['amt']){
 							$try=false;
 							output("You don't have {$_GET['amt']} gems!");
 						}else{
-						  $chance = $HTTP_GET_VARS[amt]/4;
-							$session['user'][gems]-=$HTTP_GET_VARS[amt];
-			  				debuglog("spent {$HTTP_GET_VARS['amt']} gems on bribing Cedrik");
+						  $chance = $_GET[amt]/4;
+							$session['user'][gems]-=$_GET[amt];
+			  				debuglog("spent {$_GET['amt']} gems on bribing Cedrik");
 							$try=true;
 						}
 					}else{
@@ -747,9 +747,9 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 							$try=false;
 						}else{
 							$try=true;
-							$chance = $HTTP_GET_VARS[amt]/($session['user']['level']*40);
-							$session['user'][gold]-=$HTTP_GET_VARS[amt];
-				  			debuglog("spent {$HTTP_GET_VARS['amt']} gold bribing Cedrik");
+							$chance = $_GET[amt]/($session['user']['level']*40);
+							$session['user'][gold]-=$_GET[amt];
+				  			debuglog("spent {$_GET['amt']} gold bribing Cedrik");
 						}
 					}
 					$chance*=100;
@@ -763,14 +763,14 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 							addnav("Switch specialty","inn.php?op=bartender&act=specialty");
 						}else{
 							output("Cedrik begins to wipe down the counter top, an act that really needed doing a long time ago.  ");
-							output("When he finished, your ".($HTTP_GET_VARS[type]=="gem"?"gem".($HTTP_GET_VARS[amt]>0?"s are":" is"):"gold is"));
+							output("When he finished, your ".($_GET[type]=="gem"?"gem".($_GET[amt]>0?"s are":" is"):"gold is"));
 							output(" gone.  You inquire about the loss, and he stares blankly back at you.");
 						}
 					}else{
 						output("`n`nCedrik stands there staring at you blankly.");
 					}
 				}
-			}else if ($HTTP_GET_VARS['act']=="ale"){
+			}else if ($_GET['act']=="ale"){
 			  output("Pounding your fist on the bar, you demand an ale");
 				if ($session['user']['drunkenness']>66){
 				  //************************************************************************************************************************************
@@ -799,7 +799,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					  output("You don't have enough money.  How can you have any ale if you don't have any money!?!");
 					}
 				}
-			}else if ($HTTP_GET_VARS['act']=="listupstairs"){
+			}else if ($_GET['act']=="listupstairs"){
 				addnav("Refresh the list","inn.php?op=bartender&act=listupstairs");
 				output("Cedrik lays out a set of keys on the counter top, and tells you which key opens whose room.  The choice is yours, you may sneak in and attack any one of them.");
 				$pvptime = getsetting("pvptimeout",600);
@@ -829,7 +829,7 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					}
 				}
 				output("</table>",true);
-			}else if($HTTP_GET_VARS['act']=="colors"){
+			}else if($_GET['act']=="colors"){
 			  output("Cedrik leans on the bar.  \"`%So you want to know about colors, do you?`0\" he asks.");
 				output("  You are about to answer when you realize the question was posed in the rhetoric.  ");
 				output("Cedrik continues, \"`%To do colors, here's what you need to do.  First, you use a &#0096; mark ",true);
@@ -838,15 +838,15 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 				output("`n`!&#0096;! `@&#0096;@ `#&#0096;# `\$&#0096;\$ `%&#0096;% `^&#0096;^ `&&#0096;& `n",true);
 				output("`% got it?`0\"  You can practice below:");
 				output("<form action=\"$REQUEST_URI\" method='POST'>",true);
-				output("You entered ".str_replace("`","&#0096;",HTMLEntities($HTTP_POST_VARS[testtext]))."`n",true);
-				output("It looks like ".$HTTP_POST_VARS[testtext]." `n");
+				output("You entered ".str_replace("`","&#0096;",HTMLEntities($_POST[testtext]))."`n",true);
+				output("It looks like ".$_POST[testtext]." `n");
 				output("<input name='testtext' id='input'><input type='submit' class='button' value='Try'></form>",true);
 				output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
 
 				output("`0`n`nThese colors can be used in your name, and in any conversations you have.");
 				addnav("",$REQUEST_URI);
-			}else if($HTTP_GET_VARS['act']=="specialty"){
-				if ($HTTP_GET_VARS[specialty]==""){
+			}else if($_GET['act']=="specialty"){
+				if ($_GET[specialty]==""){
 					output("\"`2I want to change my specialty,`0\" you announce to Cedrik.`n`n");
 					output("With out a word, Cedrik grabs you by the shirt, pulls you over the counter, and behind the ");
 					output("barrels behind him.  There, he rotates the tap on a small keg labeled \"Fine Swill XXX\"");
@@ -867,14 +867,14 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					output("`n`n\"`3Oh, one more thing.  Your old use points and skill level still apply to that skill, ");
 					output("you'll have to build up some points in this one to be very good at it.`0\"");
 					//addnav("Return to the inn","inn.php");
-					$session['user'][specialty]=$HTTP_GET_VARS[specialty];
+					$session['user'][specialty]=$_GET[specialty];
 				}
 			}
 			break;
 		case "room":
 			$config = unserialize($session['user']['donationconfig']);
 		  $expense = round(($session['user']['level']*(10+log($session['user']['level']))),0);
-			if ($HTTP_GET_VARS[pay]){
+			if ($_GET[pay]){
 				if ($_GET['coupon']==1){
 			  	$config['innstays']--;
 					$session['user']['donationconfig']=serialize($config);
@@ -885,11 +885,11 @@ if ($HTTP_GET_VARS['op']=="" || $HTTP_GET_VARS['op']=="strolldown"){
 					$session=array();
 					redirect("index.php");
 				}else{
-					if ($HTTP_GET_VARS[pay] == 2 || $session['user'][gold]>=$expense || $session['user'][boughtroomtoday]){
+					if ($_GET[pay] == 2 || $session['user'][gold]>=$expense || $session['user'][boughtroomtoday]){
 						if ($session['user'][loggedin]){
 							if ($session['user'][boughtroomtoday]) {
 							}else{
-								if ($HTTP_GET_VARS[pay] == 2) {
+								if ($_GET[pay] == 2) {
 									$fee = getsetting("innfee", "5%");
 									if (strpos($fee, "%"))
 										$expense += round($expense * $fee / 100,0);

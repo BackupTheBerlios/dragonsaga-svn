@@ -4,7 +4,7 @@ if (!isset($session)) exit();
 // addcommentary();
 output("`c`b<span style='color: #787878'>Dark Horse Tavern`b`c",true);
 $session[user][specialinc]="darkhorse.php";
-switch($HTTP_GET_VARS[op]){
+switch($_GET['op']){
 case "":
 	checkday();
 	output("A cluster of trees nearby looks familiar... You're sure you've seen this place before.  ");
@@ -37,16 +37,16 @@ case "tables":
 	addnav("Return to the tavern","forest.php?op=tavern");
 	break;
 case "bartender":
-	if ($HTTP_GET_VARS[what]==""){
+	if ($_GET[what]==""){
 		output("The grizzled old man behind the bar reminds you very much of a strip of beef jerkey.`n`n");
 		output("\"`7Shay, what can I do for you ".($session[user][sex]?"lasshie":"shon")."?`0\" inquires the toothless ");
 		output("fellow.  \"`7Don't shee the likesh of your short too offen 'round theshe partsh.`0\"");
 		addnav("Learn about my enemies","forest.php?op=bartender&what=enemies");
 		addnav("Learn about colors","forest.php?op=bartender&what=colors");
 		//addnav("Buy swill","forest.php?op=bartender&what=swill");
-	}else if($HTTP_GET_VARS[what]=="swill"){
+	}else if($_GET[what]=="swill"){
 		
-	}else if($HTTP_GET_VARS[what]=="colors"){
+	}else if($_GET[what]=="colors"){
 			  output("The old man leans on the bar.  \"`%Sho you want to know about colorsh, do you?`0\" he asks.");
 				output("  You are about to answer when you realize the question was posed in the rhetoric.  ");
 				output("He continues, \"`%To do colorsh, here'sh what you need to do.  Firsht, you ushe a &#0096; mark ",true);
@@ -55,13 +55,13 @@ case "bartender":
 				output("`n`!&#0096;! `@&#0096;@ `#&#0096;# `\$&#0096;\$ `%&#0096;% `^&#0096;^ `&&#0096;& `n",true);
 				output("`% got it?`0\"  You can practice below:");
 				output("<form action=\"$REQUEST_URI\" method='POST'>",true);
-				output("You entered ".str_replace("`","&#0096;",HTMLEntities($HTTP_POST_VARS[testtext]))."`n",true);
-				output("It looks like ".$HTTP_POST_VARS[testtext]." `n");
+				output("You entered ".str_replace("`","&#0096;",HTMLEntities($_POST[testtext]))."`n",true);
+				output("It looks like ".$_POST[testtext]." `n");
 				output("<input name='testtext'><input type='submit' class='button' value='Try'></form>",true);
 				output("`0`n`nThese colors can be used in your name, and in any conversations you have.");
 				addnav("",$REQUEST_URI);
-	}else if($HTTP_GET_VARS[what]=="enemies"){
-		if ($HTTP_GET_VARS[who]==""){
+	}else if($_GET[what]=="enemies"){
+		if ($_GET[who]==""){
 			output("\"`7Sho, you want to learn about your enemiesh, do you?  Who do you want to know about?  Well?  Shpeak up!  It only costs `^100`7 gold per person for information.`0\"");
 			if ($_GET['subop']!="search"){
 				output("<form action='forest.php?op=bartender&what=enemies&subop=search' method='POST'><input name='name'><input type='submit' class='button' value='Search'></form>",true);
@@ -90,7 +90,7 @@ case "bartender":
 			}
 		}else{
 			if ($session[user][gold]>=100){
-				$sql = "SELECT name,alive,location,maxhitpoints,gold,sex,level,weapon,armor,attack,defence FROM accounts WHERE login=\"$HTTP_GET_VARS[who]\"";
+				$sql = "SELECT name,alive,location,maxhitpoints,gold,sex,level,weapon,armor,attack,defence FROM accounts WHERE login=\"$_GET[who]\"";
 				$result = db_query($sql) or die(db_error(LINK));
 				if (db_num_rows($result)>0){
 					$row = db_fetch_assoc($result);
@@ -125,7 +125,7 @@ case "bartender":
 	break;
 case "oldman":
 	addnav("Old Man");
-	switch($HTTP_GET_VARS[game]){
+	switch($_GET[game]){
 	case "":
 		checkday();
 		output("The old man looks up at you, his eyes sunken and hollow.  His red eyes make it seem that he may have been crying recently ");
@@ -225,7 +225,7 @@ case "oldman":
 		break;
 	case "guess":
 		if ($session[user][gold]>0){
-			$bet = abs((int)$HTTP_GET_VARS[bet] + (int)$HTTP_POST_VARS[bet]);
+			$bet = abs((int)$_GET[bet] + (int)$_POST[bet]);
 			if ($bet<=0){
 				output("`3\"`!You have 6 tries to guess the number I am thinking of, from 1 to 100.  Each time I will tell you if you are too high or too low.`3\"`n`n");
 				output("`3\"`!How much would you bet young ".($session[user][sex]?"lady":"man")."?`3\"");
@@ -238,9 +238,9 @@ case "oldman":
 				output("`n`nEmbarrased, you think you'll head back to the tavern.");
 				addnav("Return to the tavern","forest.php?op=tavern");
 			}else{
-				if ($HTTP_POST_VARS[guess]!==NULL){
-					$try = (int)$HTTP_GET_VARS[try];
-					if ($HTTP_POST_VARS[guess]==$session[user][specialmisc]){
+				if ($_POST[guess]!==NULL){
+					$try = (int)$_GET[try];
+					if ($_POST[guess]==$session[user][specialmisc]){
 						if ($try == 1) {
 							output("`3\"`!INCREDIBLE!!!!`3\" the old man shouts, \"`!You guessed the number in only `^one try`!! Well, congratulations to you, and I am thoroughly impressed! It is almost as if you read my mind.`3\" He looks at you suspiciously and thinks about trying to make off with your winnings, but remembers your seemingly psychic abilities and hands over the `^$bet`3 gold that he owes you.");
 						} else {
@@ -253,7 +253,7 @@ case "oldman":
 						$session[user][specialinc]="darkhorse.php";
 						addnav("Return to the tavern","forest.php?op=tavern");
 					}else{
-						if ($HTTP_GET_VARS[try]>=6){
+						if ($_GET[try]>=6){
 							output("`3The old man chuckles.  \"`!The number was `^".$session[user][specialmisc]."`!,`3\" he says.  You, being the honorable citizen ");
 							output("that you are, give the man the `^$bet`3 gold that you owe him, ready to be away from him.");
 							$session[user][specialinc]="darkhorse.php";
@@ -261,10 +261,10 @@ case "oldman":
 							debuglog("lost $bet gold in the guessing game");
 							addnav("Return to the tavern","forest.php?op=tavern");
 						}else{
-							if ((int)$HTTP_POST_VARS[guess]>$session[user][specialmisc]){
-								output("`3\"`!Nope, not `^".(int)$HTTP_POST_VARS[guess]."`!, it's lower than that!  That was try `^$try`!.`3\"`n`n");
+							if ((int)$_POST[guess]>$session[user][specialmisc]){
+								output("`3\"`!Nope, not `^".(int)$_POST[guess]."`!, it's lower than that!  That was try `^$try`!.`3\"`n`n");
 							}else{
-								output("`3\"`!Nope, not `^".(int)$HTTP_POST_VARS[guess]."`!, it's higher than that!  That was try `^$try`!.`3\"`n`n");
+								output("`3\"`!Nope, not `^".(int)$_POST[guess]."`!, it's higher than that!  That was try `^$try`!.`3\"`n`n");
 							}
 							output("`3You have bet `^$bet`3.  What is your guess?");
 							output("<form action='forest.php?op=oldman&game=guess&bet=$bet&try=".(++$try)."' method='POST'><input name='guess'><input type='submit' class='button' value='Guess'></form>",true);
@@ -286,7 +286,7 @@ case "oldman":
 		break;
 	case "dice":
 		if ($session[user][gold]>0){
-			$bet = abs((int)$HTTP_GET_VARS[bet] + (int)$HTTP_POST_VARS[bet]);
+			$bet = abs((int)$_GET[bet] + (int)$_POST[bet]);
 			if ($bet<=0){
 				output("`3\"`!You get to roll a die, and choose to keep or pass on the roll.  If you pass, you get up to two more chances");
 				output(" to roll, for a total of three rolls.  Once you keep your roll (or on the third roll), I will do the same.  ");
@@ -301,9 +301,9 @@ case "oldman":
 				output("`n`nEmbarrased, you think you'll head back to the tavern.");
 				addnav("Return to the tavern","forest.php?op=tavern");
 			}else{
-				if ($HTTP_GET_VARS[what]!="keep"){
+				if ($_GET[what]!="keep"){
 					$session[user][specialmisc]=e_rand(1,6);
-					$try=$HTTP_GET_VARS[try];
+					$try=$_GET[try];
 					$try++;
 					output("You roll your ".($try==1?"first":($try==2?"second":"third"))." die, and it comes up as `b".$session[user][specialmisc]."`b`n`n");
 					output("`3You have bet `^$bet`3.  What do you do?");

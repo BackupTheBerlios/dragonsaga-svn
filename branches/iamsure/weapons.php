@@ -5,7 +5,7 @@ checkday();
 page_header("MightyE's Weapons");
 output("`c`b`&MightyE's Weapons`0`b`c");
 $tradeinvalue = round(($session['user']['weaponvalue']*.75),0);
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
   output("`!MightyE `7stands behind a counter and appears to pay little attention to you as you enter, ");
 	output("but you know from experience that he has his eye on every move you make.  He may be a humble ");
 	output("weapons merchant, but he still carries himself with the grace of a man who has used his weapons ");
@@ -17,7 +17,7 @@ if ($HTTP_GET_VARS['op']==""){
 	output("have an opportunity to use one of these weapons.");
   addnav("Peruse Weapons","weapons.php?op=peruse");
 	addnav("Return to the village","village.php");
-}else if ($HTTP_GET_VARS['op']=="peruse"){
+}else if ($_GET['op']=="peruse"){
 	$sql = "SELECT max(level) AS level FROM weapons WHERE level<=".(int)$session['user']['dragonkills'];
 	$result = db_query($sql) or die(db_error(LINK));
 	$row = db_fetch_assoc($result);
@@ -44,8 +44,8 @@ if ($HTTP_GET_VARS['op']==""){
 	}
 	output("</table>",true);
 	addnav("Return to the village","village.php");
-}else if ($HTTP_GET_VARS[op]=="buy"){
-  $sql = "SELECT * FROM weapons WHERE weaponid='$HTTP_GET_VARS[id]'";
+}else if ($_GET[op]=="buy"){
+  $sql = "SELECT * FROM weapons WHERE weaponid='$_GET[id]'";
 	$result = db_query($sql) or die(db_error(LINK));
 	if (db_num_rows($result)==0){
 	  output("`!MightyE`7 looks at you, confused for a second, then realizes that you've apparently taken one too many bonks on the head, and nods and smiles.");

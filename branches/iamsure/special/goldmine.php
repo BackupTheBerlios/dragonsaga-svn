@@ -19,7 +19,7 @@ if ($hashorse) {
 	}
 }
 
-if ($HTTP_GET_VARS[op]==""){ 
+if ($_GET[op]==""){ 
 	$session[user][specialinc]="goldmine.php"; 
 	output("`2You found an old abandoned mine in the depths of the forest. There is some old mining equipment nearby.`n`n");
 	output("`^As you look around you realize that this is going to be a lot of work.  So much so in fact that you will lose a forest fight for the day if you attempt it.`n`n");
@@ -29,11 +29,11 @@ if ($HTTP_GET_VARS[op]==""){
 	addnav("","forest.php?op=mine"); 
 	addnav("","forest.php?op=no");
 
-}else if ($HTTP_GET_VARS[op]=="no"){ 
+}else if ($_GET[op]=="no"){ 
 	output("`2Nope you don't have time for this slow way to gain gold and gems so you leave the old mine...`n"); 
 	$session[user][specialinc]="";
  
-} elseif ($HTTP_GET_VARS[op]=="mine") {
+} elseif ($_GET[op]=="mine") {
 	$session[user][specialinc]="goldmine.php"; 
 	if ($session[user][turns]<=0) {
 		output("`2You are too tired to mine anymore..`n");

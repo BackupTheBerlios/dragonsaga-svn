@@ -6,7 +6,7 @@ page_header("Dag Durnick's Table");
 output("<span style='color: #9900FF'>",true);
 output("`c`bDag Durnick's Table`b`c");
 
-if ($HTTP_GET_VARS['op']=="list"){
+if ($_GET['op']=="list"){
 	output("Dag fishes a small leather bound book out from under his cloak, flips through it to a certain page and holds it up for you to see.`n`n");
 	output("`c`bThe Bounty List`b`c`n");
 	$sql = "SELECT name,alive,sex,level,laston,loggedin,bounty FROM accounts WHERE bounty>0 ORDER BY bounty DESC";
@@ -44,7 +44,7 @@ if ($HTTP_GET_VARS['op']=="list"){
 		output("</td></tr>",true);
 	}
 	output("</table>",true);
-}else if ($HTTP_GET_VARS['op']=="addbounty"){
+}else if ($_GET['op']=="addbounty"){
 	if ($session['user']['bounties'] >= getsetting("maxbounties",5)) {
 		output("Dag gives you a piercing look. `7\"Ye be thinkin' I be an assassin or somewhat?  Ye already be placin' more than 'nuff bounties for t'day.  Now, be ye gone before I stick a bounty on yer head fer annoyin' me.`n`n");
 	} else {
@@ -62,7 +62,7 @@ if ($HTTP_GET_VARS['op']=="list"){
 		output("<input type='submit' class='button' value='Finalize Contract'></form>",true);
 		addnav("","dag.php?op=finalize");
 	}
-}elseif ($HTTP_GET_VARS['op']=="finalize") {
+}elseif ($_GET['op']=="finalize") {
 	//$name = "%" . rawurldecode($_POST['contractname']) . "%";
 	if ($_GET['subfinal']==1){
 		$sql = "SELECT acctid,name,login,level,locked,age,dragonkills,pk,experience,bounty FROM accounts WHERE name='".addslashes(rawurldecode(stripslashes($_POST['contractname'])))."' AND locked=0";
@@ -138,7 +138,7 @@ if ($HTTP_GET_VARS['op']=="list"){
 	addnav("Check the Wanted List","dag.php?op=list");
 	addnav("Set a Bounty","dag.php?op=addbounty");
 }
-if ($HTTP_GET_VARS['op'] != '')
+if ($_GET['op'] != '')
 addnav("Talk to Dag Durnick", "dag.php");
 addnav("Return to the inn","inn.php");
 output("</span>",true);

@@ -3,7 +3,7 @@ require_once "common.php";
 $pvptime = getsetting("pvptimeout",600);
 $pvptimeout = date("Y-m-d H:i:s",strtotime("-$pvptime seconds"));
 page_header("PvP Combat!");
-if ($HTTP_GET_VARS[op]=="" && $HTTP_GET_VARS[act]!="attack"){
+if ($_GET[op]=="" && $_GET[act]!="attack"){
 	//if ($session['user']['age']<=5 && $session['user']['dragonkills']==0){
 	//  output("`\$Warning!`^ Players are immune from Player vs Player (PvP) combat for their first 5 days in the game.  If you choose to attack another player, you will lose this immunity!`n`n");
 	//}
@@ -12,7 +12,7 @@ if ($HTTP_GET_VARS[op]=="" && $HTTP_GET_VARS[act]!="attack"){
   output("`4You head out to the fields, where you know some unwitting warriors are sleeping.`n`nYou have `^".$session[user][playerfights]."`4 PvP fights left for today.");
 	addnav("List Warriors","pvp.php?op=list");
   addnav("Return to the Village","village.php");
-}else if ($HTTP_GET_VARS[op]=="list"){
+}else if ($_GET[op]=="list"){
 	checkday();
 	pvpwarning();
 	$days = getsetting("pvpimmunity", 5);
@@ -42,7 +42,7 @@ if ($HTTP_GET_VARS[op]=="" && $HTTP_GET_VARS[act]!="attack"){
 	output("</table>",true);
 	addnav("List Warriors","pvp.php?op=list");
   addnav("Return to the Village","village.php");
-} else if ($HTTP_GET_VARS[act] == "attack") {
+} else if ($_GET[act] == "attack") {
   $sql = "SELECT name AS creaturename,
 	               level AS creaturelevel,
 								 weapon AS creatureweapon,
@@ -59,7 +59,7 @@ if ($HTTP_GET_VARS[op]=="" && $HTTP_GET_VARS[act]!="attack"){
 								 acctid,
 								 pvpflag
 					FROM accounts
-					WHERE login=\"$HTTP_GET_VARS[name]\"";
+					WHERE login=\"$_GET[name]\"";
 	$result = db_query($sql) or die(db_error(LINK));
 	if (db_num_rows($result)>0){
 		$row = db_fetch_assoc($result);
@@ -104,15 +104,15 @@ if ($HTTP_GET_VARS[op]=="" && $HTTP_GET_VARS[act]!="attack"){
 	  addnav("Return to the village","village.php");
 	}
 }
-if ($HTTP_GET_VARS[op]=="run"){
+if ($_GET[op]=="run"){
   output("Your honor prevents you from running");
-	$HTTP_GET_VARS[op]="fight";
+	$_GET[op]="fight";
 }
-if ($HTTP_GET_VARS[skill]!=""){
+if ($_GET[skill]!=""){
   output("Your honor prevents you from using a special ability");
-	$HTTP_GET_VARS[skill]="";
+	$_GET[skill]="";
 }
-if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
+if ($_GET[op]=="fight" || $_GET[op]=="run"){
 	$battle=true;
 }
 if ($battle){
@@ -175,7 +175,7 @@ if ($battle){
 		$sql = "UPDATE accounts SET alive=0, bounty=0, goldinbank=goldinbank-IF(gold<$badguy[creaturegold],gold-$badguy[creaturegold],0),gold=gold-$badguy[creaturegold], experience=experience-$lostexp WHERE acctid=".(int)$badguy[acctid]."";		
 		db_query($sql);
 		
-		$HTTP_GET_VARS[op]="";
+		$_GET[op]="";
 		if ($badguy['location']){
 			addnav("Return to the inn","inn.php");
 		} else {

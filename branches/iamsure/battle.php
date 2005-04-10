@@ -202,8 +202,8 @@ if (date("m-d")=="04-01"){
 $adjustment = ($session['user']['level']/$badguy['creaturelevel']);
 if ($badguy['pvp']) $adjustment=1;
 
-if ($HTTP_GET_VARS[op]=="fight"){
-	if ($HTTP_GET_VARS['skill']=="godmode"){
+if ($_GET[op]=="fight"){
+	if ($_GET['skill']=="godmode"){
 		$session['bufflist']['godmode']=array(
 			"name"=>"`&GOD MODE",
 			"rounds"=>1,
@@ -215,10 +215,10 @@ if ($HTTP_GET_VARS[op]=="fight"){
 			"activate"=>"roundstart"
 		);
 	}
-	if ($HTTP_GET_VARS['skill']=="MP"){
-		if ($session['user']['magicuses'] >= $HTTP_GET_VARS['l']){
+	if ($_GET['skill']=="MP"){
+		if ($session['user']['magicuses'] >= $_GET['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS['l']){
+			switch($_GET['l']){
 			case 1:
 				$session['bufflist']['mp1'] = array(
 					"startmsg"=>"`n`^You begin to regenerate!`n`n",
@@ -270,7 +270,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 				);
 				break;
 			}
-			$session['user']['magicuses']-=$HTTP_GET_VARS['l'];
+			$session['user']['magicuses']-=$_GET['l'];
 		}else{
 			$session['bufflist']['mp0'] = array(
 				"startmsg"=>"`nYou furrow your brow and call on the powers of the elements.  A tiny flame appears.  {badguy} lights a cigarette from it, giving you a word of thanks before swinging at you again.`n`n",
@@ -279,10 +279,10 @@ if ($HTTP_GET_VARS[op]=="fight"){
 			);
 		}
 	}
-	if ($HTTP_GET_VARS['skill']=="DA"){
-		if ($session['user']['darkartuses'] >= $HTTP_GET_VARS['l']){
+	if ($_GET['skill']=="DA"){
+		if ($session['user']['darkartuses'] >= $_GET['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS['l']){
+			switch($_GET['l']){
 			case 1:
 				$session['bufflist']['da1']=array(
 					"startmsg"=>"`n`\$You call on the spirits of the dead, and skeletal hands claw at {badguy} from beyond the grave.`n`n",
@@ -330,7 +330,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			}
-			$session['user']['darkartuses']-=$HTTP_GET_VARS['l'];
+			$session['user']['darkartuses']-=$_GET['l'];
 		}else{
 			$session['bufflist']['da0'] = array(
 				"startmsg"=>"`nExhausted, you try your darkest magic, a bad joke.  {badguy} looks at you for a minute, thinking, and finally gets the joke.  Laughing, it swings at you again.`n`n",
@@ -339,10 +339,10 @@ if ($HTTP_GET_VARS[op]=="fight"){
 				);
 		}
 	}
-	if ($HTTP_GET_VARS['skill']=="TS"){
-		if ($session['user']['thieveryuses'] >= $HTTP_GET_VARS['l']){
+	if ($_GET['skill']=="TS"){
+		if ($session['user']['thieveryuses'] >= $_GET['l']){
 			$creaturedmg = 0;
-			switch($HTTP_GET_VARS['l']){
+			switch($_GET['l']){
 			case 1:
 				$session['bufflist']['ts1']=array(
 					"startmsg"=>"`n`^You call {badguy} a bad name, making it cry.`n`n",
@@ -389,7 +389,7 @@ if ($HTTP_GET_VARS[op]=="fight"){
 					);
 				break;
 			}
-			$session['user']['thieveryuses']-=$HTTP_GET_VARS['l'];
+			$session['user']['thieveryuses']-=$_GET['l'];
 		}else{
 			$session['bufflist']['ts0'] = array(
 				"startmsg"=>"`nYou try to attack {badguy} by putting your best thievery skills in to practice, but instead, you trip over your feet.`n`n",
@@ -519,23 +519,23 @@ if ($buffset['invulnerable']) {
 }
 
 if (e_rand(1,3)==1 &&
-	($HTTP_GET_VARS[op]=="search" ||
-	 ($badguy['pvp'] && $HTTP_GET_VARS['act']=="attack"))) {
+	($_GET[op]=="search" ||
+	 ($badguy['pvp'] && $_GET['act']=="attack"))) {
 	if ($badguy['pvp']){
 		output("`b`^".$badguy['creaturename']."`\$'s skill allows them to get the first round of attack!`0`b`n`n");
 	}else{
 		output("`b`^".$badguy['creaturename']."`\$ surprises you and gets the first round of attack!`0`b`n`n");
 	}
-	$HTTP_GET_VARS['op']="run";
+	$_GET['op']="run";
 	$surprised=true;
 }else{
-	if ($HTTP_GET_VARS['op']=="search")
+	if ($_GET['op']=="search")
 		output("`b`\$Your skill allows you to get the first attack!`0`b`n`n");
 	$surprised=false;
 }
 
-if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
-	if ($HTTP_GET_VARS['op']=="fight"){
+if ($_GET['op']=="fight" || $_GET['op']=="run"){
+	if ($_GET['op']=="fight"){
 		if ($badguy['creaturehealth']>0 && $session['user']['hitpoints']>0){
 			$buffset = activate_buffs("offense");
 			if ($atk > $session['user']['attack']) {
@@ -570,7 +570,7 @@ if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
 				process_lifetaps($buffset['lifetap'],$creaturedmg);
 			}
 		}
-	}else if($HTTP_GET_VARS[op]=="run" && !$surprised){
+	}else if($_GET[op]=="run" && !$surprised){
 		output("`4You are too busy trying to run away like a cowardly dog to try to fight `^".$badguy['creaturename']."`4.`n");
 	}
 	// We need to check both user health and creature health. Otherwise the user
@@ -600,7 +600,7 @@ expire_buffs();
 
 if ($session['user']['hitpoints']>0 &&
 	$badguy['creaturehealth']>0 &&
-	($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run")){
+	($_GET['op']=="fight" || $_GET['op']=="run")){
 	output("`2`bEnd of Round:`b`n");
 	output("`2".$badguy['creaturename']."`2's ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$badguy['creaturehealth']."`0`n");
 	output("`2YOUR ".($session['user']['alive']?"Hitpoints":"Soulpoints").": `6".$session['user']['hitpoints']."`0`n");

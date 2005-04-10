@@ -63,16 +63,16 @@ if ($_GET['op']=="forgot"){
 	}
 }
 page_header("Create A Character");
-if ($HTTP_GET_VARS['op']=="create"){
+if ($_GET['op']=="create"){
 	if(getsetting("spaceinname",0) == 0) {
-  		$shortname = preg_replace("([^[:alpha:]_-])","",$HTTP_POST_VARS['name']);
+  		$shortname = preg_replace("([^[:alpha:]_-])","",$_POST['name']);
 	} else {
-  		$shortname = preg_replace("([^[:alpha:] _-])","",$HTTP_POST_VARS['name']);
+  		$shortname = preg_replace("([^[:alpha:] _-])","",$_POST['name']);
 	}
 
 	if (soap($shortname)!=$shortname){
 		output("`\$Error`^: Bad language was found in your name, please consider revising it.");
-		$HTTP_GET_VARS['op']="";
+		$_GET['op']="";
 	}else{
 		$blockaccount=false;
 		if (getsetting("blockdupeemail",0)==1 && getsetting("requireemail",0)==1){
@@ -83,7 +83,7 @@ if ($HTTP_GET_VARS['op']=="create"){
 				$msg.="You may have only one account.`n";
 			}
 		}
-		if (strlen($HTTP_POST_VARS['pass1'])<=3){
+		if (strlen($_POST['pass1'])<=3){
 			$msg.="Your password must be at least 4 characters long.`n";
 			$blockaccount=true;
 		}
@@ -105,8 +105,8 @@ if ($HTTP_GET_VARS['op']=="create"){
 			$blockaccount=true;
 		}
 		/*
-		if ($HTTP_POST_VARS[pass1]==$HTTP_POST_VARS[pass2] 
-		&& strlen($HTTP_POST_VARS[pass1])>3 
+		if ($_POST[pass1]==$_POST[pass2] 
+		&& strlen($_POST[pass1])>3 
 		&& strlen($shortname)>2 
 		&& !$blockaccount
 		&& (
@@ -120,9 +120,9 @@ if ($HTTP_GET_VARS['op']=="create"){
 			$result = db_query($sql) or die(db_error(LINK));
 			if (db_num_rows($result)>0){
 				output("`\$Error`^: Someone is already known by that name in this realm, please try again.");
-				$HTTP_GET_VARS[op]="";
+				$_GET[op]="";
 			}else{
-				$title = ($HTTP_POST_VARS[sex]?"Farmgirl":"Farmboy");
+				$title = ($_POST[sex]?"Farmgirl":"Farmboy");
 				if (getsetting("requirevalidemail",0)){
 					$emailverification=md5(date("Y-m-d H:i:s").$_POST['email']);
 				}
@@ -151,8 +151,8 @@ if ($HTTP_GET_VARS['op']=="create"){
 				) VALUES (
 					'$title $shortname',
 					'$title',
-					'$HTTP_POST_VARS[pass1]',
-					'$HTTP_POST_VARS[sex]',
+					'$_POST[pass1]',
+					'$_POST[sex]',
 					'$shortname',
 					'".date("Y-m-d H:i:s",strtotime("-1 day"))."',
 					'$_COOKIE[lgi]',
@@ -176,7 +176,7 @@ if ($HTTP_GET_VARS['op']=="create"){
 						);
 						output("`4An email was sent to `\$".$_POST['email']."`4 to validate your address.  Click the link in the email to activate your account.`0`n`n");
 					}else{
-						output("<form action='login.php' method='POST'><input name='name' value='".$shortname."' type='hidden'><input name='password' value='".$HTTP_POST_VARS['pass1']."' type='hidden'>
+						output("<form action='login.php' method='POST'><input name='name' value='".$shortname."' type='hidden'><input name='password' value='".$_POST['pass1']."' type='hidden'>
 						Your account was created, your login name is `^$shortname`0.  `n`n<input type='submit' class='button' value='Click here to log in'></form>`n`n"
 						.($trash>0?"Characters that have never been logged in to will be deleted after $trash day(s) of no activity.`n":"")
 						.($new>0?"Characters that have never reached level 2 will be deleted after $new days of no activity.`n":"")
@@ -194,11 +194,11 @@ if ($HTTP_GET_VARS['op']=="create"){
 			and your passwords must match.");
 			*/
 			output("`\$Error`^:`n$msg");
-			$HTTP_GET_VARS['op']="";
+			$_GET['op']="";
 		}
 	}
 }
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
 	output("`&`c`bCreate a Character`b`c");
 	output("`0<form action=\"create.php?op=create".($_GET['r']>""?"&r=".HTMLEntities($_GET['r']):"")."\" method='POST'>",true);
 	output("How will you be known to this world? <input name='name'>`n",true);

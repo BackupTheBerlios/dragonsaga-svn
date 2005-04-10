@@ -1,6 +1,6 @@
 <?php
 if (!isset($session)) exit();
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET['op']==""){
 	output("`5You stumble across a clearing that is oddly quiet.  To one side are three baskets, tightly lidded.  Finding this 
 	curious, you cautiously approach them when you hear the faint mew of a kitten.  You reach for the lid of the first basket
 	when out of no where, Crazy Audrey appears, ranting feverishly about colored kittens, and pulls the baskets to her.  Taken 
@@ -23,10 +23,10 @@ if ($HTTP_GET_VARS[op]==""){
 	addnav("Play","forest.php?op=play");
 	addnav("Run away from Crazy Audrey","forest.php?op=run");
 	$session['user']['specialinc']="audrey.php";
-}else if($HTTP_GET_VARS[op]=="run"){
+}else if($_GET['op']=="run"){
 	$session['user']['specialinc']="";
 	output("`5You run, very quickly, away from this mad woman.");
-}else if($HTTP_GET_VARS[op]=="play"){
+}else if($_GET['op']=="play"){
 	//$session['user']['specialinc']="audrey.php";
 	$kittens = array("`^C`&a`6l`7i`^c`7o","`7T`&i`7g`&e`7r","`6Orange","`&White","`^`bHedgehog`b");
 	$c1 = e_rand(0,3);

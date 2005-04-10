@@ -6,13 +6,13 @@ if (!isset($session['loggedin']))
     $session['loggedin']='';
 }
 
-if (isset($HTTP_POST_VARS['name']) && ($HTTP_POST_VARS['name']!="")){
+if (isset($_POST['name']) && ($_POST['name']!="")){
 	if ($session['loggedin']){
 		redirect("badnav.php");
 	}else{
 		if(0){
 		}else{
-			$sql = "SELECT * FROM accounts WHERE login='".$HTTP_POST_VARS['name']."' AND password='".$HTTP_POST_VARS['password']."' AND locked=0";
+			$sql = "SELECT * FROM accounts WHERE login='".$_POST['name']."' AND password='".$_POST['password']."' AND locked=0";
 			$result = db_query($sql);
 			if (db_num_rows($result)==1){
 				$session['user']=db_fetch_assoc($result);
@@ -114,7 +114,7 @@ if (isset($HTTP_POST_VARS['name']) && ($HTTP_POST_VARS['name']!="")){
 			}
 		}
 	}
-}else if ($HTTP_GET_VARS['op']=="logout"){
+}else if ($_GET['op']=="logout"){
         if (!isset($session['user']['loggedin']))
         {
             $session['user']['loggedin']='';

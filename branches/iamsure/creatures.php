@@ -56,16 +56,16 @@ page_header("Creature Editor");
 if ($session['user']['superuser'] >= 2){
 	addnav("G?Return to the Grotto","superuser.php");
 	addnav("M?Return to the Mundane","village.php");
-	if ($HTTP_POST_VARS['save']<>""){
-		if (!isset($HTTP_POST_VARS['location'])) $HTTP_POST_VARS['location']=0;
-		if ($HTTP_POST_VARS['id']!=""){
+	if ($_POST['save']<>""){
+		if (!isset($_POST['location'])) $_POST['location']=0;
+		if ($_POST['id']!=""){
 			$sql="UPDATE creatures SET ";
-			//unset($HTTP_POST_VARS[save]);
-			while (list($key,$val)=each($HTTP_POST_VARS)){
+			//unset($_POST[save]);
+			while (list($key,$val)=each($_POST)){
 				if (substr($key,0,8)=="creature") $sql.="$key = \"$val\", ";
 			}
-			reset($creaturestats[(int)$HTTP_POST_VARS['creaturelevel']]);
-			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS['creaturelevel']])){
+			reset($creaturestats[(int)$_POST['creaturelevel']]);
+			while (list($key,$val)=each($creaturestats[$_POST['creaturelevel']])){
 				if ( $key!="creaturelevel" && substr($key,0,8)=="creature"){
 					$sql.="$key = \"".addslashes($val)."\", ";
 				}
@@ -73,7 +73,7 @@ if ($session['user']['superuser'] >= 2){
 			$sql.=" location=\"".(int)($_POST['location'])."\", ";
 			//$sql = substr($sql,0,strlen($sql)-2);
 			$sql.= " createdby=\"".addslashes($session['user']['login'])."\" ";
-			$sql.= " WHERE creatureid='$HTTP_POST_VARS[id]'";
+			$sql.= " WHERE creatureid='$_POST[id]'";
 			//output($sql);
 			db_query($sql) or output("`\$".db_error(LINK)."`0`n`#$sql`0`n");
 			output(db_affected_rows()." record changed.");
@@ -81,15 +81,15 @@ if ($session['user']['superuser'] >= 2){
 			$cols = array();
 			$vals = array();
 			
-			while (list($key,$val)=each($HTTP_POST_VARS)){
+			while (list($key,$val)=each($_POST)){
 				if (substr($key,0,8)=="creature" || $key=="location") {
 					array_push($cols,$key);
 					array_push($vals,$val);
 					//$sql.="$key = \"$val\", ";
 				}
 			}
-			reset($creaturestats[(int)$HTTP_POST_VARS['creaturelevel']]);
-			while (list($key,$val)=each($creaturestats[$HTTP_POST_VARS['creaturelevel']])){
+			reset($creaturestats[(int)$_POST['creaturelevel']]);
+			while (list($key,$val)=each($creaturestats[$_POST['creaturelevel']])){
 				if ($key!="creaturelevel"){
 					//$sql.="$key = \"".addslashes($val)."\", ";
 					array_push($cols,$key);
@@ -101,17 +101,17 @@ if ($session['user']['superuser'] >= 2){
 			db_query($sql);
 		}
 	}
-	if ($HTTP_GET_VARS['op']=="del"){
-		$sql = "DELETE FROM creatures WHERE creatureid='".$HTTP_GET_VARS['id']."'";
+	if ($_GET['op']=="del"){
+		$sql = "DELETE FROM creatures WHERE creatureid='".$_GET['id']."'";
 		db_query($sql);
 		if (db_affected_rows()>0){
 			output("Creature deleted`n`n");
 		}else{
 			output("Creature not deleted: ".db_error(LINK));
 		}
-		$HTTP_GET_VARS['op']="";
+		$_GET['op']="";
 	}
-	if ($HTTP_GET_VARS['op']==""){
+	if ($_GET['op']==""){
 		$sql = "SELECT * FROM creatures ORDER BY creaturelevel,creaturename";
 		$result = db_query($sql) or die(db_error(LINK));
 		addnav("Add a creature","creatures.php?op=add");
@@ -140,9 +140,9 @@ if ($session['user']['superuser'] >= 2){
 		}
 		output("</table>",true);
 	}else{
-		if ($HTTP_GET_VARS['op']=="edit" || $HTTP_GET_VARS['op']=="add"){
-			if ($HTTP_GET_VARS['op']=="edit"){
-				$sql = "SELECT * FROM creatures WHERE creatureid='".$HTTP_GET_VARS['id']."'";
+		if ($_GET['op']=="edit" || $_GET['op']=="add"){
+			if ($_GET['op']=="edit"){
+				$sql = "SELECT * FROM creatures WHERE creatureid='".$_GET['id']."'";
 				$result = db_query($sql) or die(db_error(LINK));
 				if (db_num_rows($result)<>1){
 					output("`4Error`0, that creature was not found!");
@@ -151,7 +151,7 @@ if ($session['user']['superuser'] >= 2){
 				}
 			}
 			output("<form action='creatures.php' method='POST'>",true);
-			output("<input name='id' value=\"".HTMLEntities($HTTP_GET_VARS[id])."\" type='hidden'>",true);
+			output("<input name='id' value=\"".HTMLEntities($_GET[id])."\" type='hidden'>",true);
 			output("<table border='0' cellpadding='2' cellspacing='0'>",true);
 			output("<tr><td>Creature Name:</td><td><input name='creaturename' maxlength='50' value='".HTMLEntities($row['creaturename'])."'></td></tr>",true);
 			output("<tr><td>Weapon: </td><td><input name='creatureweapon' maxlength='50' value='".HTMLEntities($row['creatureweapon'])."'></td></tr>",true);

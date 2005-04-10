@@ -6,14 +6,14 @@ $balance = getsetting("creaturebalance", 0.33);
 addcommentary();
 
 //savesetting("creaturebalance","0.33");
-if ($HTTP_GET_VARS['op']=="darkhorse"){
-	$HTTP_GET_VARS['op']="";
+if ($_GET['op']=="darkhorse"){
+	$_GET['op']="";
 	$session['user']['specialinc']="darkhorse.php";
 }
 $fight = false;
 page_header("The Forest");
-if ($session['user']['superuser']>1 && $HTTP_GET_VARS['specialinc']!=""){
-  $session['user']['specialinc'] = $HTTP_GET_VARS['specialinc'];
+if ($session['user']['superuser']>1 && $_GET['specialinc']!=""){
+  $session['user']['specialinc'] = $_GET['specialinc'];
 }
 if ($session['user']['specialinc']!=""){
   //echo "DEBUG:$x including special/".$session['user']['specialinc'];
@@ -29,15 +29,15 @@ if ($session['user']['specialinc']!=""){
 	page_footer();
 	exit();
 }
-if ($HTTP_GET_VARS['op']=="run"){
+if ($_GET['op']=="run"){
 	if (e_rand()%3 == 0){
 		output ("`c`b`&You have successfully fled your oponent!`0`b`c`n");
-		$HTTP_GET_VARS['op']="";
+		$_GET['op']="";
 	}else{
 		output("`c`b`\$You failed to flee your oponent!`0`b`c");
 	}
 }
-if ($HTTP_GET_VARS['op']=="dragon"){
+if ($_GET['op']=="dragon"){
 	addnav("Enter the cave","dragon.php");
 	addnav("Run away like a baby","inn.php");
 	output("`\$You approach the blackened entrance of a cave deep in the forest, though ");
@@ -58,11 +58,11 @@ if ($HTTP_GET_VARS['op']=="dragon"){
 	output("the even warmer ".($session['user']['sex']?"Seth":"Violet").".  What do you do?");
 	$session['user']['seendragon']=1;
 }
-if ($HTTP_GET_VARS['op']=="search"){
+if ($_GET['op']=="search"){
 	checkday();
   if ($session['user']['turns']<=0){
     output("`\$`bYou are too tired to search the forest any longer today.  Perhaps tomorrow you will have more energy.`b`0");
-    $HTTP_GET_VARS['op']="";
+    $_GET['op']="";
   }else{
 	  $session['user']['drunkenness']=round($session['user']['drunkenness']*.9,0);
   	$specialtychance = e_rand()%7;
@@ -85,11 +85,11 @@ if ($HTTP_GET_VARS['op']=="search"){
 				if (count($events)==0){
 				  output("`b`@Aww, your administrator has decided you're not allowed to have any special events.  Complain to them, not me.");
 				}else{
-				  $y = $HTTP_GET_VARS['op'];
-					$HTTP_GET_VARS['op']="";
+				  $y = $_GET['op'];
+					$_GET['op']="";
 				  //echo "DEBUG:$x including special/".$events[$x];
 				  include("special/".$events[$x]);
-					$HTTP_GET_VARS['op']=$y;
+					$_GET['op']=$y;
 				}
 			}else{
 			  output("`c`b`\$ERROR!!!`b`c`&Unable to open the special events!  Please notify the administrator!!");
@@ -105,11 +105,11 @@ if ($HTTP_GET_VARS['op']=="search"){
 			  $plev=0;
 				$nlev=0;
 			}
-			if ($HTTP_GET_VARS['type']=="slum"){
+			if ($_GET['type']=="slum"){
 			  $nlev++;
 				output("`\$You head for the section of forest you know to contain foes that you're a bit more comfortable with.`0`n");
 			}
-			if ($HTTP_GET_VARS['type']=="thrill"){
+			if ($_GET['type']=="thrill"){
 			  $plev++;
 				output("`\$You head for the section of forest which contains creatures of your nightmares, hoping to find one of them injured.`0`n");
 			}
@@ -162,7 +162,7 @@ if ($HTTP_GET_VARS['op']=="search"){
 		}
 	}
 }
-if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
+if ($_GET['op']=="fight" || $_GET['op']=="run"){
 	$battle=true;
 }
 if ($battle){
@@ -201,7 +201,7 @@ if ($battle){
 		$session['user']['gold']+=$badguy['creaturegold'];
 		$session['user']['experience']+=($badguy['creatureexp']+$expbonus);
 		$creaturelevel = $badguy['creaturelevel'];
-		$HTTP_GET_VARS['op']="";
+		$_GET['op']="";
 		//if ($session[user][hitpoints] == $session[user][maxhitpoints]){
 		if ($badguy['diddamage']!=1){
 			if ($session['user']['level']>=getsetting("lowslumlevel",4) || $session['user']['level']<=$creaturelevel){
@@ -266,7 +266,7 @@ function addhistory($value){
  */
 }
 
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
 	// Need to pass the variable here so that we show the forest message
 	// sometimes, but not others.
 	forest($dontdisplayforestmessage);

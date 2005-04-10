@@ -2,7 +2,7 @@
 require_once "common.php";
 page_header("Ye Olde Bank");
 output("`^`c`bYe Olde Bank`b`c`6");
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
   checkday();
   output("A short man in a immaculately arranged suit greets you from behind reading spectacles.`n`n");
   output("\"`5Hello my good man,`6\" you greet him, \"`5Might I inquire as to my balance this fine day?`6\"`n`n");
@@ -106,12 +106,12 @@ if ($HTTP_GET_VARS['op']==""){
 			output("`6Transfer could not be completed, please try again!");
 		}
 	}
-}else if($HTTP_GET_VARS['op']=="deposit"){
+}else if($_GET['op']=="deposit"){
   output("<form action='bank.php?op=depositfinish' method='POST'>You have ".($session['user']['goldinbank']>=0?"a balance of":"a debt of")." ".abs($session['user']['goldinbank'])." gold in the bank.`n",true);
 	output("`^".($session['user']['goldinbank']>=0?"Deposit":"Pay off")." <u>h</u>ow much? <input id='input' name='amount' width=5 accesskey='h'> <input type='submit' class='button' value='Deposit'>`n`iEnter 0 or nothing to deposit it all`i</form>",true);
 	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=depositfinish");
-}else if($HTTP_GET_VARS['op']=="depositfinish"){
+}else if($_GET['op']=="depositfinish"){
 	$_POST[amount]=abs((int)$_POST[amount]);
 	if ($_POST[amount]==0){
 		$_POST[amount]=$session[user][gold];
@@ -133,12 +133,12 @@ if ($HTTP_GET_VARS['op']==""){
   output("`^Borrow <u>h</u>ow much (you may borrow a max of $maxborrow total at your level)? <input id='input' name='amount' width=5 accesskey='h'> <input type='hidden' name='borrow' value='x'><input type='submit' class='button' value='Borrow'>`n(Money will be withdrawn until you have none left, the remainder will be borrowed)</form>",true);
 	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");
-}else if($HTTP_GET_VARS['op']=="withdraw"){
+}else if($_GET['op']=="withdraw"){
   output("<form action='bank.php?op=withdrawfinish' method='POST'>You have ".$session[user][goldinbank]." gold in the bank.`n",true);
   output("`^Withdraw <u>h</u>ow much? <input id='input' name='amount' width=5 accesskey='h'> <input type='submit' class='button' value='Withdraw'>`n`iEnter 0 or nothing to withdraw it all`i</form>",true);
 	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");
-}else if($HTTP_GET_VARS['op']=="withdrawfinish"){
+}else if($_GET['op']=="withdrawfinish"){
 	$_POST[amount]=abs((int)$_POST[amount]);
 	if ($_POST[amount]==0){
 		$_POST[amount]=abs($session[user][goldinbank]);

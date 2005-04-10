@@ -25,7 +25,7 @@ if (db_num_rows($result) > 0){
 	$exprequired=$exparray[$session[user][level]];
 	//output("`\$Exp Required: $exprequired; exp possessed: ".$session[user][experience]."`0`n");
 	
-	if ($HTTP_GET_VARS[op]==""){
+	if ($_GET[op]==""){
 		output("The sound of conflict surrounds you.  The clang of weapons in grizzly battle inspires your warrior heart. ");
 		output("`n`nYour master is `^$master[creaturename]`0.");
 		addnav("Question Master","train.php?op=question");
@@ -34,8 +34,8 @@ if (db_num_rows($result) > 0){
 			addnav("Superuser Gain level","train.php?op=challenge&victory=1");
 		}
 		addnav("Return to the Village","village.php");
-	}else if($HTTP_GET_VARS[op]=="challenge"){
-		if ($HTTP_GET_VARS['victory']) {
+	}else if($_GET[op]=="challenge"){
+		if ($_GET['victory']) {
 			$victory=true;
 			$defeat=false;
 			if ($session['user']['experience'] < $exprequired)
@@ -71,7 +71,7 @@ if (db_num_rows($result) > 0){
 				$session[user][seenmaster]=1;
 			}
 		}
-	}else if($HTTP_GET_VARS[op]=="question"){
+	}else if($_GET[op]=="question"){
 		output("You approach `^$master[creaturename]`0 timidly and inquire as to your standing in his class.");
 		if($session[user][experience]>=$exprequired){
 			output("`n`n`^$master[creaturename]`0 says, \"Gee, your muscles are getting bigger than mine...\"");
@@ -96,19 +96,19 @@ if (db_num_rows($result) > 0){
 		}
 		addnews("`3{$session['user']['name']}`3 was hunted down by their master `^{$master['creaturename']}`3 for being truant.");
 	}
-	if ($HTTP_GET_VARS[op]=="fight"){
+	if ($_GET[op]=="fight"){
 		$battle=true;
 	}
-	if ($HTTP_GET_VARS[op]=="run"){
+	if ($_GET[op]=="run"){
 		output("`\$Your pride prevents you from running from this conflict!`0");
-		$HTTP_GET_VARS[op]="fight";
+		$_GET[op]="fight";
 		$battle=true;
 	}
 	
 	if($battle){
-		if (count($session[bufflist])>0 && is_array($session[bufflist]) || $HTTP_GET_VARS[skill]!=""){
-			$HTTP_GET_VARS[skill]="";
-			if ($HTTP_GET_VARS['skill']=="") $session['user']['buffbackup']=serialize($session['bufflist']);
+		if (count($session[bufflist])>0 && is_array($session[bufflist]) || $_GET[skill]!=""){
+			$_GET[skill]="";
+			if ($_GET['skill']=="") $session['user']['buffbackup']=serialize($session['bufflist']);
 			$session[bufflist]=array();
 			output("`&Your pride prevents you from using any special abilities during the fight!`0");
 		}

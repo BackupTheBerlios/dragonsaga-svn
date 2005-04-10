@@ -1416,17 +1416,17 @@ function ordinal($val){
 }
 
 function addcommentary() {
-	global $HTTP_POST_VARS,$session,$REQUEST_URI,$HTTP_GET_VARS,$doublepost;
+	global $_POST,$session,$REQUEST_URI,$_GET,$doublepost;
 	$doublepost=0;
 	if ((int)getsetting("expirecontent",180)>0){
 		$sql = "DELETE FROM commentary WHERE postdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 		db_query($sql);
 	}
-	$section=$HTTP_POST_VARS['section'];
-	$talkline=$HTTP_POST_VARS['talkline'];
-	if ($HTTP_POST_VARS['insertcommentary'][$section]!==NULL &&
-		trim($HTTP_POST_VARS['insertcommentary'][$section])!="") {
-		$commentary = str_replace("`n","",soap($HTTP_POST_VARS['insertcommentary'][$section]));
+	$section=$_POST['section'];
+	$talkline=$_POST['talkline'];
+	if ($_POST['insertcommentary'][$section]!==NULL &&
+		trim($_POST['insertcommentary'][$section])!="") {
+		$commentary = str_replace("`n","",soap($_POST['insertcommentary'][$section]));
 		$y = strlen($commentary);
 		for ($x=0;$x<$y;$x++){
 			if (substr($commentary,$x,1)=="`"){
@@ -1501,7 +1501,7 @@ function addcommentary() {
 }
 
 function viewcommentary($section,$message="Interject your own commentary?",$limit=10,$talkline="says") {
-	global $HTTP_POST_VARS,$session,$REQUEST_URI,$HTTP_GET_VARS, $doublepost;
+	global $_POST,$session,$REQUEST_URI,$_GET, $doublepost;
 	$nobios = array("motd.php"=>true);
 	if ($nobios[basename($_SERVER['SCRIPT_NAME'])]) $linkbios=false; else $linkbios=true;
 	//output("`b".basename($_SERVER['SCRIPT_NAME'])."`b`n");
@@ -1511,7 +1511,7 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 		$sql = "DELETE FROM commentary WHERE postdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 		db_query($sql);
 	}
-	$com=(int)$HTTP_GET_VARS['comscroll'];
+	$com=(int)$_GET['comscroll'];
   $sql = "SELECT commentary.*, 
 	               accounts.name,
 	               accounts.login
@@ -1610,21 +1610,21 @@ function viewcommentary($section,$message="Interject your own commentary?",$limi
 	}
 	if (db_num_rows($result)>=$limit){
 		$req = preg_replace("'[&]?c(omscroll)?=([[:digit:]-])*'","",$REQUEST_URI)."&comscroll=".($com+1);
-			//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$HTTP_GET_VARS[c]"."&comscroll=".($com+1);
+			//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$_GET[c]"."&comscroll=".($com+1);
 			$req = str_replace("?&","?",$req);
 			if (!strpos($req,"?")) $req = str_replace("&","?",$req);
 			output("<a href=\"$req\">&lt;&lt; Previous</a>",true);
 			addnav("",$req);
 		}
 	$req = preg_replace("'[&]?c(omscroll)?=([[:digit:]]|-)*'","",$REQUEST_URI)."&comscroll=0";
-		//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$HTTP_GET_VARS[c]"."&comscroll=".($com-1);
+		//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$_GET[c]"."&comscroll=".($com-1);
 		$req = str_replace("?&","?",$req);
 		if (!strpos($req,"?")) $req = str_replace("&","?",$req);
 		output("&nbsp;<a href=\"$req\">Refresh</a>&nbsp;",true);
 		addnav("",$req);
 		if ($com>0){
 		$req = preg_replace("'[&]?c(omscroll)?=([[:digit:]]|-)*'","",$REQUEST_URI)."&comscroll=".($com-1);
-			//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$HTTP_GET_VARS[c]"."&comscroll=".($com-1);
+			//$req = substr($REQUEST_URI,0,strpos($REQUEST_URI,"c="))."&c=$_GET[c]"."&comscroll=".($com-1);
 			$req = str_replace("?&","?",$req);
 			if (!strpos($req,"?")) $req = str_replace("&","?",$req);
 			output(" <a href=\"$req\">Next &gt;&gt;</a>",true);

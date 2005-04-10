@@ -57,7 +57,7 @@ function filterwords($string)
     return $string;
 }
 
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET['op']==""){
     output("`6`nA short little gnome with leaves in his hair squats beside a small tree.  He smirks, giggling behind one of his fatty hands.");
     output("For a moment, it looks like he might scramble off into the trees, but after a moment smirks and looks at you.`n`n");
     output("`6\"`@I'll give you a boon,`6\" he says, \"`@if you can think and answer my riddle!`6\"`n`n");
@@ -77,8 +77,8 @@ if ($HTTP_GET_VARS[op]==""){
     }
     $session[user][specialinc]="riddles.php";
 
-}else if($HTTP_GET_VARS[op]=="yes"){
-    //if ($HTTP_POST_VARS[guess]==NULL){
+}else if($_GET['op']=="yes"){
+    //if ($_POST[guess]==NULL){
 		if ($_GET['subop']!="answer"){
         $session[user][specialinc]="riddles.php";
         $rid = $session[user][specialmisc];
@@ -112,7 +112,7 @@ if ($HTTP_GET_VARS[op]==""){
             }
         
         //*** Get and filter players guess
-        $guess = $HTTP_POST_VARS[guess];
+        $guess = $_POST[guess];
         // $guessdebug = $guess; // This is only for debugging, see below when the answer is wrong.
         $guess = preg_replace("/[^[:alpha:]]/"," ",$guess); 
         $guess = filterwords($guess);
@@ -207,7 +207,7 @@ if ($HTTP_GET_VARS[op]==""){
         $session[user][specialinc]="";
         $session[user][specialmisc]="";
     }
-}else if($HTTP_GET_VARS[op]=="no"){
+}else if($_GET['op']=="no"){
     output("`n`6Afraid to look the fool, you decline his challenge.  He was a little bit creepy anyway.");
     output("`n`6The strange gnome giggles histerically as he disappears into the forest.");
     $session[user][specialinc]="";

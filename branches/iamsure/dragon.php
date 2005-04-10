@@ -2,7 +2,7 @@
 require_once "common.php";
 
 page_header("The Green Dragon!");
-if ($HTTP_GET_VARS['op']==""){
+if ($_GET['op']==""){
   output("`\$Fighting down every urge to flee, you cautiously enter the cave entrance, intent ");
 	output("on catching the great green dragon sleeping, so that you might slay him with a minimum ");
 	output("of pain.  Sadly, this is not to be the case, for as you round a corner within the cave ");
@@ -42,10 +42,10 @@ if ($HTTP_GET_VARS['op']==""){
 	$badguy['creaturehealth']+=$hpflux;
 	$session['user']['badguy']=createstring($badguy);
 	$battle=true;
-}else if($HTTP_GET_VARS['op']=="prologue1"){
+}else if($_GET['op']=="prologue1"){
 	output("`@Victory!`n`n");
 	$flawless = 0;
-  	if ($HTTP_GET_VARS['flawless']) {
+  	if ($_GET['flawless']) {
 		$flawless = 1;
 		output("`b`c`&~~ Flawless Fight ~~`0`c`b`n`n");
 	}
@@ -198,11 +198,11 @@ if ($HTTP_GET_VARS['op']==""){
 	debuglog("slew the dragon and starts with ".$session['user']['gold']." gold and ".$session['user']['gems']." gems");
 }
 
-if ($HTTP_GET_VARS['op']=="run"){
+if ($_GET['op']=="run"){
   output("The creature's tail blocks the only exit to its lair!");
-	$HTTP_GET_VARS['op']="fight";
+	$_GET['op']="fight";
 }
-if ($HTTP_GET_VARS['op']=="fight" || $HTTP_GET_VARS['op']=="run"){
+if ($_GET['op']=="fight" || $_GET['op']=="run"){
 	$battle=true;
 }
 if ($battle){

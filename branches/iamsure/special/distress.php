@@ -9,7 +9,7 @@ Version 1.1
 
 if (!isset($session)) exit();
 
-if ($HTTP_GET_VARS[op]==""){
+if ($_GET[op]==""){
     $session[user][specialinc]="distress.php";
     output("`n`3While searching through the forest, you find a man lying face down in the dirt. ");
     output("The Arrow in his back, the pool of blood, and the lack of movement are a good ");
@@ -40,14 +40,14 @@ if ($HTTP_GET_VARS[op]==""){
     addnav("","forest.php?op=3");
     addnav("","forest.php?op=no");
 
-}else if ($HTTP_GET_VARS[op]=="no"){
+}else if ($_GET[op]=="no"){
     output("`3You crumple the note up and toss it into the trees.  You're not afraid, she's just not worth your time. ");
     output("Nope, not afraid at all, no way.  You turn your back on the poor distressed ".($session[user][sex]?"man":"maiden")."'s pitiful cry for ");
     output("help, and set off through the trees to find something a little less danger- ...er, a little more challenging.");
     //addnav("Return to the forest","forest.php");
     $session[user][specialinc]="";
 }else{
-    switch($HTTP_GET_VARS[op]) {
+    switch($_GET[op]) {
         case 1: $loc = "`#Wyvern Keep";
             break;
         case 2: $loc = "`#Castle Slaag";

@@ -37,7 +37,7 @@ if ($_GET['op']=="search"){
 		$session['user']['badguy']=createstring($badguy);
 	}
 }
-if ($HTTP_GET_VARS[op]=="fight" || $HTTP_GET_VARS[op]=="run"){
+if ($_GET['op']=="fight" || $_GET['op']=="run"){
 	if ($_GET['op']=="run"){
 		if (e_rand(0,2)==1) {
 			output("`\$Ramius`) curses you for your cowardice.`n`n");
