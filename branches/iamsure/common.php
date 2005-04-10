@@ -42,6 +42,11 @@ $session =& $_SESSION['session'];
 //register_global($_SESSION);
 register_global($_SERVER);
 
+if (!isset($session['lasthit']))
+{
+    $session['lasthit'] = '';
+}
+
 if (strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds") > $session['lasthit'] && $session['lasthit']>0 && $session['loggedin'])
 {
     // force the abandoning of the session when the user should have been sent to the fields.
@@ -55,7 +60,7 @@ $session['lasthit'] = strtotime("now");
 
 $revertsession = $session;
 
-if ($_SERVER['PATH_INFO'] != "")
+if (isset($_SERVER['PATH_INFO']) && ($_SERVER['PATH_INFO'] != ""))
 {
     $SCRIPT_NAME = $_SERVER['PATH_INFO'];
     $REQUEST_URI = "";
@@ -115,6 +120,21 @@ if ($session['loggedin']){
 		redirect("index.php","Account Disappeared!");
 	}
 	db_free_result($result);
+        if (!isset($session['allowednavs'][$REQUEST_URI]))
+        {
+            $session['allowednavs'][$REQUEST_URI] = '';
+        }
+
+        if (!isset($session['allowednavs'][$REQUEST_URI]))
+        {
+            $session['allowednavs'][$REQUEST_URI]='';
+        }
+
+        if (!isset($allownonnav[$SCRIPT_NAME]))
+        {
+            $allownonnav[$SCRIPT_NAME]='';
+        }
+
 	if ($session['allowednavs'][$REQUEST_URI] && !$allownonnav[$SCRIPT_NAME]){
 		$session['allowednavs']=array();
 	}else{
@@ -130,17 +150,37 @@ if ($session['loggedin']){
 	}
 }
 //if ($session['user']['loggedin']!=true && $SCRIPT_NAME != "index.php" && $SCRIPT_NAME != "login.php" && $SCRIPT_NAME != "create.php" && $SCRIPT_NAME != "about.php"){
+if (!isset($session['user']['loggedin']))
+{
+    $session['user']['loggedin'] = '';
+}
+
 if ($session['user']['loggedin'] != true && !$allowanonymous[$SCRIPT_NAME])
 {
     redirect("login.php?op=logout");
 }
 
+if (!isset($session['counter']))
+{
+    $session['counter'] = '';
+}
+
 $session['counter']++;
 $nokeeprestore = array("newday.php"=>1,"badnav.php"=>1,"motd.php"=>1,"mail.php"=>1,"petition.php"=>1);
+if (!isset($nokeeprestore[$SCRIPT_NAME]))
+{
+    $nokeeprestore[$SCRIPT_NAME]='';
+}
+
 if (!$nokeeprestore[$SCRIPT_NAME]) { //strpos($REQUEST_URI,"newday.php")===false && strpos($REQUEST_URI,"badnav.php")===false && strpos($REQUEST_URI,"motd.php")===false && strpos($REQUEST_URI,"mail.php")===false
   $session['user']['restorepage']=$REQUEST_URI;
 }else{
 
+}
+
+if (!isset($session['user']['hitpoints']))
+{
+    $session['user']['hitpoints']='';
 }
 
 if ($session['user']['hitpoints']>0)
@@ -152,7 +192,16 @@ else
     $session['user']['alive'] = false;
 }
 
-$session['bufflist'] = unserialize($session['user']['bufflist']);
+if (isset($session['user']['bufflist']))
+{
+    $session['bufflist'] = unserialize($session['user']['bufflist']);
+}
+
+if (!isset($session['bufflist']))
+{
+    $session['bufflist'] = '';
+}
+
 if (!is_array($session['bufflist'])) $session['bufflist']=array();
 $session['user']['lastip'] = $REMOTE_ADDR;
 if (strlen($_COOKIE['lgi'])<32){
@@ -170,6 +219,11 @@ if (strlen($_COOKIE['lgi'])<32){
 
 $url = "http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']);
 $url = substr($url,0,strlen($url)-1);
+
+if (!isset($_SERVER['HTTP_REFERER']))
+{
+    $_SERVER['HTTP_REFERER']='';
+}
 
 if (substr($_SERVER['HTTP_REFERER'],0,strlen($url))==$url || $_SERVER['HTTP_REFERER'] == ""){
 
@@ -208,6 +262,11 @@ while (list($key,$val) = each($templatetags)){
 	if (strpos($template['header'],"{".$val."}")===false && strpos($template['footer'],"{".$val."}")===false) $templatemessage.="You do not have {".$val."} defined in either your header or footer\n";
 }
 
+if (!isset($templatemessage))
+{
+    $templatemessage = '';
+}
+
 if ($templatemessage != "")
 {
     echo "<b>You have one or more errors in your template page!</b><br>".nl2br($templatemessage);
@@ -219,7 +278,14 @@ $races = array(1=>"Troll",2=>"Elf",3=>"Human",4=>"Dwarf",0=>"Unknown",50=>"Hover
 $logd_version = "TDS-0.01";
 $session['user']['laston'] = date("Y-m-d H:i:s");
 
-$playermount = getmount($session['user']['hashorse']);
+if (isset($session['user']['hashorse']))
+{
+    $playermount = getmount($session['user']['hashorse']);
+}
+else
+{
+    $playermount = '';
+}
 
 $titles = array(
 	0=>array("Farmboy","Farmgirl"),
@@ -254,6 +320,11 @@ $titles = array(
 	29=>array("Archtitan", "Archtitaness"),
 	30=>array("Undergod", "Undergoddess"),
 );
+
+if (!isset($session['user']['beta']))
+{
+    $session['user']['beta']='';
+}
 
 $beta = (getsetting("beta",0) == 1 || $session['user']['beta']==1);
 ?>

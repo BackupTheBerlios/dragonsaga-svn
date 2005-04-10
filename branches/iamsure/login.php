@@ -1,6 +1,10 @@
 <?php
 require_once "common.php";
 
+if (!isset($session['loggedin']))
+{
+    $session['loggedin']='';
+}
 
 if (isset($HTTP_POST_VARS['name']) && ($HTTP_POST_VARS['name']!="")){
 	if ($session['loggedin']){

@@ -345,6 +345,11 @@ function is_email($email){
 
 function checkban($login=false){
 	global $session;
+        if (!isset($session['banoverride']))
+        {
+            $session['banoverride'] = '';
+        }
+
 	if ($session['banoverride']) return false;
 	if ($login===false){
 		$ip=$_SERVER['REMOTE_ADDR'];
@@ -462,6 +467,31 @@ function fightnav($allowspecial=true, $allowflee=true){
 
 function appoencode($data,$priv=false){
 	global $nestedtags,$session;
+        if (!isset($output))
+        {
+            $output = '';
+        }
+
+        if (!isset($nestedtags['font']))
+        {
+            $nestedtags['font']='';
+        }
+
+        if (!isset($nestedtags['b']))
+        {
+            $nestedtags['b']='';
+        }
+
+        if (!isset($nestedtags['i']))
+        {
+            $nestedtags['i']='';
+        }
+
+        if (!isset($nestedtags['div']))
+        {
+            $nestedtags['div']='';
+        }
+
 	while( !(($x=strpos($data,"`")) === false) ){
 		$tag=substr($data,$x+1,1);
 		$append=substr($data,0,$x);
@@ -671,6 +701,11 @@ function charstats(){
 		//return "Your character info will appear here after you've logged in.";
 		//$sql = "SELECT name,alive,location,sex,level,laston,loggedin,lastip,uniqueid FROM accounts WHERE locked=0 AND loggedin=1 ORDER BY level DESC";
 		$sql="SELECT name,alive,location,sex,level,laston,loggedin,lastip,uniqueid FROM accounts WHERE locked=0 AND loggedin=1 AND laston>'".date("Y-m-d H:i:s",strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds"))."' ORDER BY level DESC";
+                if (!isset($ret))
+                {
+                    $ret = '';
+                }
+
 		$ret.=appoencode("`bOnline Characters:`b`n");
 		$result = db_query($sql) or die(sql_error($sql));
 		for ($i=0;$i<db_num_rows($result);$i++){
@@ -682,6 +717,10 @@ function charstats(){
 			//}
 		}
 		db_free_result($result);
+                if (!isset($onlinecount))
+                {
+                    $onlinecount = '';
+                }
 		if ($onlinecount==0) $ret.=appoencode("`iNone`i");
 		return $ret;
 	}
@@ -724,9 +763,17 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 					$found=false;
 					for ($i=0;$i<strlen($text); $i++){
 						$char = substr($text,$i,1);
+                                                if (!isset($ignoreuntil))
+                                                {
+                                                    $ignoreuntil = '';
+                                                }
 						if ($ignoreuntil == $char){
 							$ignoreuntil="";
 						}else{
+                                                        if (!isset($ignoreuntil))
+                                                        {
+                                                            $ignoreuntil = '';
+                                                        }
 							if ($ignoreuntil<>""){
 								if ($char=="<") $ignoreuntil=">";
 								if ($char=="&") $ignoreuntil=";";
@@ -753,9 +800,17 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 			if ($key==""){
 				for ($i=0;$i<strlen($text); $i++){
 					$char = substr($text,$i,1);
+                                        if (!isset($ignoreuntil))
+                                        {
+                                            $ignoreuntil = '';
+                                        }
 					if ($ignoreuntil == $char) {
 						$ignoreuntil="";
 					}else{
+                                                if (!isset($accesskeys[strtolower($char)]))
+                                                {
+                                                    $accesskeys[strtolower($char)] = '';
+                                                }
 						if (($accesskeys[strtolower($char)]==1) || (strpos("abcdefghijklmnopqrstuvwxyz0123456789", strtolower($char)) === false) || $ignoreuntil<>"") {
 							if ($char=="<") $ignoreuntil=">";
 							if ($char=="&") $ignoreuntil=";";
@@ -795,6 +850,10 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 				));
 			//$nav.="<a href=\"".HTMLEntities($link.$extra)."\" $keyrep class='nav'>".appoencode($text,$priv)."<br></a>";
 		}
+                if (!isset($extra))
+                {
+                    $extra = '';
+                }
 		$session['allowednavs'][$link.$extra]=true;
 		$session['allowednavs'][str_replace(" ", "%20", $link).$extra]=true;
 		$session['allowednavs'][str_replace(" ", "+", $link).$extra]=true;
@@ -915,6 +974,11 @@ function clearnav(){
 
 function redirect($location,$reason=false){
 	global $session,$REQUEST_URI;
+        if (!isset($session['debug']))
+        {
+            $session['debug'] = '';
+        }
+
 	if ($location!="badnav.php"){
 		$session['allowednavs']=array();
 		addnav("",$location);
@@ -980,6 +1044,11 @@ function page_header($title="The Dragon Saga"){
 	$result = db_query($sql);
 	$row = db_fetch_assoc($result);
 	db_free_result($result);
+        if (!isset($session['user']['lastmotd']))
+        {
+            $session['user']['lastmotd'] = '';
+        }
+
 	if (($row['motddate']>$session['user']['lastmotd']) && $nopopups[$SCRIPT_NAME]!=1 && $session['user']['loggedin']){
 		$header=str_replace("{headscript}","<script type='text/javascript'>".popup("motd.php")."</script>",$header);
 		$session['needtoviewmotd']=true;
@@ -1001,6 +1070,11 @@ function page_footer(){
 
 		unset($nestedtags[$key]);
 	}
+        if (!isset($script))
+        {
+            $script = '';
+        }
+
         $script.="<script type='text/javascript'>
 	<!--
 	document.onkeypress=keyevent;
@@ -1040,6 +1114,11 @@ function page_footer(){
 	$header = str_replace("{motd}", motdlink(), $header);
 	$footer = str_replace("{motd}", motdlink(), $footer);
 
+        if (!isset($session['user']['acctid']))
+        {
+            $session['user']['acctid'] = '';
+        }
+
 	if ($session['user']['acctid']>0) {
 		$header=str_replace("{mail}",maillink(),$header);
 		$footer=str_replace("{mail}",maillink(),$footer);
@@ -1049,6 +1128,12 @@ function page_footer(){
 	}
 	$header=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$header);
 	$footer=str_replace("{petition}","<a href='petition.php' onClick=\"".popup("petition.php").";return false;\" target='_blank' class='motd'>Petition for Help</a>",$footer);
+        
+        if (!isset($session['user']['superuser']))
+        {
+            $session['user']['superuser'] = '';
+        }
+
 	if ($session['user']['superuser']>1){
 		$sql = "SELECT count(petitionid) AS c,status FROM petitions GROUP BY status";
 		$result = db_query($sql);
@@ -1070,6 +1155,21 @@ function page_footer(){
 	$footer=str_replace("{copyright}","Copyright 2002-2003, Game: Eric Stevens",$footer);
 	$footer=str_replace("{version}", "Version: $logd_version", $footer);
 	$gentime = getmicrotime()-$pagestarttime;
+        if (!isset($session['user']['gensize']))
+        {
+            $session['user']['gensize'] = '';
+        }
+
+        if (!isset($session['user']['gentime']))
+        {
+            $session['user']['gentime'] = '';
+        }
+
+        if (!isset($session['user']['gentimecount']))
+        {
+            $session['user']['gentimecount'] = '';
+        }
+
 	$session['user']['gentime']+=$gentime;
 	$session['user']['gentimecount']++;
 	$footer=str_replace("{pagegen}","Page gen: ".round($gentime,2)."s, Ave: ".round($session['user']['gentime']/$session['user']['gentimecount'],2)."s - ".round($session['user']['gentime'],2)."/".round($session['user']['gentimecount'],2)."",$footer);
@@ -1160,6 +1260,11 @@ function saveuser(){
 	global $session,$dbqueriesthishit;
 //	$cmd = date("Y-m-d H:i:s")." $dbqueriesthishit ".$_SERVER['REQUEST_URI'];
 //	@exec("echo $cmd >> /home/groups/l/lo/lotgd/sessiondata/data/queryusage-".$session['user']['login'].".txt");
+        if (!isset($session['loggedin']))
+        {
+            $session['loggedin'] = '';
+        }
+
 	if ($session['loggedin'] && $session['user']['acctid']!=""){
   	$session['user']['output']=$session['output'];
   	$session['user']['allowednavs']=serialize($session['allowednavs']);

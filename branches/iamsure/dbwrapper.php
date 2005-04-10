@@ -4,9 +4,9 @@
 include_once("./global_includes.php");
 
 error_reporting (E_ALL ^ E_NOTICE);
+//error_reporting (E_ALL);
 ini_set("arg_separator.output","&amp;");
 
-//error_reporting (E_ALL);
 if (!get_magic_quotes_gpc()){
 	set_magic_quotes($_GET);
 	set_magic_quotes($_POST);
