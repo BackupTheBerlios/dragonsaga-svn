@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: glowingstream.php
+
 if ($_GET['op']==""){
   output("`#You discover a small stream of faintly glowing water that babbles over round pure white stones.  You can sense a magical ");
 	output("power in the water.  Drinking this water may yield untold powers, or it may result ");

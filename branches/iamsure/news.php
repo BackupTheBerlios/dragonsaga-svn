@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: news.php
+
 require_once "common.php";
 if ((int)getsetting("expirecontent",180)>0){
 	$sql = "DELETE FROM news WHERE newsdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";

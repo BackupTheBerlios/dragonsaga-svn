@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: translator_de.php
+
 /* Format for translator.php
  Each translatable page has its own entry below, locate the page where the text you want
  to translate is, and populate the $replace array with "From"=>"To" translation combinations.

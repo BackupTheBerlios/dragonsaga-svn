@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: fairy1.php
+
 if (!isset($session)) exit();
 if ($_GET[op]==""){
 	output("`%You encounter a fairy in the forest.  \"`^Give me a gem!`%\" she demands.  What do you do?");

@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: rock.php
+
 require_once("common.php");
 // This idea is Imusade's from lotgd.net
 if ($session['user']['dragonkills']>0 || $session['user']['superuser']>1){

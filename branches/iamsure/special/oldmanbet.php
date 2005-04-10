@@ -1,4 +1,11 @@
 <?php
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2 of the License, or (at your
+// option) any later version.
+//
+// File: oldmanbet.php
+
 if (!isset($session)) exit();
 if ($_GET['op']==""){
   output("`3An old man stops you as you wander through the woods.  \"`!How would you like to play a little ");
