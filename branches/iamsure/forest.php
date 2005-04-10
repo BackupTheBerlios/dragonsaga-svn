@@ -193,9 +193,9 @@ if ($battle){
 		  debuglog("found a gem when slaying a monster.");
 		}
 		if ($expbonus>0){
-		  output("`#***Because of the difficult nature of this fight, you are awarded an additional `^$expbonus`# experience! `n($badguy['creatureexp'] + ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
+		  output("`#***Because of the difficult nature of this fight, you are awarded an additional `^$expbonus`# experience! `n($badguy[creatureexp] + ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
 		}else if ($expbonus<0){
-		  output("`#***Because of the simplistic nature of this fight, you are penalized `^".abs($expbonus)."`# experience! `n($badguy['creatureexp'] - ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
+		  output("`#***Because of the simplistic nature of this fight, you are penalized `^".abs($expbonus)."`# experience! `n($badguy[creatureexp] - ".abs($expbonus)." = ".($badguy['creatureexp']+$expbonus).") ");
 		}
 		output("You receive `^".($badguy['creatureexp']+$expbonus)."`# total experience!`n`0");
 		$session['user']['gold']+=$badguy['creaturegold'];
