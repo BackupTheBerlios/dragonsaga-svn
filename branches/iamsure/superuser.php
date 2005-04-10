@@ -4,6 +4,10 @@ isnewday(2);
 addcommentary();
 
 addnav("M?Return to the Mundane","village.php");
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']=="newsdelete"){
 	$sql = "DELETE FROM news WHERE newsid='$_GET[newsid]'";
 	db_query($sql);

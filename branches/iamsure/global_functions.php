@@ -1417,13 +1417,29 @@ function ordinal($val){
 
 function addcommentary() {
 	global $_POST,$session,$REQUEST_URI,$_GET,$doublepost;
+        if (!isset($_POST['insertcommentary']))
+        {
+            $_POST['insertcommentary'] = '';
+        }
 	$doublepost=0;
 	if ((int)getsetting("expirecontent",180)>0){
 		$sql = "DELETE FROM commentary WHERE postdate<'".date("Y-m-d H:i:s",strtotime("-".getsetting("expirecontent",180)." days"))."'";
 		db_query($sql);
 	}
+        if (!isset($_POST['section']))
+        {
+            $_POST['section'] = '';
+        }
+        if (!isset($_POST['talkline']))
+        {
+            $_POST['talkline'] = '';
+        }
 	$section=$_POST['section'];
 	$talkline=$_POST['talkline'];
+        if (!isset($_POST['insertcommentary'][$section]))
+        {
+            $_POST['insertcommentary'][$section] = '';
+        }
 	if ($_POST['insertcommentary'][$section]!==NULL &&
 		trim($_POST['insertcommentary'][$section])!="") {
 		$commentary = str_replace("`n","",soap($_POST['insertcommentary'][$section]));
@@ -1502,7 +1518,15 @@ function addcommentary() {
 
 function viewcommentary($section,$message="Interject your own commentary?",$limit=10,$talkline="says") {
 	global $_POST,$session,$REQUEST_URI,$_GET, $doublepost;
+        if (!isset($_GET['comscroll']))
+        {
+            $_GET['comscroll']='';
+        }
 	$nobios = array("motd.php"=>true);
+        if (!isset($nobios[basename($_SERVER['SCRIPT_NAME'])]))
+        {
+            $nobios[basename($_SERVER['SCRIPT_NAME'])]='';
+        }
 	if ($nobios[basename($_SERVER['SCRIPT_NAME'])]) $linkbios=false; else $linkbios=true;
 	//output("`b".basename($_SERVER['SCRIPT_NAME'])."`b`n");
 	if ($doublepost) output("`\$`bDouble post?`b`0`n");

@@ -1,6 +1,10 @@
 <?php
 require_once "common.php";
 $balance = getsetting("creaturebalance", 0.33);
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 
 // Handle updating any commentary that might be around.
 addcommentary();
