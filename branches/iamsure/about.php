@@ -1,11 +1,4 @@
-<?php
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the
-// Free Software Foundation; either version 2 of the License, or (at your
-// option) any later version.
-//
-// File: about.php
-
+<?
 require_once "common.php";
 page_header("About The Dragon Saga");
 $time = (strtotime(date("1971-m-d H:i:s",strtotime("now -".getsetting("gameoffsetseconds",0)." seconds"))))*getsetting("daysperday",4) % strtotime("1971-01-01 00:00:00"); 
@@ -44,35 +37,38 @@ if ($_GET['op']==""){
 			 * NOTICE This section may not be modified, please modify the Server Specific section above.
 			 * NOTICE
 			 */
-			output("`@Legend of the Green Dragon`nBy Eric Stevens`n`n");
-			output("`cLoGD version {$logd_version}`c");
+			output("`@`cThe Dragon Saga - {$logd_version}`c`n`n");
 			//This section may not be modified, please modify the Server Specific section above.
-			output("MightyE tells you, \"`2Legend of the Green Dragon is my remake of the classic");
-			output("BBS Door game, Legend of the Red Dragon (aka LoRD) by Seth Able Robinson.  ");
-			output("`n`n`@\"`2LoRD is now owned by Gameport (<a href='http://www.gameport.com/bbs/lord.html'>http://www.gameport.com/bbs/lord.html</a>), and ",true);
-			output("they retain exclusive rights to the LoRD name and game.  That's why all content in ");
-			//This section may not be modified, please modify the Server Specific section above.
-			output("Legend of the Green Dragon is new, with only a very few nods to the original game, such ");
-			output("as the buxom barmaid, Violet, and the handsome bard, Seth.`n`n");
-			output("`@\"`2Although serious effort was made to preserve the original feel of the game, ");
-			output("numerous departures were taken from the original game to enhance playability, and ");
-			//This section may not be modified, please modify the Server Specific section above.
-			output("to adapt it to the web.`n`n");
-			output("`@\"`2LoGD is released under the GNU General Public License (GPL), which essentially means ");
-			output("that the source code to the game, and all derivatives of the game must remain open and");
+
+			output("`2The Dragon Saga is an epic open source, web-based, massively multiplayer free roleplaying game.");
+			output("It is collaboratively developed by a diverse group of people around the world, like you.`n`n");
+			output("`@`2You may download the latest version of <a href='http://develop.thedragonsaga.com/' target='_blank'>The Dragon Saga</a>",true);
+			output(" and you may also <a href='http://play.thedragonsaga.com/'>play the latest version of The Dragon Saga</a>.`n`n",true);
+			output("`@`2The Dragon Saga is programmed in PHP with an SQL backend.  It is known to run on Windows and Linux with appropriate
+				setups.  The code is developed under the 
+				<a href=\"http://www.gnu.org/copyleft/gpl.html\">GNU General Public License</a>, which essentially means that the source code to the game, and all derivatives of the game must remain open and",true);
 			output("available upon request.`n`n");
-			//This section may not be modified, please modify the Server Specific section above.
-			output("`@\"`2You can download the latest version of LoGD at <a href='http://sourceforge.net/projects/lotgd' target='_blank'>http://sourceforge.net/projects/lotgd</a>",true);
-			output(" and you can play the latest version at <a href='http://lotgd.net/'>http://lotgd.net</a>.`n`n",true);
-			output("`@\"`2LoGD is programmed in PHP with a MySQL backend.  It is known to run on Windows and Linux with appropriate
-				setups.  Most code has been written by Eric Stevens, with some pieces by other authors (denoted in source at these locations), 
-				and the code has been released under the 
-				<a href=\"http://www.gnu.org/copyleft/gpl.html\">GNU General Public License</a>.  Users of the source
-				are bound to the terms therein.`@\"`n`n",true);
-			//This section may not be modified, please modify the Server Specific section above.
-			output("`@\"`2Users of the source are free to view and modify the source, but original copyright information, and
-				original text from the about page must be preserved, though they may be added to.`@\"`n`n");
-			output("`@\"`2I hope you enjoy the game!`@\"");
+
+			output("`@`2Users of the code are free to view and modify the source, but copyright information, and
+				original text from the about page must be preserved, though they may be added to.");
+
+                        output("`n`nThe majority of the game code came from Legend of the Green Dragon, another similar project, that is now developed under the <a href=\"http://creativecommons.org/licenses/by-nc-sa/2.0/\">Creative Commons License.</a>",true);
+                        output("`n`nThe original game code, developed by Eric Stevens and JT Traub, with a design by Chris Yarbrough, remains under their copyright.");
+
+                        output("`n`nYou may download the latest official version of LoGD at <a href=\"http://sourceforge.net/projects/lotgd\">http://sourceforge.net/projects/lotgd</a>",true);
+                        output("and you can play the version currently in development at http://lotgd.net.");
+                        output("`n`nLegend of the Green Dragon is a remake of and homage to the classic");
+			output("BBS Door game, Legend of the Red Dragon (aka LoRD) by <a href=\"http://www.rtsoft.com/\">Seth Able Robinson</a>.  ",true);
+			output("`n`n`@`2LoRD is now owned by Gameport (<a href='http://www.gameport.com/bbs/lord.html'>http://www.gameport.com/bbs/lord.html</a>), and ",true);
+			output("they retain exclusive rights to the LoRD name and game.  That's why all content in ");
+			output("Legend of the Green Dragon (and by extension, TDS) is new, with only a very few nods to the original game, such ");
+			output("as the buxom barmaid, Violet, and the handsome bard, Seth.`n`n");
+			output("`@`2Although serious effort was made to preserve the original feel of the game, ");
+			output("numerous departures were taken from the original game to enhance playability, and ");
+			output("to adapt it to the web.`n`n");
+
+			output("`@`2We hope you enjoy the game!`@");
+
 			//This section may not be modified, please modify the Server Specific section above.
 			break;
 		}
@@ -80,7 +76,7 @@ if ($_GET['op']==""){
 	
 	addnav("Game Setup Info","about.php?op=setup");
 }elseif($_GET['op']=="setup"){
-	addnav("About LoGD","about.php");
+	addnav("About TDS","about.php");
 	$setup = array(
 		"Game Setup,title",
 		"pvp"=>"Enable Slay Other Players,viewonly",
