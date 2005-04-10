@@ -501,7 +501,7 @@ function appoencode($data,$priv=false){
 		switch($tag){
 			case "0":
 			if ($nestedtags['font']) $output.="</span>";
-			unset($nestedtags['font']);
+			$nestedtags['font']='';
 		break;
 			case "1":
 			if ($nestedtags['font']) $output.="</span>"; else $nestedtags['font']=true;
@@ -566,7 +566,7 @@ function appoencode($data,$priv=false){
 			case "c":
 			if ($nestedtags['div']) {
 				$output.="</div>";
-				unset($nestedtags['div']);
+				$nestedtags['div']='';
 			}else{
 				$nestedtags['div']=true;
 				$output.="<div align='center'>";
@@ -575,7 +575,7 @@ function appoencode($data,$priv=false){
 			case "H":
 			if ($nestedtags['div']) {
 				$output.="</span>";
-				unset($nestedtags['div']);
+				$nestedtags['div']='';
 			}else{
 				$nestedtags['div']=true;
 				$output.="<span class='navhi'>";
@@ -584,7 +584,7 @@ function appoencode($data,$priv=false){
 			case "b":
 			if ($nestedtags['b']){
 				$output.="</b>";
-				unset($nestedtags['b']);
+				$nestedtags['b']='';
 			}else{
 				$nestedtags['b']=true;
 			  $output.="<b>";
@@ -593,7 +593,7 @@ function appoencode($data,$priv=false){
 		  case "i":
 		  if ($nestedtags['i']) {
 		  	$output.="</i>";
-		  	unset($nestedtags['i']);
+		  	$nestedtags['i']='';
 		  }else{
 		  	$nestedtags['i']=true;
 		  	$output.="<i>";
@@ -634,8 +634,15 @@ function templatereplace($itemname,$vals=false){
 }
 
 function charstats(){
+        // The $u[attack] and $u[defense] warnings dont seem to have an easy fix - either setting them to '' or only setting them selectively causes
+        // bad nav repeatedly. 
 	global $session;
 	$u =& $session['user'];
+
+        if (!isset($buffs))
+        {
+            $buffs = '';
+        }
 	if ($session['loggedin']){
 		$u['hitpoints']=round($u['hitpoints'],0);
 		$u['experience']=round($u['experience'],0);
@@ -644,7 +651,7 @@ function charstats(){
         if ($u['alive']){ }else{ $spirits[$u['spirits']] = "DEAD"; }
 		reset($session['bufflist']);
 		$atk=$u['attack'];
-		$def=$u['defense'];
+                $def=$u['defense'];
   
 		while (list($key,$val)=each($session['bufflist'])){
 			$buffs.=appoencode("`#$val[name] `7($val[rounds] rounds left)`n",true);
@@ -753,6 +760,10 @@ function addnav($text,$link=false,$priv=false,$pop=false){
 			$key="";
 			if (substr($text,1,1)=="?") {
 				// check to see if a key was specified up front.
+                                if (!isset($accesskeys[strtolower(substr($text, 0, 1))]))
+                                {
+                                    $accesskeys[strtolower(substr($text, 0, 1))]='';
+                                }
 				if ($accesskeys[strtolower(substr($text, 0, 1))]==1){
 					// output ("key ".substr($text,0,1)." already taken`n");
 					$text = substr($text,2);
