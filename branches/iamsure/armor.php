@@ -5,6 +5,10 @@ checkday();
 page_header("Pegasus Armor");
 output("`c`b`%Pegasus Armor`0`b`c");
 $tradeinvalue = round(($session['user']['armorvalue']*.75),0);
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']==""){
 	output("`5The fair and beautiful `#Pegasus`5 greets you with a warm smile as you stroll over to her brightly colored ");
 	output("gypsy wagon, which is placed, not out of coincidence, right next to `!MightyE`5's weapon shop.  Her outfit is ");

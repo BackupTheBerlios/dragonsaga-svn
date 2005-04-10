@@ -2,7 +2,11 @@
 require_once "common.php";
 addcommentary();
 $cost = $session['user']['level']*20;
-if ($_GET[op]=="pay"){
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if ($_GET['op']=="pay"){
 	if ($session['user']['gold']>=$cost){
 		$session['user']['gold']-=$cost;
 		debuglog("spent $cost gold to speak to the dead");
@@ -10,7 +14,7 @@ if ($_GET[op]=="pay"){
 	}else{
 		page_header("Gypsy Seer's tent");
 		addnav("Return to the village","village.php");
-		output("`5You offer the old gypsy woman your `^{$session[user][gold]}`5 gold for your gen-u-wine say-ance, however she informs you that the dead 
+		output("`5You offer the old gypsy woman your `^{$session['user']['gold']}`5 gold for your gen-u-wine say-ance, however she informs you that the dead 
 		may be dead, but they ain't cheap.");
 	}
 }elseif ($_GET['op']=="talk"){

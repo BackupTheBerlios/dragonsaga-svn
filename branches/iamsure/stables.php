@@ -4,6 +4,20 @@ page_header("Merick's Stables");
 
 addnav("Return to the village","village.php");
 
+if (!isset($playermount['mountcostgold']))
+{
+    $playermount['mountcostgold'] = '';
+}
+
+if (!isset($playermount['mountcostgems']))
+{
+    $playermount['mountcostgems'] = '';
+}
+
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 $repaygold = round($playermount['mountcostgold']*2/3,0);
 $repaygems = round($playermount['mountcostgems']*2/3,0);
 if ($_GET['op']==""){

@@ -3,6 +3,10 @@ require_once "common.php";
 
 isnewday(2);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']=="block"){
     $sql = "UPDATE accounts SET bio='`iBlocked for inappropriate usage`i',biotime='9999-12-31 23:59:59' WHERE acctid='{$_GET['userid']}'";
 	systemmail($_GET['userid'],"Your bio has been blocked","The system administrators have decided that your bio entry is inappropriate, so it has been blocked.`n`nIf you wish to appeal this decision, you may do so with the petition link.");

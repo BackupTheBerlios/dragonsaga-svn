@@ -95,6 +95,10 @@ else
 
 $allowanonymous = array("index.php"=>true,"login.php"=>true,"create.php"=>true,"about.php"=>true,"list.php"=>true,"petition.php"=>true,"connector.php"=>true,"logdnet.php"=>true,"referral.php"=>true,"news.php"=>true,"motd.php"=>true,"topwebvote.php"=>true);
 $allownonnav = array("badnav.php"=>true,"motd.php"=>true,"petition.php"=>true,"mail.php"=>true,"topwebvote.php"=>true);
+if (!isset($session['loggedin']))
+{
+    $session['loggedin'] = '';
+}
 if ($session['loggedin']){
 	$sql = "SELECT * FROM accounts WHERE acctid = '".$session['user']['acctid']."'";
 	$result = db_query($sql);

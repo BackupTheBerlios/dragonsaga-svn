@@ -6,6 +6,10 @@ page_header("Dag Durnick's Table");
 output("<span style='color: #9900FF'>",true);
 output("`c`bDag Durnick's Table`b`c");
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']=="list"){
 	output("Dag fishes a small leather bound book out from under his cloak, flips through it to a certain page and holds it up for you to see.`n`n");
 	output("`c`bThe Bounty List`b`c`n");

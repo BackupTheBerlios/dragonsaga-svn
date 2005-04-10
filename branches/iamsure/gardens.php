@@ -32,6 +32,15 @@ page_header("The Gardens");
 checkday();
 addcommentary();
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+
+if (!isset($session['user']['fishturns']))
+{
+    $session['user']['fishturns'] = '';
+}
 if($_GET['op']=="") {
     if($session['user']['fishturns']>0) {
     output("`b`c`2The Gardens`0`c`b");

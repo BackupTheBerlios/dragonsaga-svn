@@ -7,6 +7,22 @@ require_once "common.php";
 addcommentary();
 checkday();
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['subop']))
+{
+    $_GET['subop'] = '';
+}
+if (!isset($_GET['flirt']))
+{
+    $_GET['flirt'] = '';
+}
+if (!isset($_GET['act']))
+{
+    $_GET['act'] = '';
+}
 if ($session['user']['slainby']!=""){
 	page_header("You have been slain!");
 		output("`\$You were slain in ".$session['user']['killedin']."`\$ by `%".$session['user']['slainby']."`\$.  They cost you 5% of your experience, and took any gold you had.  Don't you think it's time for some revenge?");
@@ -874,7 +890,7 @@ if ($_GET['op']=="" || $_GET['op']=="strolldown"){
 		case "room":
 			$config = unserialize($session['user']['donationconfig']);
 		  $expense = round(($session['user']['level']*(10+log($session['user']['level']))),0);
-			if ($_GET[pay]){
+			if ($_GET['pay']){
 				if ($_GET['coupon']==1){
 			  	$config['innstays']--;
 					$session['user']['donationconfig']=serialize($config);
@@ -885,11 +901,11 @@ if ($_GET['op']=="" || $_GET['op']=="strolldown"){
 					$session=array();
 					redirect("index.php");
 				}else{
-					if ($_GET[pay] == 2 || $session['user'][gold]>=$expense || $session['user'][boughtroomtoday]){
-						if ($session['user'][loggedin]){
-							if ($session['user'][boughtroomtoday]) {
+					if ($_GET['pay'] == 2 || $session['user']['gold']>=$expense || $session['user']['boughtroomtoday']){
+						if ($session['user']['loggedin']){
+							if ($session['user']['boughtroomtoday']) {
 							}else{
-								if ($_GET[pay] == 2) {
+								if ($_GET['pay'] == 2) {
 									$fee = getsetting("innfee", "5%");
 									if (strpos($fee, "%"))
 										$expense += round($expense * $fee / 100,0);
@@ -914,7 +930,7 @@ if ($_GET['op']=="" || $_GET['op']=="strolldown"){
 					}
 				}
 			}else{
-				if ($session['user'][boughtroomtoday]){
+				if ($session['user']['boughtroomtoday']){
 					output("You already paid for a room for the day.");
 					addnav("Go to room","inn.php?op=room&pay=1");
 				}else{

@@ -16,6 +16,10 @@ if ($_GET['op']=="darkhorse"){
 }
 $fight = false;
 page_header("The Forest");
+if (!isset($_GET['specialinc']))
+{
+    $_GET['specialinc'] = '';
+}
 if ($session['user']['superuser']>1 && $_GET['specialinc']!=""){
   $session['user']['specialinc'] = $_GET['specialinc'];
 }
@@ -169,6 +173,10 @@ if ($_GET['op']=="search"){
 if ($_GET['op']=="fight" || $_GET['op']=="run"){
 	$battle=true;
 }
+if (!isset($battle))
+{
+    $battle = '';
+}
 if ($battle){
   include("battle.php");
 //	output(serialize($badguy));
@@ -270,6 +278,10 @@ function addhistory($value){
  */
 }
 
+if (!isset($dontdisplayforestmessage))
+{
+    $dontdisplayforestmessage = '';
+}
 if ($_GET['op']==""){
 	// Need to pass the variable here so that we show the forest message
 	// sometimes, but not others.

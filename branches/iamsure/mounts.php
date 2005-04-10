@@ -7,6 +7,10 @@ addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
 addnav("Add a mount","mounts.php?op=add");
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']=="del"){
 	$sql = "UPDATE mounts SET mountactive=0 WHERE mountid='{$_GET['id']}'";
 	db_query($sql);
@@ -105,6 +109,62 @@ if ($_GET['op']==""){
 
 function mountform($mount){
 	global $output;
+        if (!isset($mount['mountbuff']['wearoff']))
+        {
+            $mount['mountbuff']['wearoff'] = '';
+        }
+        if (!isset($mount['mountbuff']['effectmsg']))
+        {
+            $mount['mountbuff']['effectmsg'] = '';
+        }
+        if (!isset($mount['mountbuff']['effectnodmgmsg']))
+        {
+            $mount['mountbuff']['effectnodmgmsg'] = '';
+        }
+        if (!isset($mount['mountbuff']['effectfailmsg']))
+        {
+            $mount['mountbuff']['effectfailmsg'] = '';
+        }
+        if (!isset($mount['mountbuff']['defmod']))
+        {
+            $mount['mountbuff']['defmod'] = '';
+        }
+        if (!isset($mount['mountbuff']['regen']))
+        {
+            $mount['mountbuff']['regen'] = '';
+        }
+        if (!isset($mount['mountbuff']['minioncount']))
+        {
+            $mount['mountbuff']['minioncount'] = '';
+        }
+        if (!isset($mount['mountbuff']['minbadguydamage']))
+        {
+            $mount['mountbuff']['minbadguydamage'] = '';
+        }
+        if (!isset($mount['mountbuff']['maxbadguydamage']))
+        {
+            $mount['mountbuff']['maxbadguydamage'] = '';
+        }
+        if (!isset($mount['mountbuff']['lifetap']))
+        {
+            $mount['mountbuff']['lifetap'] = '';
+        }
+        if (!isset($mount['mountbuff']['damageshield']))
+        {
+            $mount['mountbuff']['damageshield'] = '';
+        }
+        if (!isset($mount['mountbuff']['badguydmgmod']))
+        {
+            $mount['mountbuff']['badguydmgmod'] = '';
+        }
+        if (!isset($mount['mountbuff']['badguyatkmod']))
+        {
+            $mount['mountbuff']['badguyatkmod'] = '';
+        }
+        if (!isset($mount['mountbuff']['badguydefmod']))
+        {
+            $mount['mountbuff']['badguydefmod'] = '';
+        }
 	output("<form action='mounts.php?op=save&id={$mount['mountid']}' method='POST'>",true);
 	addnav("","mounts.php?op=save&id={$mount['mountid']}");
 	$output.="<table>";

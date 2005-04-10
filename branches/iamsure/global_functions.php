@@ -260,6 +260,14 @@ function isnewday($level){
 function forest($noshowmessage=false) {
 	global $session,$playermount;
     $conf = unserialize($session['user']['donationconfig']);
+    if (!isset($conf['healer']))
+    {
+        $conf['healer'] = '';
+    }
+    if (!isset($playermount['tavern']))
+    {
+        $playermount['tavern'] = '';
+    }
     if ($conf['healer']) {
   	    addnav("H?Golinda's Hut","healer.php");
     } else {
@@ -400,7 +408,7 @@ function increment_specialty(){
 			$skillnames = array(1=>"Dark Arts","Mystical Powers","Thievery");
 			$skills = array(1=>"darkarts","magic","thievery");
 			$skillpoints = array(1=>"darkartuses","magicuses","thieveryuses");
-			$session[user][$skills[$session['user']['specialty']]]++;
+			$session['user'][$skills[$session['user']['specialty']]]++;
 			output("`nYou gain a level in `&".$skillnames[$session['user']['specialty']]."`# to ".$session['user'][$skills[$session['user']['specialty']]].", ");
 			$x = ($session['user'][$skills[$session['user']['specialty']]]) % 3;
 			if ($x == 0){
@@ -643,6 +651,11 @@ function charstats(){
         {
             $buffs = '';
         }
+        if (!isset($session['loggedin']))
+        {
+            $session['loggedin'] = '';
+        }
+
 	if ($session['loggedin']){
 		$u['hitpoints']=round($u['hitpoints'],0);
 		$u['experience']=round($u['experience'],0);
@@ -923,6 +936,10 @@ function showform($layout,$row,$nosave=false){
 	output("<table>",true);
 	while(list($key,$val)=each($layout)){
 		$info = split(",",$val);
+                if (!isset($info[1]))
+                {
+                    $info[1] = '';
+                }
 		if ($info[1]=="title"){
 			output("<tr><td colspan='2' bgcolor='#666666'>",true);
 			output("`b`^$info[0]`0`b");
@@ -942,6 +959,10 @@ function showform($layout,$row,$nosave=false){
 			list($k,$v)=each($info);
 			$output.="<select name='$key'>";
 			while (list($k,$v)=each($info)){
+                                if (!isset($row[$key]))
+                                {
+                                    $row[$key] = '';
+                                }
 				$optval = $v;
 				list($k,$v)=each($info);
 				$optdis = $v;
@@ -953,6 +974,10 @@ function showform($layout,$row,$nosave=false){
 			$output.="<input type='password' name='$key' value='".HTMLEntities($row[$key])."'>";
 			break;
 		case "bool":
+                        if (!isset($row[$key]))
+                        {
+                            $row[$key] = '';
+                        }
 			$output.="<select name='$key'>";
 			$output.="<option value='0'".($row[$key]==0?" selected":"").">No</option>";
 			$output.="<option value='1'".($row[$key]==1?" selected":"").">Yes</option>";
@@ -1299,6 +1324,10 @@ function saveuser(){
 }
 
 function createstring($array){
+  if (!isset($output))
+  {
+      $output = '';
+  }
   if (is_array($array)){
     reset($array);
     while (list($key,$val)=each($array)){

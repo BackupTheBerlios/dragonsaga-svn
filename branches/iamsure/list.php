@@ -1,5 +1,13 @@
 <?php
 require_once "common.php";
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['page']))
+{
+    $_GET['page'] = '';
+}
 if ($session['user']['loggedin']) {
 	checkday();
 	if ($session['user']['alive']) {
@@ -45,6 +53,10 @@ for ($i=0;$i<$totalplayers;$i+=$playersperpage){
 // Order the list by level, dragonkills, name so that the ordering is total!
 // Without this, some users would show up on multiple pages and some users
 // wouldn't show up
+if (!isset($search))
+{
+    $search = '';
+}
 if ($_GET['page']=="" && $_GET['op']==""){
 	output("`c`bWarriors Currently Online`b`c");
 	$sql = "SELECT name,login,alive,location,sex,level,laston,loggedin,lastip,uniqueid FROM accounts WHERE locked=0 AND loggedin=1 AND laston>'".date("Y-m-d H:i:s",strtotime("-".getsetting("LOGINTIMEOUT",900)." seconds"))."' ORDER BY level DESC, dragonkills DESC, login ASC";
@@ -78,7 +90,7 @@ for($i=0;$i<$max;$i++){
 	output("`&$row[name]`0");
 	if ($session['user']['loggedin']) output("</a>",true);
 	output("</td><td>",true);
-	$loggedin=(date("U") - strtotime($row[laston]) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
+	$loggedin=(date("U") - strtotime($row['laston']) < getsetting("LOGINTIMEOUT",900) && $row['loggedin']);
 	output($row['location']
 				?"`3Boar's Head Inn`0"
 				:(
@@ -90,7 +102,7 @@ for($i=0;$i<$max;$i++){
 	output("</td><td>",true);
 	output($row['sex']?"`!Female`0":"`!Male`0");
 	output("</td><td>",true);
-	$laston=round((strtotime("0 days")-strtotime($row[laston])) / 86400,0)." days";
+	$laston=round((strtotime("0 days")-strtotime($row['laston'])) / 86400,0)." days";
 	if (substr($laston,0,2)=="1 ") $laston="1 day";
 	if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d")) $laston="Today";
 	if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";

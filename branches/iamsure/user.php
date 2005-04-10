@@ -2,6 +2,10 @@
 require_once "common.php";
 isnewday(3);
 
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']=="search"){
 	$sql = "SELECT acctid FROM accounts WHERE ";
 	$where="
@@ -340,8 +344,12 @@ if ($_GET['op']=="lasthit"){
 	}
 }elseif ($_GET['op']==""){
 	if (isset($_GET['page'])){
+                if (!isset($where))
+                {
+                    $where = '';
+                }
 		$order = "acctid";
-		if ($_GET[sort]!="") $order = "$_GET[sort]";
+		if ($_GET['sort']!="") $order = "$_GET[sort]";
 		$offset=(int)$_GET['page']*100;
 		$sql = "SELECT acctid,login,name,level,laston,gentimecount,lastip,uniqueid,emailaddress FROM accounts ".($where>""?"WHERE $where ":"")."ORDER BY \"$order\" LIMIT $offset,100";
 		$result = db_query($sql) or die(db_error(LINK));
@@ -367,12 +375,40 @@ if ($_GET['op']=="lasthit"){
 		$rn=0;
 		for ($i=0;$i<db_num_rows($result);$i++){
 			$row=db_fetch_assoc($result);
-			$laston=round((strtotime("0 days")-strtotime($row[laston])) / 86400,0)." days";
+                        if (!isset($row['gentimecount']))
+                        {
+                            $row['gentimecount'] = '';
+                        }
+                        if (!isset($gentimecount))
+                        {
+                            $gentimecount = '';
+                        }
+                        if (!isset($gentime))
+                        {
+                            $gentime = '';
+                        }
+                        if (!isset($row['gentime']))
+                        {
+                            $row['gentime'] = '';
+                        }
+                        if (!isset($row['laston']))
+                        {
+                            $row['laston'] = '';
+                        }
+                        if (!isset($loggedin))
+                        {
+                            $loggedin = '';
+                        }
+                        if (!isset($oorder))
+                        {
+                            $oorder = '';
+                        }
+			$laston=round((strtotime("0 days")-strtotime($row['laston'])) / 86400,0)." days";
 			if (substr($laston,0,2)=="1 ") $laston="1 day";
-			if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d")) $laston="Today";
-			if (date("Y-m-d",strtotime($row[laston])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
+			if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d")) $laston="Today";
+			if (date("Y-m-d",strtotime($row['laston'])) == date("Y-m-d",strtotime("-1 day"))) $laston="Yesterday";
 			if ($loggedin) $laston="Now";
-			$row[laston]=$laston;
+			$row['laston']=$laston;
 			if ($row[$order]!=$oorder) $rn++;
 			$oorder = $row[$order];
 			output("<tr class='".($rn%2?"trlight":"trdark")."'>",true);

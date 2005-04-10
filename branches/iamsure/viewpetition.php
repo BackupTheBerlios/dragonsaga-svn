@@ -5,20 +5,28 @@ addcommentary();
 
 $statuses=array(0=>"`bUnseen`b","Seen","Closed");
 
-if ($_GET[op]=="del"){
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['setstat']))
+{
+    $_GET['setstat'] = '';
+}
+if ($_GET['op']=="del"){
 	$sql = "DELETE FROM petitions WHERE petitionid='$_GET[id]'";
 	db_query($sql);
 	$sql = "DELETE FROM commentary WHERE section='pet-{$_GET['id']}'";
 	db_query($sql);
-	$_GET[op]="";
+	$_GET['op']="";
 }
 page_header("Petition Viewer");
 addnav("G?Return to the Grotto","superuser.php");
 addnav("M?Return to the Mundane","village.php");
-if ($_GET[op]==""){
+if ($_GET['op']==""){
 	$sql = "DELETE FROM petitions WHERE status=2 AND date<'".date("Y-m-d H:i:s",strtotime("-7 days"))."'";
 	db_query($sql);
-	if ($_GET[setstat]!=""){
+	if ($_GET['setstat']!=""){
 		$sql = "UPDATE petitions SET status='{$_GET['setstat']}' WHERE petitionid='{$_GET['id']}'";
 		db_query($sql);
 		//output($sql);
@@ -58,7 +66,7 @@ if ($_GET[op]==""){
 	be unless they have been around for some time (in which case someone probably forgot to mark them unseen
 	after they looked at it).`n
 	If you have dealt with an issue, mark it closed, and it will auto delete when it is 7 days old.");
-}elseif($_GET[op]=="view"){
+}elseif($_GET['op']=="view"){
 	if ($_GET['viewpageinfo']==1){
 		addnav("Hide Details","viewpetition.php?op=view&id={$_GET['id']}");
 	}else{

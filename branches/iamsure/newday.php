@@ -290,6 +290,10 @@ if (count($session['user']['dragonpoints'])<$session['user']['dragonkills'] && $
 				output("  This buy has expired.`n");
 			}
 		}
+                if (!isset($config['healer']))
+                {
+                    $config['healer'] = '';
+                }
 		if ($config['healer'] > 0) {
 			$config['healer']--;
 			if ($config['healer'] > 0) {

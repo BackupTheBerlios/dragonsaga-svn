@@ -3,16 +3,32 @@ require_once "common.php";
 $pvptime = getsetting("pvptimeout",600);
 $pvptimeout = date("Y-m-d H:i:s",strtotime("-$pvptime seconds"));
 page_header("PvP Combat!");
-if ($_GET[op]=="" && $_GET[act]!="attack"){
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if (!isset($_GET['act']))
+{
+    $_GET['act'] = '';
+}
+if (!isset($_GET['skill']))
+{
+    $_GET['skill'] = '';
+}
+if (!isset($battle))
+{
+    $battle = '';
+}
+if ($_GET['op']=="" && $_GET['act']!="attack"){
 	//if ($session['user']['age']<=5 && $session['user']['dragonkills']==0){
 	//  output("`\$Warning!`^ Players are immune from Player vs Player (PvP) combat for their first 5 days in the game.  If you choose to attack another player, you will lose this immunity!`n`n");
 	//}
 	checkday();
 	pvpwarning();
-  output("`4You head out to the fields, where you know some unwitting warriors are sleeping.`n`nYou have `^".$session[user][playerfights]."`4 PvP fights left for today.");
+  output("`4You head out to the fields, where you know some unwitting warriors are sleeping.`n`nYou have `^".$session['user']['playerfights']."`4 PvP fights left for today.");
 	addnav("List Warriors","pvp.php?op=list");
   addnav("Return to the Village","village.php");
-}else if ($_GET[op]=="list"){
+}else if ($_GET['op']=="list"){
 	checkday();
 	pvpwarning();
 	$days = getsetting("pvpimmunity", 5);
@@ -20,10 +36,10 @@ if ($_GET[op]=="" && $_GET[act]!="attack"){
   $sql = "SELECT name,alive,location,sex,level,laston,loggedin,login,pvpflag FROM accounts WHERE 
 	(locked=0) AND 
 	(age > $days OR dragonkills > 0 OR pk > 0 OR experience > $exp) AND
-	(level >= ".($session[user][level]-1)." AND level <= ".($session[user][level]+2).") AND 
+	(level >= ".($session['user']['level']-1)." AND level <= ".($session['user']['level']+2).") AND 
 	(alive=1 AND location=0) AND 
 	(laston < '".date("Y-m-d H:i:s",strtotime("-".getsetting("LOGINTIMEOUT",900)." sec"))."' OR loggedin=0) AND
-	(acctid <> ".$session[user][acctid].")
+	(acctid <> ".$session['user']['acctid'].")
 	ORDER BY level DESC";
 	//echo ("<pre>$sql</pre>");
   $result = db_query($sql) or die(db_error(LINK));
@@ -42,7 +58,7 @@ if ($_GET[op]=="" && $_GET[act]!="attack"){
 	output("</table>",true);
 	addnav("List Warriors","pvp.php?op=list");
   addnav("Return to the Village","village.php");
-} else if ($_GET[act] == "attack") {
+} else if ($_GET['act'] == "attack") {
   $sql = "SELECT name AS creaturename,
 	               level AS creaturelevel,
 								 weapon AS creatureweapon,
@@ -104,15 +120,15 @@ if ($_GET[op]=="" && $_GET[act]!="attack"){
 	  addnav("Return to the village","village.php");
 	}
 }
-if ($_GET[op]=="run"){
+if ($_GET['op']=="run"){
   output("Your honor prevents you from running");
-	$_GET[op]="fight";
+	$_GET['op']="fight";
 }
-if ($_GET[skill]!=""){
+if ($_GET['skill']!=""){
   output("Your honor prevents you from using a special ability");
-	$_GET[skill]="";
+	$_GET['skill']="";
 }
-if ($_GET[op]=="fight" || $_GET[op]=="run"){
+if ($_GET['op']=="fight" || $_GET['op']=="run"){
 	$battle=true;
 }
 if ($battle){
@@ -175,7 +191,7 @@ if ($battle){
 		$sql = "UPDATE accounts SET alive=0, bounty=0, goldinbank=goldinbank-IF(gold<$badguy[creaturegold],gold-$badguy[creaturegold],0),gold=gold-$badguy[creaturegold], experience=experience-$lostexp WHERE acctid=".(int)$badguy[acctid]."";		
 		db_query($sql);
 		
-		$_GET[op]="";
+		$_GET['op']="";
 		if ($badguy['location']){
 			addnav("Return to the inn","inn.php");
 		} else {

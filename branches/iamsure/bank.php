@@ -2,6 +2,10 @@
 require_once "common.php";
 page_header("Ye Olde Bank");
 output("`^`c`bYe Olde Bank`b`c`6");
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']==""){
   checkday();
   output("A short man in a immaculately arranged suit greets you from behind reading spectacles.`n`n");
@@ -17,7 +21,7 @@ if ($_GET['op']==""){
 	}
 }else if($_GET['op']=="transfer"){
 	output("`6`bTransfer Money`b:`n");
-	if ($session[user][goldinbank]>=0){
+	if ($session['user']['goldinbank']>=0){
 		output("You may only transfer `^".getsetting("transferperlevel",25)."`6 gold per the recipient's level.`n");
 		$maxout = $session['user']['level']*getsetting("maxtransferout",25);
 		output("You may transfer no more than `^$maxout`6 gold total. ");
@@ -134,7 +138,7 @@ if ($_GET['op']==""){
 	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");
 }else if($_GET['op']=="withdraw"){
-  output("<form action='bank.php?op=withdrawfinish' method='POST'>You have ".$session[user][goldinbank]." gold in the bank.`n",true);
+  output("<form action='bank.php?op=withdrawfinish' method='POST'>You have ".$session['user']['goldinbank']." gold in the bank.`n",true);
   output("`^Withdraw <u>h</u>ow much? <input id='input' name='amount' width=5 accesskey='h'> <input type='submit' class='button' value='Withdraw'>`n`iEnter 0 or nothing to withdraw it all`i</form>",true);
 	output("<script type='text/javascript'>document.getElementById('input').focus();</script>",true);
   addnav("","bank.php?op=withdrawfinish");

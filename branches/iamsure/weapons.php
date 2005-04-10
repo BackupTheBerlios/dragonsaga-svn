@@ -5,6 +5,10 @@ checkday();
 page_header("MightyE's Weapons");
 output("`c`b`&MightyE's Weapons`0`b`c");
 $tradeinvalue = round(($session['user']['weaponvalue']*.75),0);
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
 if ($_GET['op']==""){
   output("`!MightyE `7stands behind a counter and appears to pay little attention to you as you enter, ");
 	output("but you know from experience that he has his eye on every move you make.  He may be a humble ");

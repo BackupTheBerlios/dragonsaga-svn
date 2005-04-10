@@ -6,7 +6,11 @@ if (isset($_POST['template'])){
 require_once "common.php";
 page_header("Preferences");
 
-if ($_GET[op]=="suicide" && getsetting("selfdelete",0)!=0) {
+if (!isset($_GET['op']))
+{
+    $_GET['op'] = '';
+}
+if ($_GET['op']=="suicide" && getsetting("selfdelete",0)!=0) {
     $sql = "DELETE FROM accounts WHERE acctid='$_GET[userid]'";
 	db_query($sql);
 	output("Your character has been deleted!");
@@ -41,6 +45,14 @@ if (count($_POST)==0){
 	reset($_POST);
 	$nonsettings = array("pass1"=>1,"pass2"=>1,"email"=>1,"template"=>1,"bio"=>1);
 	while (list($key,$val)=each($_POST)){
+                if (!isset($_POST[$key]))
+                {
+                    $_POST[$key] = '';
+                }
+                if (!isset($nonsettings[$key]))
+                {
+                    $nonsettings[$key] = '';
+                }
 		if (!$nonsettings[$key]) $session['user']['prefs'][$key]=$_POST[$key];
 	}
 	if (stripslashes($_POST['bio'])!=$session['user']['bio']){

@@ -68,7 +68,7 @@ if (isset($_POST['name']) && ($_POST['name']!="")){
 					}
 				}
 			}else{
-				$session[message]="`4Error, your login was incorrect`0";
+				$session['message']="`4Error, your login was incorrect`0";
 				//now we'll log the failed attempt and begin to issue bans if there are too many, plus notify the admins.
 				$sql = "DELETE FROM faillog WHERE date<'".date("Y-m-d H:i:s",strtotime("-".(getsetting("expirecontent",180)/4)." days"))."'";
 				checkban();
