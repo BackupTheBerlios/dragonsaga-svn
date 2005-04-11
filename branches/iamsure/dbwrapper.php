@@ -135,11 +135,14 @@ function db_pconnect($host,$user,$pass)
     $db->debug=0;
     $db->autoRollback = true;
     $result = $db->Connect("$ADODB_SESSION_CONNECT", "$ADODB_SESSION_USER", "$ADODB_SESSION_PWD", "$ADODB_SESSION_DB");
-
     if (!$result)
     {
         die ("Unable to connect to the database: " . $db->ErrorMsg());
         return 0;
+    }
+    else
+    {
+        $db->LogSQL();
     }
 
     return $db;
