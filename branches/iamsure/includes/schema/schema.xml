@@ -1,0 +1,1166 @@
+<?xml version="1.0"?>
+<schema version="0.3">
+  <table name="riddles">
+    <field name="id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="riddle" type="XL">
+      <NOTNULL/>
+    </field>
+    <field name="answer" type="C" size="10">
+      <NOTNULL/>
+    </field>
+  </table>
+
+  <table name="mounts">
+    <field name="mountid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountname" type="C" size="50">
+
+      <NOTNULL/>
+    </field>
+    <field name="mountdesc" type="C" size="50"/>
+    <field name="mountcategory" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="mountbuff" type="X"/>
+    <field name="mountcostgems" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountcostgold" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountactive" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountforestfights" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="tavern" type="I" size="4">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="newday" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="recharge" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="partrecharge" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_canenter" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+
+    <field name="mine_candie" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mine_cansave" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="mine_tethermsg" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_deathmsg" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_savemsg" type="X">
+      <NOTNULL/>
+
+    </field>
+    <index name="mountid">
+      <col>mountid</col>
+    </index>
+  </table>
+
+  <table name="accounts">
+    <field name="acctid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="name" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="sex" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="specialty" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="darkarts" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="magic" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="thievery" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="experience" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="charisma" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="seenlover" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+
+    <field name="gold" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="weapon" type="C" size="50">
+      <NOTNULL/>
+      <DEFAULT value="Fists"/>
+    </field>
+
+    <field name="armor" type="C" size="50">
+      <NOTNULL/>
+      <DEFAULT value="T-Shirt"/>
+    </field>
+    <field name="seenmaster" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+
+    <field name="level" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="defence" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="attack" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="alive" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="goldinbank" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="marriedto" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="playerkills" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="spirits" type="I" size="4">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+    </field>
+    <field name="laston" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="hitpoints" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="10"/>
+
+    </field>
+    <field name="maxhitpoints" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="10"/>
+      <UNSIGNED/>
+    </field>
+    <field name="gems" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="weaponvalue" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="armorvalue" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="location" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="turns" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="10"/>
+      <UNSIGNED/>
+    </field>
+    <field name="title" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="password" type="C" size="32">
+      <NOTNULL/>
+
+    </field>
+    <field name="darkartuses" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="magicuses" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="thieveryuses" type="I" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="badguy" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="allowednavs" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="output" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="loggedin" type="I1" size="4">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="resurrections" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="superuser" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="weapondmg" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="armordef" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="age" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="charm" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="specialinc" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="specialmisc" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="login" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="slainby" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="lastmotd" type="T">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="playerfights" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="3"/>
+      <UNSIGNED/>
+    </field>
+    <field name="lasthit" type="T">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="seendragon" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="dragonkills" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="drunkenness" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="locked" type="I1" size="4">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="restorepage" type="C" size="128"/>
+    <field name="seenbard" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="hashorse" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="bufflist" type="X">
+      <NOTNULL/>
+    </field>
+
+    <field name="gentime" type="F">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="gentimecount" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="lastip" type="C" size="40">
+      <NOTNULL/>
+    </field>
+    <field name="uniqueid" type="C" size="32"/>
+    <field name="dragonpoints" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="boughtroomtoday" type="I1" size="4">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="emailaddress" type="C" size="128">
+      <NOTNULL/>
+    </field>
+    <field name="emailvalidation" type="C" size="32">
+      <NOTNULL/>
+    </field>
+
+    <field name="killedin" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="sentnotice" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="prefs" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="pvpflag" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="transferredtoday" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="hauntpoints" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="soulpoints" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="gravefights" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="hauntedby" type="C" size="50">
+      <NOTNULL/>
+
+    </field>
+    <field name="deathpower" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="gensize" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="recentcomments" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="donation" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="donationspent" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="donationconfig" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="referer" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="refererawarded" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="bio" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="race" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+
+    <field name="superuser2" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="banoverride" type="I1" size="4">
+      <DEFAULT value="0"/>
+    </field>
+    <field name="buffbackup" type="X">
+
+      <NOTNULL/>
+    </field>
+    <field name="biotime" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="history" type="X">
+      <NOTNULL/>
+    </field>
+
+    <field name="bounty" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="amountouttoday" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="pk" type="I1" size="3">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="dragonage" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="bestdragonage" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="lastwebvote" type="D">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00"/>
+    </field>
+    <field name="bounties" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="ctitle" type="C" size="25">
+      <NOTNULL/>
+
+    </field>
+    <field name="usedouthouse" type="I1" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="beta" type="I1" size="3">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+
+      <UNSIGNED/>
+    </field>
+    <index name="name">
+      <col>name</col>
+    </index>
+    <index name="level">
+      <col>level</col>
+    </index>
+
+    <index name="login">
+      <col>login</col>
+    </index>
+    <index name="alive">
+      <col>alive</col>
+    </index>
+    <index name="laston">
+      <col>laston</col>
+
+    </index>
+    <index name="lasthit">
+      <col>lasthit</col>
+    </index>
+    <index name="emailaddress">
+      <col>emailaddress</col>
+    </index>
+  </table>
+
+  <table name="adodb_logsql">
+    <field name="created" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="sql0" type="C" size="250">
+      <NOTNULL/>
+    </field>
+    <field name="sql1" type="X">
+
+      <NOTNULL/>
+    </field>
+    <field name="params" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="tracer" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="timer" type="N" size="16">
+
+      <NOTNULL/>
+      <DEFAULT value="0.000000"/>
+    </field>
+  </table>
+  <table name="armor">
+    <field name="armorid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="armorname" type="C" size="128"/>
+    <field name="value" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="defense" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+
+    </field>
+    <field name="level" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+  </table>
+  <table name="bans">
+    <field name="ipfilter" type="C" size="15">
+      <NOTNULL/>
+
+    </field>
+    <field name="uniqueid" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <field name="banexpire" type="D"/>
+    <field name="banreason" type="X">
+      <NOTNULL/>
+    </field>
+  </table>
+
+  <table name="commentary">
+    <field name="commentid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="section" type="C" size="20"/>
+    <field name="author" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="comment" type="C" size="200">
+      <NOTNULL/>
+    </field>
+    <field name="postdate" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+
+    </field>
+    <index name="section">
+      <col>section</col>
+    </index>
+    <index name="postdate">
+      <col>postdate</col>
+    </index>
+  </table>
+
+  <table name="creatures">
+    <field name="creatureid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="creaturename" type="C" size="50"/>
+    <field name="creaturelevel" type="I" size="11"/>
+    <field name="creatureweapon" type="C" size="50"/>
+    <field name="creaturelose" type="C" size="120"/>
+
+    <field name="creaturewin" type="C" size="120"/>
+    <field name="creaturegold" type="I" size="11"/>
+    <field name="creatureexp" type="I" size="11"/>
+    <field name="creaturehealth" type="I" size="11"/>
+    <field name="creatureattack" type="I" size="11"/>
+    <field name="creaturedefense" type="I" size="11"/>
+    <field name="oldcreatureexp" type="I" size="11"/>
+    <field name="createdby" type="C" size="50"/>
+    <field name="location" type="I1" size="4">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <index name="creaturelevel">
+      <col>creaturelevel</col>
+    </index>
+  </table>
+  <table name="debuglog">
+
+    <field name="id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="date" type="T">
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+
+    <field name="actor" type="I" size="11">
+      <UNSIGNED/>
+    </field>
+    <field name="target" type="I" size="11">
+      <UNSIGNED/>
+    </field>
+    <field name="message" type="X">
+      <NOTNULL/>
+    </field>
+
+    <index name="date">
+      <col>date</col>
+    </index>
+    <index name="actor">
+      <col>actor</col>
+    </index>
+    <index name="target">
+      <col>target</col>
+
+    </index>
+  </table>
+
+  <table name="faillog">
+    <field name="eventid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="date" type="T">
+
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="post" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="ip" type="C" size="40">
+      <NOTNULL/>
+    </field>
+
+    <field name="acctid" type="I" size="11">
+      <UNSIGNED/>
+    </field>
+    <field name="id" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <index name="date">
+      <col>date</col>
+
+    </index>
+    <index name="acctid">
+      <col>acctid</col>
+    </index>
+    <index name="ip">
+      <col>ip</col>
+    </index>
+  </table>
+
+  <table name="logdnet">
+    <field name="serverid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="address" type="C" size="255">
+      <NOTNULL/>
+    </field>
+
+    <field name="description" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="priority" type="F">
+      <NOTNULL/>
+      <DEFAULT value="100"/>
+    </field>
+    <field name="lastupdate" type="T">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+  </table>
+  <table name="mail">
+    <field name="messageid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+
+    <field name="msgfrom" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="msgto" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="subject" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="body" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="sent" type="T">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="seen" type="I1" size="1">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <index name="msgto">
+      <col>msgto</col>
+
+    </index>
+    <index name="seen">
+      <col>seen</col>
+    </index>
+  </table>
+  <table name="masters">
+    <field name="creatureid" type="I" size="11">
+      <KEY/>
+
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="creaturename" type="C" size="50"/>
+    <field name="creaturelevel" type="I" size="11"/>
+    <field name="creatureweapon" type="C" size="50"/>
+    <field name="creaturelose" type="C" size="120"/>
+    <field name="creaturewin" type="C" size="120"/>
+    <field name="creaturegold" type="I" size="11"/>
+
+    <field name="creatureexp" type="I" size="11"/>
+    <field name="creaturehealth" type="I" size="11"/>
+    <field name="creatureattack" type="I" size="11"/>
+    <field name="creaturedefense" type="I" size="11"/>
+  </table>
+  <table name="motd">
+    <field name="motditem" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="motdtitle" type="C" size="200"/>
+    <field name="motdbody" type="X"/>
+    <field name="motddate" type="T"/>
+    <field name="motdtype" type="I1" size="4">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+  </table>
+  <table name="nastywords">
+    <field name="words" type="X"/>
+  </table>
+
+  <table name="news">
+    <field name="newsid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="newstext" type="X">
+      <NOTNULL/>
+    </field>
+
+    <field name="newsdate" type="D">
+      <KEY/>
+      <DEFAULT value="0000-00-00"/>
+    </field>
+    <field name="accountid" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+
+    <index name="accountid">
+      <col>accountid</col>
+    </index>
+  </table>
+  <table name="petitions">
+    <field name="petitionid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="author" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="date" type="T">
+      <NOTNULL/>
+
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="status" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="body" type="X"/>
+    <field name="pageinfo" type="X"/>
+
+  </table>
+  <table name="pollresults">
+    <field name="resultid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="choice" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="account" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="motditem" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+  </table>
+  <table name="referers">
+    <field name="refererid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+
+      <UNSIGNED/>
+    </field>
+    <field name="uri" type="X"/>
+    <field name="count" type="I" size="11"/>
+    <field name="last" type="T"/>
+    <field name="site" type="C" size="50">
+      <NOTNULL/>
+    </field>
+  </table>
+
+  <table name="settings">
+    <field name="setting" type="C" size="20">
+      <KEY/>
+    </field>
+    <field name="value" type="C" size="255">
+      <NOTNULL/>
+
+    </field>
+  </table>
+  <table name="taunts">
+    <field name="tauntid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="taunt" type="X"/>
+
+    <field name="editor" type="C" size="50"/>
+  </table>
+  <table name="weapons">
+    <field name="weaponid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="weaponname" type="C" size="128"/>
+
+    <field name="value" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="damage" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+    </field>
+    <field name="level" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+  </table>
+
+  <table name="faillog">
+    <field name="eventid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="date" type="T">
+
+      <NOTNULL/>
+      <DEFAULT value="0000-00-00 00:00:00"/>
+    </field>
+    <field name="post" type="C">
+      <NOTNULL/>
+    </field>
+    <field name="ip" type="C" size="40">
+      <NOTNULL/>
+    </field>
+
+    <field name="acctid" type="I" size="11">
+      <UNSIGNED/>
+    </field>
+    <field name="id" type="C" size="32">
+      <NOTNULL/>
+    </field>
+    <index name="date">
+      <col>date</col>
+
+    </index>
+    <index name="acctid">
+      <col>acctid</col>
+    </index>
+    <index name="ip">
+      <col>ip</col>
+    </index>
+  </table>
+
+  <table name="riddles">
+    <field name="id" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+    </field>
+    <field name="riddle" type="C" size="20">
+      <NOTNULL/>
+    </field>
+    <field name="answer" type="C" size="255">
+      <NOTNULL/>
+    </field>
+  </table>
+
+  <table name="mounts">
+    <field name="mountid" type="I" size="11">
+      <KEY/>
+      <AUTOINCREMENT/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountname" type="C" size="50">
+
+      <NOTNULL/>
+    </field>
+    <field name="mountdesc" type="C" size="255"/>
+    <field name="mountcategory" type="C" size="50">
+      <NOTNULL/>
+    </field>
+    <field name="mountbuff" type="X"/>
+    <field name="mountcostgems" type="I" size="11">
+      <NOTNULL/>
+
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountcostgold" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountactive" type="I" size="11">
+
+      <NOTNULL/>
+      <DEFAULT value="1"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mountforestfights" type="I" size="11">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+    </field>
+    <field name="tavern" type="I1" size="4">
+
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="newday" type="C" size="255">
+      <NOTNULL/>
+    </field>
+    <field name="recharge" type="X">
+      <NOTNULL/>
+
+    </field>
+    <field name="partrecharge" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_canenter" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+
+    <field name="mine_candie" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+    </field>
+    <field name="mine_cansave" type="I" size="10">
+      <NOTNULL/>
+      <DEFAULT value="0"/>
+      <UNSIGNED/>
+
+    </field>
+    <field name="mine_tethermsg" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_deathmsg" type="X">
+      <NOTNULL/>
+    </field>
+    <field name="mine_savemsg" type="X">
+      <NOTNULL/>
+
+    </field>
+    <index name="mountid">
+      <col>mountid</col>
+    </index>
+  </table>
+
+</schema>
