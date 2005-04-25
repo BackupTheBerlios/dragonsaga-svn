@@ -254,6 +254,12 @@ if (substr($_SERVER['HTTP_REFERER'],0,strlen($url))==$url || $_SERVER['HTTP_REFE
 	db_query($sql);
 }
 
+if (!isset($_COOKIE['template']))
+{
+    $_COOKIE['template'] = '';
+}
+
+$templatename = '';
 if ($_COOKIE['template'] != "") $templatename = $_COOKIE['template'];
 if (!file_exists("templates/$templatename") || $templatename == "") $templatename = "yarbrough.htm";
 $template = loadtemplate($templatename);
